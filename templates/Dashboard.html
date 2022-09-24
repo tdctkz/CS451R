@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+
+{% if name %}
+<h1>Hello {{ name }}</h1>
+{% else %}
+<h1>What's your name?</h1>
+<div class="container">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.name(class="form-control") }}
+        <br>
+        {{ form.submit(class="btn btn-secondary") }}
+    </form>
+</div>
+
+{% endif %}
+
+{% endblock %}

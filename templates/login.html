@@ -1,9 +1,9 @@
 {% extends "base.html" %} {% block title %}Login{% endblock %} {% block
 content %}
 
-<div class="container">
+<div class="container mt-4 p-4">
     <!-- Login Form Start -->
-    <div class="row justify-content-center wrapper" id="login-box">
+    <div class="row justify-content-center">
         <div class="my-auto myShadow">
             <div class="col-lg-12 bg-white">
                 <div class="row">
@@ -13,7 +13,7 @@ content %}
                         <p class="text-center font-weight-bolder text-light lead">Please Sign in
                             your user account.</p>
                         <p class="text-center text-black">Don't Have an Account?<a class="h6 text-light text-primary"
-                                href="{{url_for('sign_up')}}">
+                                href="{{url_for('add_user')}}">
                                 Sign up</a>
                         </p>
                     </div>
