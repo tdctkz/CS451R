@@ -11,16 +11,33 @@
 </div>
 {% endfor %}
 
-<h1>Update name</h1>
-<div class="container">
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        {{ form.name(class="form-control", value=name_to_update.name) }}
+<div class="card">
+    <div class="card-header">
+        Update Profile
+    </div>
+    <div class="card-body">
+        <form action="/update/{{ name_to_update.id }}" method="POST">
+            {{ form.hidden_tag() }}
 
-        {{ form.email(class="form-control", value=name_to_update.email) }}
-        <br>
-        {{ form.submit(class="btn btn-secondary") }}
-    </form>
+            {{ form.name.label(class="form-label") }}
+
+            {{ form.name(class="form-control", value=name_to_update.name) }}
+            <br />
+
+            {{ form.username.label(class="form-label") }}
+
+            {{ form.username(class="form-control", value=name_to_update.username) }}
+            <br />
+
+            {{ form.email.label(class="form-label") }}
+
+            {{ form.email(class="form-control", value=name_to_update.email) }}
+            <br />
+
+            {{ form.submit(class="btn btn-secondary btn-sm") }}
+
+        </form>
+    </div>
 </div>
 
 {% endblock %}
