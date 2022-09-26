@@ -1,109 +1,103 @@
-{% extends "base.html" %} {% block title %}Donation Form{% endblock %} {% block
-content %}
+{% extends "base.html" %}
+{% block title %}Donation Form{% endblock %}
+{% block content %}
 
 
 <div class="container mt-2">
     <!-- Donation form start-->
-    <div class="col-lg-12 my-auto myShadow bg-light">
-        <div class="float-left ml-2 mt-2">
-            <a href="{{url_for('home')}}"><button class="btn myLinkBtn"><i
-                        class="fas fa-arrow-left fa-lg"></i></button></a>
-        </div>
+    <div class="row justify-content-center myShadow bg-light">
         <h1 class="text-center font-weight-bold text-primary">Donation Form</h1>
-        <hr class="my-3" />
-        <div class="row">
-            <form action="#" method="POST" class="px-3" id="register-form">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <h3 class="text-center font-weight-bold text-secondary">Your information</h3>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i class="far fa-user fa-lg fa-fw"></i></span>
-                            </div>
-                            <input type="text" id="name" name="name" class="form-control rounded-0"
-                                placeholder="Your full name" required />
+        <form action="#" method="POST" class="px-3">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h3 class="text-center font-weight-bold text-secondary">Your information</h3>
+                    <div class="input-group input-group-lg form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text rounded-0"><i class="far fa-user fa-lg fa-fw"></i></span>
                         </div>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i
-                                        class="far fa-envelope fa-lg fa-fw"></i></span>
-                            </div>
-                            <input type="email" id="remail" name="email" class="form-control rounded-0"
-                                placeholder="Your Email" required />
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
-                            </div>
-                            <input type="address" id="address" name="address" class="form-control rounded-0"
-                                placeholder="Your Address" required />
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            <input type="string" id="city" name="city" class="form-control rounded-0" minlength="3"
-                                placeholder="City" required />
-                            <input type="string" id="state" name="state" class="form-control rounded-0" minlength="3"
-                                placeholder="State" required />
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            <input type="number" id="zipcode" name="zipcode" class="form-control rounded-0"
-                                minlength="3" placeholder="Zip code" required />
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i
-                                        class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
-                            </div>
-                            <input type="number" id="amount" name="amount" class="form-control rounded-0"
-                                placeholder="Enter amount" required />
-                        </div>
-
+                        <input type="text" id="name" name="name" class="form-control rounded-0"
+                            placeholder="Your full name" required />
                     </div>
-                    <div class="col-lg-6">
-                        <h3 class="text-center font-weight-bold text-secondary">Credit card information</h3>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i
-                                        class="fas fa-credit-card fa-lg fa-fw"></i></span>
-                            </div>
-                            <input for="card-number" type="tel" id="credit-number" name="credit"
-                                class="form-control card-number rounded-0" placeholder="xxxx xxxx xxxx xxxx"
-                                pattern="[0-9]*" inputmode="numeric" maxlength="16" required />
+                    <div class="input-group input-group-lg form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text rounded-0"><i class="far fa-envelope fa-lg fa-fw"></i></span>
                         </div>
-                        <div class="input-group input-group-lg form-group">
-                            <label class="h5 font-weight-normal mr-3 mt-2" for="card-number">Expiration
-                                Date</label>
-                            <input for="card-number" placeholder="MM/YY" pattern="[0-9]*" type="text"
-                                class="form-control card-expiration" id="card-expiration" required />
-                            <input for="card-number" placeholder="CVV" pattern="[0-9]*" type="text"
-                                class="form-control card-cvv" id="cvv" required />
+                        <input type="email" id="remail" name="email" class="form-control rounded-0"
+                            placeholder="Your Email" required />
+                    </div>
+                    <div class="input-group input-group-lg form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
                         </div>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
-                            </div>
-                            <input type="address" id="address" name="address" class="form-control rounded-0"
-                                placeholder="Billing Address" required />
+                        <input type="address" id="address" name="address" class="form-control rounded-0"
+                            placeholder="Your Address" required />
+                    </div>
+                    <div class="input-group input-group-lg form-group">
+                        <input type="string" id="city" name="city" class="form-control rounded-0" minlength="3"
+                            placeholder="City" required />
+                        <input type="string" id="state" name="state" class="form-control rounded-0" minlength="3"
+                            placeholder="State" required />
+                    </div>
+                    <div class="input-group input-group-lg form-group">
+                        <input type="number" id="zipcode" name="zipcode" class="form-control rounded-0" minlength="3"
+                            placeholder="Zip code" required />
+                    </div>
+                    <div class="input-group input-group-lg form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text rounded-0"><i
+                                    class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
                         </div>
-                        <div class="input-group input-group-lg form-group">
+                        <input type="number" id="amount" name="amount" class="form-control rounded-0"
+                            placeholder="Enter amount" required />
+                    </div>
 
-                            <input type="string" id="city" name="city" class="form-control rounded-0" minlength="3"
-                                placeholder="City" required />
-                            <input type="string" id="state" name="state" class="form-control rounded-0" minlength="3"
-                                placeholder="State" required />
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="text-center font-weight-bold text-secondary">Credit card information</h3>
+                    <div class="input-group input-group-lg form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text rounded-0"><i
+                                    class="fas fa-credit-card fa-lg fa-fw"></i></span>
                         </div>
-                        <div class="input-group input-group-lg form-group">
-                            <input type="number" id="zipcode" name="zipcode" class="form-control rounded-0"
-                                minlength="3" placeholder="Zip code" required />
+                        <input for="card-number" type="tel" id="credit-number" name="credit"
+                            class="form-control card-number rounded-0" placeholder="xxxx xxxx xxxx xxxx"
+                            pattern="[0-9]*" inputmode="numeric" maxlength="16" required />
+                    </div>
+                    <div class="input-group input-group-lg form-group">
+                        <label class="h5 font-weight-normal mr-3 mt-2" for="card-number">Expiration
+                            Date</label>
+                        <input for="card-number" placeholder="MM/YY" pattern="[0-9]*" type="text"
+                            class="form-control card-expiration" id="card-expiration" required />
+                        <input for="card-number" placeholder="CVV" pattern="[0-9]*" type="text"
+                            class="form-control card-cvv" id="cvv" required />
+                    </div>
+                    <div class="input-group input-group-lg form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
                         </div>
-                        <div class="form-group mt-4">
-                            <input type="submit" id="register-btn" value="Submit"
-                                class="btn btn-primary btn-lg btn-block myBtn" />
-                        </div>
+                        <input type="address" id="address" name="address" class="form-control rounded-0"
+                            placeholder="Billing Address" required />
+                    </div>
+                    <div class="input-group input-group-lg form-group">
+
+                        <input type="string" id="city" name="city" class="form-control rounded-0" minlength="3"
+                            placeholder="City" required />
+                        <input type="string" id="state" name="state" class="form-control rounded-0" minlength="3"
+                            placeholder="State" required />
+                    </div>
+                    <div class="input-group input-group-lg form-group">
+                        <input type="number" id="zipcode" name="zipcode" class="form-control rounded-0" minlength="3"
+                            placeholder="Zip code" required />
+                    </div>
+                    <div class="form-group mt-4 float-right">
+                        <a href="{{url_for('home')}}" class="btn btn-secondary">Back</a>
+                        <button type="submit" class="btn btn-secondary">Submit</button>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
+</div>
 </div>
 </div>
 <!-- Donation Form End -->
