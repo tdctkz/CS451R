@@ -99,6 +99,11 @@ def update(id):
     else:       
         return render_template("update.html", form=form, name_to_update = name_to_update, id=id)        
 
+#Create donation form page
+@app.route('/dona_form')
+def donation_form():
+    return render_template("donation_form.html")
+
 @app.route('/delete/<int:id>')
 @login_required
 def delete(id):
