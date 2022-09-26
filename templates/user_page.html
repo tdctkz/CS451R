@@ -25,6 +25,9 @@
     <strong>Email:</strong>
     {{ current_user.email }}<br />
 
+    <strong>Your goal:</strong>
+    {{ current_user.fund_amount }}<br />
+
     <strong>Date Joined:</strong>
     {{ current_user.date_added }}<br />
     <br>
@@ -34,7 +37,23 @@
     <a href="{{ url_for('delete', id=current_user.id)}}" class="btn btn-danger btn-sm float-right">Delete</a>
     <br />
 </div>
+<br>
+<div class="container my-auto myShadow bg-light mt-4 p-4">
+    <h2>Fund goal list</h2>
 
-<br> <br>
+    <strong>Your goal:</strong>
+    {{ current_user.fund_amount }}<br />
+    <br>
+    <a href="{{ url_for('user_page', id=current_user.id)}}" class="btn btn-secondary btn-sm">Add a new goal</a>
 
+</div>
+{% if id == current_user.id %}
+<div class="container my-auto myShadow bg-light mt-4 p-4" id="goal-box">
+    <form action="/user_page" method="POST">
+        {{ form.fund_amount(class="form-control rounded-0", placeholder="$ Your new goal") }}
+        <br>
+        {{ form.submit(class="btn btn-secondary btn-sm") }}
+    </form>
+</div>
+{% endif %}
 {% endblock %}

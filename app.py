@@ -1,4 +1,3 @@
-from cmath import log
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError, TextAreaField
@@ -7,7 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash 
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
+from webforms import UserForm, LoginForm
 
 # create a Flask instance
 app = Flask(__name__)
@@ -30,21 +30,6 @@ login_manager.login_view = 'login'
 @login_manager.user_loader
 def load_user(user_id):
 	return Users.query.get(int(user_id))
-
-# Create a form class
-class LoginForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-# Create a form class
-class UserForm(FlaskForm):
-    name = StringField("Your name", validators=[DataRequired()])
-    username = StringField("Username", validators=[DataRequired()])
-    email = StringField("Your email", validators=[DataRequired()])
-    password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
-    password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
-    submit = SubmitField("Submit")
 
 # create a route decorator
 # Create Login pages
@@ -80,20 +65,16 @@ def user_page():
     form = UserForm()
     id = current_user.id
     name_to_update = Users.query.get_or_404(id)
-    if request.method == "POST":
-        name_to_update.name = request.form['name']
-        name_to_update.username = request.form['username']
-        name_to_update.email = request.form['email']
-       
+    if request.method == "POST":        
+        name_to_update.fund_amount = request.form['fund_amount']
         try:
             db.session.commit()
-            flash("User Updated Successfully!")
+            flash("Fund Amount Updated Successfully!")
             return render_template("user_page.html", form=form, name_to_update = name_to_update)
         except:
             flash("Error!  Looks like there was a problem...try again!")
             return render_template("user_page.html", form=form, name_to_update = name_to_update)
     else:
-        
         return render_template("user_page.html", form=form, name_to_update = name_to_update, id=id)  
 
 
@@ -107,11 +88,11 @@ def update(id):
         name_to_update.name = request.form['name']
         name_to_update.username = request.form['username']
         name_to_update.email = request.form['email']
-        #name_to_update.color = request.form['color']
+        
         try:
             db.session.commit()
             flash("User Updated Successfully!")
-            return render_template("user_page.html", form=form, name_to_update = name_to_update, id=id)
+            return render_template("update.html", form=form, name_to_update = name_to_update, id=id)
         except:
             flash("Error!  Looks like there was a problem...try again!")
             return render_template("update.html", form=form, name_to_update = name_to_update, id=id)
@@ -166,7 +147,8 @@ def add_user():
         else:            
             # Hash the password!!!
             hashed_pw = generate_password_hash(form.password_hash.data, "sha256")   
-            user = Users(username=form.username.data, name=form.name.data, email=form.email.data, password_hash=hashed_pw)
+            user = Users(username=form.username.data, name=form.name.data,
+            email=form.email.data, password_hash=hashed_pw, fund_amount = form.fund_amount.data)
             db.session.add(user)
             db.session.commit()        
             flash("User Added Successfully!")
@@ -176,7 +158,7 @@ def add_user():
         form.username.data = ''
         form.email.data = ''
         form.password_hash.data = ''        
-        
+        form.fund_amount.data = ''
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", 
 		form=form,
@@ -192,6 +174,7 @@ def page_not_found(e):
 # Create model
 class Users(db.Model, UserMixin): 
     id = db.Column(db.Integer, primary_key=True)
+    fund_amount = db.Column(db.Integer)
     name = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(20), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
