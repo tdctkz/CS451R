@@ -1,3 +1,4 @@
+from cmath import log
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError, TextAreaField
@@ -63,7 +64,7 @@ def login():
 			if check_password_hash(user.password_hash, form.password.data):
 				login_user(user)
 				flash("Login Succesfull!!")
-				return redirect(url_for('Dashboard'))
+				return redirect(url_for('user'))
 			else:
 				flash("Wrong Password - Try Again!")
 		else:
@@ -75,13 +76,13 @@ def login():
 @login_required
 def logout():
 	logout_user()
-	flash("You Have Been Logged Out!  Thanks For Stopping By...")
+	flash("You Have Been Logged Out!")
 	return redirect(url_for('login'))
 
-# Create Dashboard Page
-@app.route('/Dashboard', methods=['GET', 'POST'])
+# Create user Page
+@app.route('/user', methods=['GET', 'POST'])
 @login_required
-def Dashboard():
+def user():
     form = UserForm()
     id = current_user.id
     name_to_update = Users.query.get_or_404(id)
@@ -89,21 +90,23 @@ def Dashboard():
         name_to_update.name = request.form['name']
         name_to_update.username = request.form['username']
         name_to_update.email = request.form['email']
-        #name_to_update.color = request.form['color']
+       
         try:
             db.session.commit()
             flash("User Updated Successfully!")
-            return render_template("Dashboard.html", form=form, name_to_update = name_to_update)
+            return render_template("user.html", form=form, name_to_update = name_to_update)
         except:
             flash("Error!  Looks like there was a problem...try again!")
-            return render_template("Dashboard.html", form=form, name_to_update = name_to_update)
+            return render_template("user.html", form=form, name_to_update = name_to_update)
     else:
-        flash("User Updated Successfully!")
-        return render_template("Dashboard.html", form=form, name_to_update = name_to_update)  
+        
+        return render_template("user.html", form=form, name_to_update = name_to_update, id=id)  
 
+    return render_template("user.html")
 
 # Create  update pages
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update(id):   
     form = UserForm()
     name_to_update = Users.query.get_or_404(id)
@@ -115,65 +118,74 @@ def update(id):
         try:
             db.session.commit()
             flash("User Updated Successfully!")
-            return render_template("update.html", form=form, name_to_update = name_to_update)
+            return render_template("user.html", form=form, name_to_update = name_to_update, id=id)
         except:
             flash("Error!  Looks like there was a problem...try again!")
-            return render_template("update.html", form=form, name_to_update = name_to_update)
-    else:
-        flash("User Updated Successfully!")
-        return render_template("update.html", form=form, name_to_update = name_to_update)        
+            return render_template("update.html", form=form, name_to_update = name_to_update, id=id)
+    else:       
+        return render_template("update.html", form=form, name_to_update = name_to_update, id=id)        
 
 @app.route('/delete/<int:id>')
+@login_required
 def delete(id):
-	user_to_delete = Users.query.get_or_404(id)
-	name = None
-	form = UserForm()
+    if id == current_user.id:
+        user_to_delete = Users.query.get_or_404(id)
+        name = None
+        form = UserForm()
 
-	try:
-		db.session.delete(user_to_delete)
-		db.session.commit()
-		flash("User Deleted Successfully!!")
+        try:
+            db.session.delete(user_to_delete)
+            db.session.commit()
+            flash("User Deleted Successfully!!")
 
-		our_users = Users.query.order_by(Users.date_added)
-		return render_template("add_user.html", 
-			form=form,
-			name=name,
-			our_users=our_users)
+            our_users = Users.query.order_by(Users.date_added)
+            return render_template("add_user.html", 
+                form=form,
+                name=name,
+                our_users=our_users)
 
-	except:
-		flash("Whoops! There was a problem deleting user, try again...")
-		return render_template("add_user.html", 
-			form=form, name=name,our_users=our_users)
-	
+        except:
+            flash("Whoops! There was a problem deleting user, try again...")
+            return render_template("add_user.html", 
+                form=form, name=name,our_users=our_users)
+    else:
+        flash("Sorry, you can't delete that user! ")
+        return redirect(url_for('user'))
 
 # Create home page
-@app.route('/home')
+@app.route('/')
 def home():
     our_users = Users.query.order_by(Users.date_added)
     return render_template("home.html", our_users=our_users)
-
 
 # Create Add user pages
 @app.route('/user/add', methods=['GET', 'POST'])
 def add_user():
     name = None
     form = UserForm()
-  
+    password = request.form.get('password_hash')
+    confirm_password = request.form.get('password_hash2')
     if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data).first()
-        if user is None:
+        user = Users.query.filter_by(username=form.username.data).first()
+
+        if user:
+            flash('Username already exists.')  
+        elif password != confirm_password:
+            flash('Password must match!!')  
+        else:            
             # Hash the password!!!
-            hashed_pw = generate_password_hash(form.password_hash.data, "sha256")
+            hashed_pw = generate_password_hash(form.password_hash.data, "sha256")   
             user = Users(username=form.username.data, name=form.name.data, email=form.email.data, password_hash=hashed_pw)
             db.session.add(user)
-            db.session.commit()
+            db.session.commit()        
+            flash("User Added Successfully!")
+        
         name = form.name.data
         form.name.data = ''
         form.username.data = ''
         form.email.data = ''
-        form.password_hash.data = ''
-        #form.color.data = ''
-        flash("User Added Successfully!")
+        form.password_hash.data = ''        
+        
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", 
 		form=form,

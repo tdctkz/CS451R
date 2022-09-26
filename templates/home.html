@@ -2,20 +2,31 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-<div class="container">
-    <br>
-    {% for our_user in our_users %}
-    <tr>
-        {{our_user.id }}.<a href="{{ url_for('update', id=our_user.id)}}"> {{our_user.name }}</a>- {{our_user.username
-        }} - {{
-        our_user.email }} - <a href="{{ url_for('delete', id=our_user.id)}}">Delete</a>
-        <br>
-    </tr>
-    {% endfor %}
-    <br>
-</div>
-</div>
+<div class="container my-auto myShadow bg-light mt-4 p-4">
+    <div class="container">
+        <h2>Fundraiser List</h2>
 
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Fund Goal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for our_user in our_users %}
+                <tr>
 
+                    <td> {{ our_user.id }}.<a href="{{ url_for('update', id=our_user.id)}}"> {{our_user.name }}</a></td>
+                    <td>{{ our_user.email }}</td>
+                    <td>Doe</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% endblock %}

@@ -4,9 +4,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
-            <a class="nav-item nav-link" href="{{url_for('home')}}">Home</a>
+            <a class="nav-item nav-link" href="{{url_for('home')}}">Home/Dashboard</a>
             {% if current_user.is_authenticated %}
-            <a class="nav-item nav-link" href="{{url_for('Dashboard')}}">Dashboard</a>
+            <a class="nav-item nav-link" href="{{url_for('Dashboard')}}">Fundraiser</a>
             <a class="nav-item nav-link" href="{{url_for('logout')}}">Logout</a>
             {% else %}
             <a class="nav-item nav-link" href="{{url_for('login')}}">Login</a>

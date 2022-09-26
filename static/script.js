@@ -36,19 +36,19 @@ function password_show_hide() {
 
 / Remember username funciton/
 const rmCheck = document.getElementById("rememberMe"),
-  emailInput = document.getElementById("email");
+  username_input = document.getElementById("username");
 
 if (localStorage.checkbox && localStorage.checkbox !== "") {
   rmCheck.setAttribute("checked", "checked");
-  emailInput.value = localStorage.username;
+  username_input.value = localStorage.username;
 } else {
   rmCheck.removeAttribute("checked");
-  emailInput.value = "";
+  username_input.value = "";
 }
 
 function lsRememberMe() {
-  if (rmCheck.checked && emailInput.value !== "") {
-    localStorage.username = emailInput.value;
+  if (rmCheck.checked && username_input.value !== "") {
+    localStorage.username = username_input.value;
     localStorage.checkbox = rmCheck.value;
   } else {
     localStorage.username = "";

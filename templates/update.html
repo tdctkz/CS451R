@@ -11,33 +11,47 @@
 </div>
 {% endfor %}
 
-<div class="card">
-    <div class="card-header">
-        Update Profile
-    </div>
-    <div class="card-body">
-        <form action="/update/{{ name_to_update.id }}" method="POST">
-            {{ form.hidden_tag() }}
+{% if id == current_user.id %}
 
-            {{ form.name.label(class="form-label") }}
 
-            {{ form.name(class="form-control", value=name_to_update.name) }}
-            <br />
+<br />
+<div class="container my-auto myShadow bg-light mt-4 p-4">
+    <h2>Update User Profile</h2>
+    <form action="/update/{{ name_to_update.id }}" method="POST">
+        {{ form.hidden_tag() }}
 
-            {{ form.username.label(class="form-label") }}
+        {{ form.name.label(class="form-label") }}
 
-            {{ form.username(class="form-control", value=name_to_update.username) }}
-            <br />
+        {{ form.name(class="form-control", value=name_to_update.name) }}
+        <br />
 
-            {{ form.email.label(class="form-label") }}
+        {{ form.username.label(class="form-label") }}
 
-            {{ form.email(class="form-control", value=name_to_update.email) }}
-            <br />
+        {{ form.username(class="form-control", value=name_to_update.username) }}
+        <br />
 
-            {{ form.submit(class="btn btn-secondary btn-sm") }}
+        {{ form.email.label(class="form-label") }}
 
-        </form>
-    </div>
+        {{ form.email(class="form-control", value=name_to_update.email) }}
+
+        <br />
+
+        {{ form.submit(class="btn btn-secondary btn-sm") }}
+
+
+    </form>
 </div>
+<br /><br /><br />
+
+{% else %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    Sorry! You Can't Edit This User...
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<h2>Access Denied!</h2>
+<p>Sorry, you cannot access this user profile...</p>
+
+{% endif %}
 
 {% endblock %}
