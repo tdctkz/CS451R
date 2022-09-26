@@ -5,7 +5,6 @@ from wtforms.validators import DataRequired, EqualTo, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash 
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
 from webforms import UserForm, LoginForm
 
@@ -40,7 +39,7 @@ def login():
 		user = Users.query.filter_by(username=form.username.data).first()
 		if user:
 			# Check the hash
-			if check_password_hash(user.password_hash, form.password.data):
+			if user.password == form.password.data:
 				login_user(user)
 				flash("Login Succesfull!!")
 				return redirect(url_for('user_page'))
@@ -80,15 +79,16 @@ def user_page():
 
 # Create  update pages
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
-@login_required
+
 def update(id):   
     form = UserForm()
     name_to_update = Users.query.get_or_404(id)
+    
     if request.method == "POST":
         name_to_update.name = request.form['name']
         name_to_update.username = request.form['username']
         name_to_update.email = request.form['email']
-        
+        name_to_update.password = request.form['password']
         try:
             db.session.commit()
             flash("User Updated Successfully!")
@@ -144,11 +144,10 @@ def add_user():
         if user:
             flash('Username already exists.')  
          
-        else:            
-            # Hash the password!!!
-            hashed_pw = generate_password_hash(form.password_hash.data, "sha256")   
+        else:                     
+          
             user = Users(username=form.username.data, name=form.name.data,
-            email=form.email.data, password_hash=hashed_pw, fund_amount = form.fund_amount.data)
+            email=form.email.data, password=form.password.data, fund_amount = form.fund_amount.data)
             db.session.add(user)
             db.session.commit()        
             flash("User Added Successfully!")
@@ -157,7 +156,7 @@ def add_user():
         form.name.data = ''
         form.username.data = ''
         form.email.data = ''
-        form.password_hash.data = ''        
+        form.password.data = ''        
         form.fund_amount.data = ''
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", 
@@ -181,18 +180,7 @@ class Users(db.Model, UserMixin):
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Do some password stuff!
-    password_hash = db.Column(db.String(128))
-    
-    @property
-    def password(self):
-        raise AttributeError('password is not a readable attribute!')
-
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def verify_password(self, password):
-        return check_password_hash(self.password_hash, password)
+    password = db.Column(db.String(128))   
 
     # Create A string
     def __repr__(self):

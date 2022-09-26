@@ -19,9 +19,10 @@
                 <tr>
 
                     <td>{{our_user.name }}</td>
+                    <td>{{our_user.username }}</td>
                     <td>{{ our_user.email }}</td>
                     <td><a href="{{ url_for('update', id=our_user.id)}}">$ {{ our_user.fund_amount }}</a></td>
-
+                    <td>{{ our_user.password}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

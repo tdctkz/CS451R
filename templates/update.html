@@ -20,25 +20,21 @@
     <form action="/update/{{ name_to_update.id }}" method="POST">
         {{ form.hidden_tag() }}
 
-        {{ form.name.label(class="form-label") }}
-
-        {{ form.name(class="form-control", value=name_to_update.name) }}
+        {{ form.name(class="form-control", placeholder="Your new name") }}
         <br />
 
-        {{ form.username.label(class="form-label") }}
-
-        {{ form.username(class="form-control", value=name_to_update.username) }}
+        {{ form.username(class="form-control", placeholder="Your new username") }}
         <br />
 
-        {{ form.email.label(class="form-label") }}
+        {{ form.email(class="form-control", placeholder="Your new email") }}
 
-        {{ form.email(class="form-control", value=name_to_update.email) }}
+        <br />
 
+        {{ form.password(class="form-control", placeholder="New password") }}
         <br />
 
         {{ form.submit(class="btn btn-secondary btn-sm") }}
-
-
+        <a href="{{ url_for('user_page', id=current_user.id)}}" class="btn btn-dark btn-sm">Back</a>
     </form>
 </div>
 <br /><br /><br />
@@ -46,7 +42,7 @@
 {% else %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
     Sorry! You Can't Edit This User...
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
 </div>
 
 <h2>Access Denied!</h2>

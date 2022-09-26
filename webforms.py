@@ -15,7 +15,7 @@ class UserForm(FlaskForm):
     fund_amount = StringField("Your goal", validators=[DataRequired()])
     username = StringField("Username", validators=[DataRequired()])
     email = StringField("Your email", validators=[DataRequired()])
-    password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
-    password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(), EqualTo('confirm_password', message='Passwords Must Match!')])
+    confirm_password= PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField("Submit")
 

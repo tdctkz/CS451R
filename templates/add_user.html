@@ -58,7 +58,7 @@
                                     <span class="input-group-text rounded-0"><i
                                             class="fas fa-key fa-lg fa-fw"></i></span>
                                 </div>
-                                {{ form.password_hash(class="form-control rounded-0", placeholder="Password",
+                                {{ form.password(class="form-control rounded-0", placeholder="Password",
                                 pattern="(?=.*[!@#$%&*_?])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}", title="Your password
                                 must
                                 be 8 characters minimum, must contain 1 upper case letter, 1 symbol
@@ -69,7 +69,7 @@
                                     <span class="input-group-text rounded-0"><i
                                             class="fas fa-key fa-lg fa-fw"></i></span>
                                 </div>
-                                {{ form.password_hash2(class="form-control rounded-0", placeholder="Confirm Password")
+                                {{ form.confirm_password(class="form-control rounded-0", placeholder="Confirm Password")
                                 }}
                             </div>
                             <div class="input-group input-group-lg form-group">
