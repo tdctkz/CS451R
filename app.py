@@ -13,7 +13,7 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, log
 app = Flask(__name__)
 
 # Add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donaUsers.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fundraisers.db'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password123@localhost/donate_users'
 # Secret key
 app.config['SECRET_KEY'] = "donation"
@@ -32,11 +32,6 @@ def load_user(user_id):
 	return Users.query.get(int(user_id))
 
 # Create a form class
-class NameForm(FlaskForm):
-    name = StringField("Your name", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-# Create a form class
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
@@ -46,7 +41,6 @@ class LoginForm(FlaskForm):
 class UserForm(FlaskForm):
     name = StringField("Your name", validators=[DataRequired()])
     username = StringField("Username", validators=[DataRequired()])
-
     email = StringField("Your email", validators=[DataRequired()])
     password_hash = PasswordField('Password', validators=[DataRequired(), EqualTo('password_hash2', message='Passwords Must Match!')])
     password_hash2 = PasswordField('Confirm Password', validators=[DataRequired()])
@@ -64,11 +58,11 @@ def login():
 			if check_password_hash(user.password_hash, form.password.data):
 				login_user(user)
 				flash("Login Succesfull!!")
-				return redirect(url_for('user'))
+				return redirect(url_for('user_page'))
 			else:
 				flash("Wrong Password - Try Again!")
 		else:
-			flash("That User Doesn't Exist! Try Again...")
+			flash("User Doesn't Exist!")
 	return render_template('login.html', form=form)
 
 # Create Logout Page
@@ -80,9 +74,9 @@ def logout():
 	return redirect(url_for('login'))
 
 # Create user Page
-@app.route('/user', methods=['GET', 'POST'])
+@app.route('/user_page', methods=['GET', 'POST'])
 @login_required
-def user():
+def user_page():
     form = UserForm()
     id = current_user.id
     name_to_update = Users.query.get_or_404(id)
@@ -94,15 +88,14 @@ def user():
         try:
             db.session.commit()
             flash("User Updated Successfully!")
-            return render_template("user.html", form=form, name_to_update = name_to_update)
+            return render_template("user_page.html", form=form, name_to_update = name_to_update)
         except:
             flash("Error!  Looks like there was a problem...try again!")
-            return render_template("user.html", form=form, name_to_update = name_to_update)
+            return render_template("user_page.html", form=form, name_to_update = name_to_update)
     else:
         
-        return render_template("user.html", form=form, name_to_update = name_to_update, id=id)  
+        return render_template("user_page.html", form=form, name_to_update = name_to_update, id=id)  
 
-    return render_template("user.html")
 
 # Create  update pages
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
@@ -118,7 +111,7 @@ def update(id):
         try:
             db.session.commit()
             flash("User Updated Successfully!")
-            return render_template("user.html", form=form, name_to_update = name_to_update, id=id)
+            return render_template("user_page.html", form=form, name_to_update = name_to_update, id=id)
         except:
             flash("Error!  Looks like there was a problem...try again!")
             return render_template("update.html", form=form, name_to_update = name_to_update, id=id)
@@ -163,15 +156,13 @@ def home():
 def add_user():
     name = None
     form = UserForm()
-    password = request.form.get('password_hash')
-    confirm_password = request.form.get('password_hash2')
+   
     if form.validate_on_submit():
         user = Users.query.filter_by(username=form.username.data).first()
 
         if user:
             flash('Username already exists.')  
-        elif password != confirm_password:
-            flash('Password must match!!')  
+         
         else:            
             # Hash the password!!!
             hashed_pw = generate_password_hash(form.password_hash.data, "sha256")   
