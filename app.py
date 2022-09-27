@@ -1,8 +1,4 @@
-import email
 from flask import Flask, render_template, flash, request, redirect, url_for
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError, TextAreaField
-from wtforms.validators import DataRequired, EqualTo, Length
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
@@ -119,18 +115,18 @@ def delete(id):
             flash("User Deleted Successfully!!")
 
             our_users = Users.query.order_by(Users.date_added)
-            return render_template("add_user.html", 
+            return render_template("login.html", 
                 form=form,
                 name=name,
                 our_users=our_users)
 
         except:
             flash("Whoops! There was a problem deleting user, try again...")
-            return render_template("add_user.html", 
+            return render_template("login.html", 
                 form=form, name=name,our_users=our_users)
     else:
         flash("Sorry, you can't delete that user! ")
-        return redirect(url_for('user'))
+        return redirect(url_for('user_page'))
 
 # Create home page
 @app.route('/')
@@ -139,34 +135,33 @@ def home():
     return render_template("home.html", our_users=our_users)
 
 # Create Add user pages
-@app.route('/user/add')
+@app.route('/user/add', methods=['GET', 'POST'])
 def add_user():
-    name = None
     form = UserForm()
    
     if form.validate_on_submit():
         user = Users.query.filter_by(username=form.username.data).first()
 
         if user:
-            flash('Username already exists.')       
+            flash('Username already exists.')  
+        elif form.confirm_password.data != form.password.data:
+            flash('Passwords must match!!Try again...')     
         else:                     
             user = Users(username=form.username.data, name=form.name.data,
             email=form.email.data, password=form.password.data, fund_amount = form.fund_amount.data)
             db.session.add(user)
             db.session.commit()        
-            flash("User Added Successfully!")
-        
-        name = form.name.data
+            flash("User Added Successfully!")           
+    
         form.name.data = ''
         form.username.data = ''
         form.email.data = ''
         form.password.data = ''        
         form.fund_amount.data = ''
+
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", 
-		form=form,
-		name=name,
-		our_users=our_users)
+		form=form, our_users=our_users)
 
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
@@ -179,7 +174,7 @@ def reset_password():
             return redirect(url_for('login'))
         else:
             flash('Email does not match in the system! Try again...')
-           
+            
     return render_template("reset_password.html", form=form)
 
 # Create Custom Error pages
