@@ -58,11 +58,11 @@ content %}
                                     <label class="custom-control-label" for="showPassword">Show Password</label>
                                 </div>
                                 <div>
-                                    <div class="forgot font-weight-normal float-left">
+                                    <div class="font-weight-normal float-left">
                                         <p>Forgot
                                             <a href="#" id="forgotUsername-link">username</a>
                                             or
-                                            <a href="#" id="forgotPassword-link"> password?</a>
+                                            <a href="{{ url_for('reset_password') }}"> password?</a>
                                         </p>
                                     </div>
                                 </div>

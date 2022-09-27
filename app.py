@@ -1,3 +1,4 @@
+import email
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField, ValidationError, TextAreaField
@@ -79,7 +80,7 @@ def user_page():
 
 # Create  update pages
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
-
+@login_required
 def update(id):   
     form = UserForm()
     name_to_update = Users.query.get_or_404(id)
@@ -138,7 +139,7 @@ def home():
     return render_template("home.html", our_users=our_users)
 
 # Create Add user pages
-@app.route('/user/add', methods=['GET', 'POST'])
+@app.route('/user/add')
 def add_user():
     name = None
     form = UserForm()
@@ -147,10 +148,8 @@ def add_user():
         user = Users.query.filter_by(username=form.username.data).first()
 
         if user:
-            flash('Username already exists.')  
-         
+            flash('Username already exists.')       
         else:                     
-          
             user = Users(username=form.username.data, name=form.name.data,
             email=form.email.data, password=form.password.data, fund_amount = form.fund_amount.data)
             db.session.add(user)
@@ -168,6 +167,20 @@ def add_user():
 		form=form,
 		name=name,
 		our_users=our_users)
+
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    form = UserForm()
+
+    if request.method == "POST":
+        user = Users.query.filter_by(email=form.email.data).first()
+        if user:        
+            flash('Check your email!! We sent an email to reset your password.') 
+            return redirect(url_for('login'))
+        else:
+            flash('Email does not match in the system! Try again...')
+           
+    return render_template("reset_password.html", form=form)
 
 # Create Custom Error pages
 # Invalid URL
@@ -190,3 +203,6 @@ class Users(db.Model, UserMixin):
     # Create A string
     def __repr__(self):
         return '<Name %r>' % self.name
+
+if __name__ == '__main__':
+    app.run(debug=True)
