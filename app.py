@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
-from webforms import UserForm, LoginForm
+from webforms import UserForm, LoginForm, DonationForm
 
 # create a Flask instance
 app = Flask(__name__)
@@ -34,6 +34,7 @@ def login():
 	form = LoginForm()
 	if form.validate_on_submit():
 		user = Users.query.filter_by(username=form.username.data).first()
+      
 		if user:
 			# Check the hash
 			if user.password == form.password.data:
@@ -62,7 +63,7 @@ def user_page():
     id = current_user.id
     name_to_update = Users.query.get_or_404(id)
     if request.method == "POST":        
-        name_to_update.fund_amount = request.form['fund_amount']
+        name_to_update.goal_amount = request.form['goal_amount']
         try:
             db.session.commit()
             flash("Fund Amount Updated Successfully!")
@@ -89,24 +90,19 @@ def update(id):
         try:
             db.session.commit()
             flash("User Updated Successfully!")
-            return render_template("update.html", form=form, name_to_update = name_to_update, id=id)
+            return render_template("user_page.html", form=form, name_to_update = name_to_update, id=id)
         except:
             flash("Error!  Looks like there was a problem...try again!")
             return render_template("update.html", form=form, name_to_update = name_to_update, id=id)
     else:       
         return render_template("update.html", form=form, name_to_update = name_to_update, id=id)        
 
-#Create donation form page
-@app.route('/dona_form')
-def donation_form():
-    return render_template("donation_form.html")
 
 @app.route('/delete/<int:id>')
 @login_required
 def delete(id):
     if id == current_user.id:
         user_to_delete = Users.query.get_or_404(id)
-        name = None
         form = UserForm()
 
         try:
@@ -117,13 +113,12 @@ def delete(id):
             our_users = Users.query.order_by(Users.date_added)
             return render_template("login.html", 
                 form=form,
-                name=name,
                 our_users=our_users)
 
         except:
             flash("Whoops! There was a problem deleting user, try again...")
             return render_template("login.html", 
-                form=form, name=name,our_users=our_users)
+                form=form, our_users=our_users)
     else:
         flash("Sorry, you can't delete that user! ")
         return redirect(url_for('user_page'))
@@ -148,34 +143,52 @@ def add_user():
             flash('Passwords must match!!Try again...')     
         else:                     
             user = Users(username=form.username.data, name=form.name.data,
-            email=form.email.data, password=form.password.data, fund_amount = form.fund_amount.data)
+            email=form.email.data, password=form.password.data, goal_amount = form.goal_amount.data)
             db.session.add(user)
             db.session.commit()        
             flash("User Added Successfully!")           
-    
+            return redirect(url_for('home'))
         form.name.data = ''
         form.username.data = ''
         form.email.data = ''
         form.password.data = ''        
-        form.fund_amount.data = ''
+        form.goal_amount.data = ''
 
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", 
 		form=form, our_users=our_users)
 
-@app.route('/reset_password', methods=['GET', 'POST'])
-def reset_password():
-    form = UserForm()
-
-    if request.method == "POST":
-        user = Users.query.filter_by(email=form.email.data).first()
-        if user:        
-            flash('Check your email!! We sent an email to reset your password.') 
-            return redirect(url_for('login'))
-        else:
-            flash('Email does not match in the system! Try again...')
+# @app.route('/reset_password', methods=['GET', 'POST'])
+# def reset_password():
+#     form = UserForm()
+#     change_password = Users.query.get_or_404(id)
+    
+#     if request.method == "POST":
+#         user = Users.query.filter_by(email=form.email.data).first()
+#         if user:        
+#             flash('Check your email!! We sent an email to reset your password.') 
+#             return redirect(url_for('login'))
+#         else:
+#             flash('Email does not match in the system! Try again...')
             
-    return render_template("reset_password.html", form=form)
+#     return render_template("reset_password.html", form=form)
+
+@app.route('/donation/<int:id>', methods=['GET', 'POST'])
+def donation(id):
+    form = DonationForm()
+    fund_to_update = Users.query.get_or_404(id)
+    
+    if request.method == "POST":
+        fund_to_update.current_amount += int(request.form['amount'])
+        try:
+            db.session.commit()
+            flash("User fund Updated Successfully!")
+            return redirect(url_for('home'))
+        except:
+            flash("Error!  Looks like there was a problem...try again!")
+            return render_template("donation_form.html", form=form, fund_to_update = fund_to_update, id=id)
+    else:       
+        return render_template("donation_form.html", form=form, fund_to_update = fund_to_update, id=id)        
 
 # Create Custom Error pages
 # Invalid URL
@@ -186,7 +199,8 @@ def page_not_found(e):
 # Create model
 class Users(db.Model, UserMixin): 
     id = db.Column(db.Integer, primary_key=True)
-    fund_amount = db.Column(db.Integer)
+    goal_amount = db.Column(db.Integer)
+    current_amount = db.Column(db.Integer)
     name = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(20), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)

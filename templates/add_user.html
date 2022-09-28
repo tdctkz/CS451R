@@ -68,7 +68,8 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text rounded-0"><i class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
                     </div>
-                    {{ form.fund_amount(class="form-control rounded-0", placeholder="Your starting goal") }}
+                    {{ form.goal_amount(class="form-control rounded-0", placeholder="Your starting goal", type="number")
+                    }}
                 </div>
                 {{ form.submit(class="btn btn-secondary float-right") }}
             </form>

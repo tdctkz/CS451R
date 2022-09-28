@@ -20,19 +20,21 @@
     <form action="/update/{{ name_to_update.id }}" method="POST">
         {{ form.hidden_tag() }}
 
-        {{ form.name(class="form-control", placeholder="Your new name") }}
+        {{ form.name(class="form-control", value=name_to_update.name, placeholder="Your new name") }}
         <br />
 
-        {{ form.username(class="form-control", placeholder="Your new username") }}
+        {{ form.username(class="form-control", value=name_to_update.username, placeholder="Your new username") }}
         <br />
 
-        {{ form.email(class="form-control", placeholder="Your new email") }}
+        {{ form.email(class="form-control", value=name_to_update.email, placeholder="Your new email") }}
 
         <br />
 
-        {{ form.password(class="form-control", placeholder="New password") }}
-        <br />
-
+        {{ form.password(class="form-control rounded-0", placeholder="New Password",
+        pattern="(?=.*[!@#$%&*_?])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}", title="Your password
+        must be 8 characters minimum, must contain 1 upper case letter, 1 symbol
+        and 1 number.") }}
+        <br>
         {{ form.submit(class="btn btn-secondary btn-sm") }}
         <a href="{{ url_for('user_page', id=current_user.id)}}" class="btn btn-dark btn-sm">Back</a>
     </form>

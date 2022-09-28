@@ -5,55 +5,48 @@
 
 <div class="container mt-2">
     <!-- Donation form start-->
-    <div class="row justify-content-center myShadow bg-light">
-        <h1 class="text-center font-weight-bold text-primary">Donation Form</h1>
-        <form action="#" method="POST" class="px-3">
+    <div class="justify-content-center myShadow bg-light">
+        <br>
+        <h1 class="text-center font-weight-bold text-secondary">Donation Form</h1>
+        <br>
+        <form method="POST" class="px-3">
             <div class="row">
                 <div class="col-lg-6">
-                    <h3 class="text-center font-weight-bold text-secondary">Your information</h3>
                     <div class="input-group input-group-lg form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text rounded-0"><i class="far fa-user fa-lg fa-fw"></i></span>
                         </div>
                         <input type="text" id="name" name="name" class="form-control rounded-0"
-                            placeholder="Your full name" required />
+                            placeholder="Your full name" />
                     </div>
                     <div class="input-group input-group-lg form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text rounded-0"><i class="far fa-envelope fa-lg fa-fw"></i></span>
                         </div>
                         <input type="email" id="remail" name="email" class="form-control rounded-0"
-                            placeholder="Your Email" required />
+                            placeholder="Your Email" />
                     </div>
                     <div class="input-group input-group-lg form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
                         </div>
                         <input type="address" id="address" name="address" class="form-control rounded-0"
-                            placeholder="Your Address" required />
+                            placeholder="Billing Address" />
                     </div>
                     <div class="input-group input-group-lg form-group">
+
                         <input type="string" id="city" name="city" class="form-control rounded-0" minlength="3"
-                            placeholder="City" required />
+                            placeholder="City" />
                         <input type="string" id="state" name="state" class="form-control rounded-0" minlength="3"
-                            placeholder="State" required />
+                            placeholder="State" />
                     </div>
                     <div class="input-group input-group-lg form-group">
                         <input type="number" id="zipcode" name="zipcode" class="form-control rounded-0" minlength="3"
-                            placeholder="Zip code" required />
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i
-                                    class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
-                        </div>
-                        <input type="number" id="amount" name="amount" class="form-control rounded-0"
-                            placeholder="Enter amount" required />
+                            placeholder="Zip code" />
                     </div>
 
                 </div>
-                <div class="col-lg-6">
-                    <h3 class="text-center font-weight-bold text-secondary">Credit card information</h3>
+                <div class="col-sm-6">
                     <div class="input-group input-group-lg form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text rounded-0"><i
@@ -61,33 +54,22 @@
                         </div>
                         <input for="card-number" type="tel" id="credit-number" name="credit"
                             class="form-control card-number rounded-0" placeholder="xxxx xxxx xxxx xxxx"
-                            pattern="[0-9]*" inputmode="numeric" maxlength="16" required />
+                            pattern="[0-9]*" inputmode="numeric" maxlength="16" />
                     </div>
                     <div class="input-group input-group-lg form-group">
                         <label class="h5 font-weight-normal mr-3 mt-2" for="card-number">Expiration
                             Date</label>
                         <input for="card-number" placeholder="MM/YY" pattern="[0-9]*" type="text"
-                            class="form-control card-expiration" id="card-expiration" required />
+                            class="form-control card-expiration" id="card-expiration" />
                         <input for="card-number" placeholder="CVV" pattern="[0-9]*" type="text"
-                            class="form-control card-cvv" id="cvv" required />
+                            class="form-control card-cvv" id="cvv" />
                     </div>
                     <div class="input-group input-group-lg form-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
+                            <span class="input-group-text rounded-0"><i
+                                    class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
                         </div>
-                        <input type="address" id="address" name="address" class="form-control rounded-0"
-                            placeholder="Billing Address" required />
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-
-                        <input type="string" id="city" name="city" class="form-control rounded-0" minlength="3"
-                            placeholder="City" required />
-                        <input type="string" id="state" name="state" class="form-control rounded-0" minlength="3"
-                            placeholder="State" required />
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        <input type="number" id="zipcode" name="zipcode" class="form-control rounded-0" minlength="3"
-                            placeholder="Zip code" required />
+                        {{ form.amount(class="form-control rounded-0", placeholder="Enter amount") }}
                     </div>
                     <div class="form-group mt-4 float-right">
                         <a href="{{url_for('home')}}" class="btn btn-secondary">Back</a>
@@ -97,11 +79,7 @@
             </div>
         </form>
     </div>
-</div>
-</div>
-</div>
-<!-- Donation Form End -->
-</div>
-</body>
+    <!-- Donation Form End -->
 
-{% endblock %}
+
+    {% endblock %}

@@ -2,6 +2,15 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% endfor %}
+
 <div class="container my-auto myShadow bg-light mt-4 p-4">
     <div class="container">
         <h2>Fundraiser List</h2>
@@ -10,18 +19,17 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Fund Goal</th>
+                    <th>Goal amount</th>
+                    <th>Current amount</th>
                 </tr>
             </thead>
             <tbody>
                 {% for our_user in our_users %}
                 <tr>
 
-                    <td>{{our_user.name }}</td>
-                    <td>{{ our_user.email }}</td>
-                    <td><a href="{{ url_for('donation_form', id=our_user.id)}}">$ {{ our_user.fund_amount }}</a></td>
-
+                    <td><a href="{{ url_for('donation', id=our_user.id)}}">{{ our_user.name }}</a></td>
+                    <td>$ {{ our_user.goal_amount }}</td>
+                    <td>$ {{ our_user.current_amount }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

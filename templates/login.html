@@ -57,15 +57,6 @@ content %}
                                         name="showPassword" onclick="show_Password()" />
                                     <label class="custom-control-label" for="showPassword">Show Password</label>
                                 </div>
-                                <div>
-                                    <div class="font-weight-normal float-left">
-                                        <p>Forgot
-                                            <a href="#" id="forgotUsername-link">username</a>
-                                            or
-                                            <a href="{{ url_for('reset_password') }}"> password?</a>
-                                        </p>
-                                    </div>
-                                </div>
                             </div>
                             {{ form.submit(class="btn btn-secondary float-right") }}
                         </form>
