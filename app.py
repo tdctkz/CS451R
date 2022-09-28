@@ -1,3 +1,4 @@
+from email.policy import default
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -200,7 +201,7 @@ def page_not_found(e):
 class Users(db.Model, UserMixin): 
     id = db.Column(db.Integer, primary_key=True)
     goal_amount = db.Column(db.Integer)
-    current_amount = db.Column(db.Integer)
+    current_amount = db.Column(db.Integer, default=0)
     name = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(20), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
