@@ -2,14 +2,31 @@
 {% block title %}Sign up{% endblock %}
 {% block content %}
 
-{% for message in get_flashed_messages() %}
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-    {{message}}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+{% if category == 'success' %}
+<div class="alert alert-success alert-dismissible">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
 </div>
+{% endif %}
+{% if category == 'warning' %}
+<div class="alert alert-warning alert-dismissible">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+{% endif %}
+{% if category == 'danger' %}
+<div class="alert alert-danger alert-dismissible">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+{% endif %}
 {% endfor %}
+{% endif %}
+{% endwith %}
+
 <div class="container p-4">
     <!-- Registration Form Start -->
     <div class="row justify-content-center">

@@ -30,7 +30,7 @@ def load_user(user_id):
 
 # create a route decorator
 # Create Login pages
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
 	if form.validate_on_submit():
@@ -40,12 +40,12 @@ def login():
 			# Check the hash
 			if user.password == form.password.data:
 				login_user(user)
-				flash("Login Succesfull!!")
+				flash("Login Succesfull!!", 'success')
 				return redirect(url_for('home'))
 			else:
-				flash("Wrong Password - Try Again!")
+				flash("Wrong Password - Try Again!", 'danger')
 		else:
-			flash("User Doesn't Exist!")
+			flash("User Doesn't Exist!", 'warning')
 	return render_template('login.html', form=form)
 
 # Create Logout Page
@@ -53,28 +53,15 @@ def login():
 @login_required
 def logout():
 	logout_user()
-	flash("You Have Been Logged Out!")
+	flash("You Have Been Logged Out!", 'success')
 	return redirect(url_for('login'))
 
 # Create user Page
 @app.route('/user_page', methods=['GET', 'POST'])
 @login_required
-def user_page():
-    form = UserForm()
-    id = current_user.id
-    name_to_update = Users.query.get_or_404(id)
-    if request.method == "POST":        
-        name_to_update.goal_amount = request.form['goal_amount']
-        try:
-            db.session.commit()
-            flash("Fund Amount Updated Successfully!")
-            return render_template("user_page.html", form=form, name_to_update = name_to_update)
-        except:
-            flash("Error!  Looks like there was a problem...try again!")
-            return render_template("user_page.html", form=form, name_to_update = name_to_update)
-    else:
-        return render_template("user_page.html", form=form, name_to_update = name_to_update, id=id)  
-
+def user_page():   
+    user_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)    
+    return render_template("user_page.html", user_fundraisers=user_fundraisers)
 
 # Create  update pages
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
@@ -90,10 +77,10 @@ def update(id):
         name_to_update.password = request.form['password']
         try:
             db.session.commit()
-            flash("User Updated Successfully!")
+            flash("User Updated Successfully!", 'success')
             return render_template("user_page.html", form=form, name_to_update = name_to_update, id=id)
         except:
-            flash("Error!  Looks like there was a problem...try again!")
+            flash("Error!  Looks like there was a problem...try again!", 'warning')
             return render_template("update.html", form=form, name_to_update = name_to_update, id=id)
     else:       
         return render_template("update.html", form=form, name_to_update = name_to_update, id=id)        
@@ -109,7 +96,7 @@ def delete(id):
         try:
             db.session.delete(user_to_delete)
             db.session.commit()
-            flash("User Deleted Successfully!!")
+            flash("User Deleted Successfully!!", 'success')
 
             our_users = Users.query.order_by(Users.date_added)
             return render_template("login.html", 
@@ -117,15 +104,15 @@ def delete(id):
                 our_users=our_users)
 
         except:
-            flash("Whoops! There was a problem deleting user, try again...")
+            flash("Whoops! There was a problem deleting user, try again...", 'warning')
             return render_template("login.html", 
                 form=form, our_users=our_users)
     else:
-        flash("Sorry, you can't delete that user! ")
+        flash("Sorry, you can't delete that user! ", 'danger')
         return redirect(url_for('user_page'))
 
 # Create Add user pages
-@app.route('/user/add', methods=['GET', 'POST'])
+@app.route('/sign-up', methods=['GET', 'POST'])
 def add_user():
     form = UserForm()
    
@@ -133,15 +120,15 @@ def add_user():
         user = Users.query.filter_by(username=form.username.data).first()
 
         if user:
-            flash('Username already exists.')  
+            flash('Username already exists.', 'warning')  
         elif form.confirm_password.data != form.password.data:
-            flash('Passwords must match!!Try again...')     
+            flash('Passwords must match!!Try again...', 'warning')     
         else:                     
             user = Users(username=form.username.data, name=form.name.data,
             email=form.email.data, password=form.password.data)
             db.session.add(user)
             db.session.commit()        
-            flash("User Added Successfully!")           
+            flash("User Added Successfully!", 'success')           
             return redirect(url_for('home'))
         form.name.data = ''
         form.username.data = ''
@@ -149,16 +136,17 @@ def add_user():
         form.password.data = ''      
 
     our_users = Users.query.order_by(Users.date_added)
+    
     return render_template("add_user.html", 
 		form=form, our_users=our_users)
 
-@app.route('/add_fundraiser', methods=['GET', 'POST'])
-def add_fundraiser():
+@app.route('/create_fundraiser', methods=['GET', 'POST'])
+def create_fundraiser():
     form = FundraiserForm()
     
     if form.validate_on_submit():
-        
-        fundraiser = Fundraiser(title=form.title.data, description=form.description.data,
+        funder = current_user.id
+        fundraiser = Fundraiser(fundraiser_id=funder, title=form.title.data, description=form.description.data,
          fund_goal=form.fund_goal.data)
 		# Clear The Form
         form.title.data = ''
@@ -171,10 +159,10 @@ def add_fundraiser():
         db.session.commit()
 
 		# Return a Message
-        flash("A Fundraiser Created Successfully!")
-
+        flash("A Fundraiser Created Successfully!", 'success')
+        return redirect(url_for('user_page'))
 	# Redirect to the webpage
-    return render_template("add_fundraiser.html", form=form)
+    return render_template("create_fundraiser.html", form=form)
 
 @app.route('/fundraiser/<int:id>')
 def fundraiser(id):
@@ -186,34 +174,26 @@ def fundraiser(id):
 def delete_fundraiser(id):
 	fundraiser_to_delete = Fundraiser.query.get_or_404(id)
 	id = current_user.id
-	if id == fundraiser_to_delete.id:
+	if id == fundraiser_to_delete.fundraiser_id:
 		try:
 			db.session.delete(fundraiser_to_delete)
 			db.session.commit()
 
 			# Return a message
-			flash("Fundraiser Was Deleted!")
-
-			# Grab all the posts from the database
-			all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)
-			return render_template("home.html", all_fundraisers=all_fundraisers)
+			flash("Fundraiser Was Deleted!", 'success')			
+			return render_template("user_page.html")
 
 		except:
 			# Return an error message
-			flash("Whoops! There was a problem deleting fundraiser, try again...")
-
-			# Grab all the posts from the database
-			all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)
-			return render_template("home.html", all_fundraisers=all_fundraisers)
+			flash("Whoops! There was a problem deleting fundraiser, try again...", 'warning')
+			return render_template("user_page.html")
 	else:
 		# Return a message
-		flash("You Aren't Authorized To Delete the Fundraiser!")
-		# Grab all the posts from the database
-		all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)
-		return render_template("home.html", all_fundraisers=all_fundraisers)
+		flash("You Aren't Authorized To Delete the Fundraiser!", 'danger')		
+		return render_template("user_page.html")
 
 # Create home page
-@app.route('/home')
+@app.route('/')
 def home():
     all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)
     return render_template("home.html", all_fundraisers=all_fundraisers)
@@ -241,10 +221,10 @@ def donation(id):
         fund_to_update.raised_amount += int(request.form['amount'])
         try:
             db.session.commit()
-            flash("User fund Updated Successfully!")
+            flash("User fund Updated Successfully!", 'success')
             return redirect(url_for('home'))
         except:
-            flash("Error!  Looks like there was a problem...try again!")
+            flash("Error!  Looks like there was a problem...try again!", 'warning')
             return render_template("donation_form.html", form=form, fund_to_update = fund_to_update, id=id)
     else:       
         return render_template("donation_form.html", form=form, fund_to_update = fund_to_update, id=id)        
@@ -263,6 +243,8 @@ class Fundraiser(db.Model):
     fund_goal = db.Column(db.Integer)
     raised_amount = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)	
+    # Foreign Key To Link Users (refer to primary key of the user)
+    fundraiser_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 # Create Users model
 class Users(db.Model, UserMixin): 
@@ -272,8 +254,9 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(100), nullable=False, unique=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)        
     password = db.Column(db.String(128))   
-
-    # Create A string
+    # User Can Have Many Posts 
+    fundraiser = db.relationship('Fundraiser', backref='funder')
+    
     def __repr__(self):
         return '<Name %r>' % self.name
 
