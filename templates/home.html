@@ -18,19 +18,19 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="text-left">Name</th>
+                    <th>Title</th>
                     <th class="text-right">Goal amount</th>
-                    <th class="text-right">Current amount</th>
+                    <th class="text-right">Raised amount</th>
+                    <th class="text-center">Created by</th>
                 </tr>
             </thead>
             <tbody>
-                {% for our_user in our_users %}
+                {% for fundraiser in all_fundraisers %}
                 <tr>
-
-                    <td class="text-left"><a href="{{ url_for('donation', id=our_user.id)}}">{{ our_user.name }}</a>
-                    </td>
-                    <td class="text-right">$ {{ our_user.goal_amount }}</td>
-                    <td class="text-right">$ {{ our_user.current_amount }}</td>
+                    <td><a href="{{ url_for('fundraiser', id=fundraiser.id)}}">{{ fundraiser.title }}</a></td>
+                    <td class="text-right">${{ fundraiser.fund_goal }}</td>
+                    <td class="text-right">${{ fundraiser.raised_amount }}</td>
+                    <td class="text-center">{{ fundraiser.date_created}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
-from webforms import UserForm, LoginForm, DonationForm
+from webforms import UserForm, LoginForm, DonationForm, FundraiserForm
 
 # create a Flask instance
 app = Flask(__name__)
@@ -30,7 +30,7 @@ def load_user(user_id):
 
 # create a route decorator
 # Create Login pages
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
 	if form.validate_on_submit():
@@ -41,7 +41,7 @@ def login():
 			if user.password == form.password.data:
 				login_user(user)
 				flash("Login Succesfull!!")
-				return redirect(url_for('user_page'))
+				return redirect(url_for('home'))
 			else:
 				flash("Wrong Password - Try Again!")
 		else:
@@ -124,12 +124,6 @@ def delete(id):
         flash("Sorry, you can't delete that user! ")
         return redirect(url_for('user_page'))
 
-# Create home page
-@app.route('/')
-def home():
-    our_users = Users.query.order_by(Users.date_added)
-    return render_template("home.html", our_users=our_users)
-
 # Create Add user pages
 @app.route('/user/add', methods=['GET', 'POST'])
 def add_user():
@@ -144,7 +138,7 @@ def add_user():
             flash('Passwords must match!!Try again...')     
         else:                     
             user = Users(username=form.username.data, name=form.name.data,
-            email=form.email.data, password=form.password.data, goal_amount = form.goal_amount.data)
+            email=form.email.data, password=form.password.data)
             db.session.add(user)
             db.session.commit()        
             flash("User Added Successfully!")           
@@ -152,13 +146,77 @@ def add_user():
         form.name.data = ''
         form.username.data = ''
         form.email.data = ''
-        form.password.data = ''        
-        form.goal_amount.data = ''
+        form.password.data = ''      
 
     our_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", 
 		form=form, our_users=our_users)
 
+@app.route('/add_fundraiser', methods=['GET', 'POST'])
+def add_fundraiser():
+    form = FundraiserForm()
+    
+    if form.validate_on_submit():
+        
+        fundraiser = Fundraiser(title=form.title.data, description=form.description.data,
+         fund_goal=form.fund_goal.data)
+		# Clear The Form
+        form.title.data = ''
+        form.description.data = ''
+        form.fund_goal.data = ''
+        # form.slug.data = ''
+
+		# Add post data to database
+        db.session.add(fundraiser)
+        db.session.commit()
+
+		# Return a Message
+        flash("A Fundraiser Created Successfully!")
+
+	# Redirect to the webpage
+    return render_template("add_fundraiser.html", form=form)
+
+@app.route('/fundraiser/<int:id>')
+def fundraiser(id):
+    current_fundraiser = Fundraiser.query.get_or_404(id)
+    return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser)
+
+@app.route('/fundraiser/delete/<int:id>')
+@login_required
+def delete_fundraiser(id):
+	fundraiser_to_delete = Fundraiser.query.get_or_404(id)
+	id = current_user.id
+	if id == fundraiser_to_delete.id:
+		try:
+			db.session.delete(fundraiser_to_delete)
+			db.session.commit()
+
+			# Return a message
+			flash("Fundraiser Was Deleted!")
+
+			# Grab all the posts from the database
+			all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)
+			return render_template("home.html", all_fundraisers=all_fundraisers)
+
+		except:
+			# Return an error message
+			flash("Whoops! There was a problem deleting fundraiser, try again...")
+
+			# Grab all the posts from the database
+			all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)
+			return render_template("home.html", all_fundraisers=all_fundraisers)
+	else:
+		# Return a message
+		flash("You Aren't Authorized To Delete the Fundraiser!")
+		# Grab all the posts from the database
+		all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)
+		return render_template("home.html", all_fundraisers=all_fundraisers)
+
+# Create home page
+@app.route('/home')
+def home():
+    all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)
+    return render_template("home.html", all_fundraisers=all_fundraisers)
 # @app.route('/reset_password', methods=['GET', 'POST'])
 # def reset_password():
 #     form = UserForm()
@@ -177,10 +235,10 @@ def add_user():
 @app.route('/donation/<int:id>', methods=['GET', 'POST'])
 def donation(id):
     form = DonationForm()
-    fund_to_update = Users.query.get_or_404(id)
+    fund_to_update = Fundraiser.query.get_or_404(id)
     
     if request.method == "POST":
-        fund_to_update.current_amount += int(request.form['amount'])
+        fund_to_update.raised_amount += int(request.form['amount'])
         try:
             db.session.commit()
             flash("User fund Updated Successfully!")
@@ -197,17 +255,22 @@ def donation(id):
 def page_not_found(e):
     return render_template("404.html"), 404
 
-# Create model
-class Users(db.Model, UserMixin): 
+# Create a Fundraser  model
+class Fundraiser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    goal_amount = db.Column(db.Integer)
-    current_amount = db.Column(db.Integer, default=0)
+    title = db.Column(db.String(255), nullable=True)
+    description = db.Column(db.Text, nullable=True)
+    fund_goal = db.Column(db.Integer)
+    raised_amount = db.Column(db.Integer, default=0)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)	
+
+# Create Users model
+class Users(db.Model, UserMixin): 
+    id = db.Column(db.Integer, primary_key=True)   
     name = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(20), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
-    date_added = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    # Do some password stuff!
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)        
     password = db.Column(db.String(128))   
 
     # Create A string
