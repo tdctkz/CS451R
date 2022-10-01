@@ -1,10 +1,12 @@
-from email.policy import default
-from flask import Flask, render_template, flash, request, redirect, url_for
+from decimal import Rounded
+from multiprocessing import current_process
+from flask import Flask, render_template, flash, request, redirect, url_for, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
 from webforms import UserForm, LoginForm, DonationForm, FundraiserForm
+import time
 
 # create a Flask instance
 app = Flask(__name__)
@@ -60,7 +62,7 @@ def logout():
 @app.route('/user_page', methods=['GET', 'POST'])
 @login_required
 def user_page():   
-    user_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)    
+    user_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())    
     return render_template("user_page.html", user_fundraisers=user_fundraisers)
 
 # Create  update pages
@@ -135,8 +137,7 @@ def add_user():
         form.email.data = ''
         form.password.data = ''      
 
-    our_users = Users.query.order_by(Users.date_added)
-    
+    our_users = Users.query.order_by(Users.date_added)    
     return render_template("add_user.html", 
 		form=form, our_users=our_users)
 
@@ -167,7 +168,9 @@ def create_fundraiser():
 @app.route('/fundraiser/<int:id>')
 def fundraiser(id):
     current_fundraiser = Fundraiser.query.get_or_404(id)
-    return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser)
+    current_process = round((current_fundraiser.raised_amount / current_fundraiser.fund_goal)*100)
+    return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser,
+     current_process=current_process)
 
 @app.route('/fundraiser/delete/<int:id>')
 @login_required
@@ -195,8 +198,10 @@ def delete_fundraiser(id):
 # Create home page
 @app.route('/')
 def home():
-    all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created)
+    all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())
     return render_template("home.html", all_fundraisers=all_fundraisers)
+
+
 # @app.route('/reset_password', methods=['GET', 'POST'])
 # def reset_password():
 #     form = UserForm()
