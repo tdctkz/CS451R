@@ -43,7 +43,7 @@ def login():
 			if user.password == form.password.data:
 				login_user(user)
 				flash("Login Succesfull!!", 'success')
-				return redirect(url_for('home'))
+				return redirect(url_for('user_page'))
 			else:
 				flash("Wrong Password - Try Again!", 'danger')
 		else:
@@ -247,6 +247,7 @@ class Fundraiser(db.Model):
     description = db.Column(db.Text, nullable=True)
     fund_goal = db.Column(db.Integer)
     raised_amount = db.Column(db.Integer, default=0)
+    process = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)	
     # Foreign Key To Link Users (refer to primary key of the user)
     fundraiser_id = db.Column(db.Integer, db.ForeignKey('users.id'))
