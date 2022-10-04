@@ -70,7 +70,7 @@
             </thead>
             <tbody>
                 {% for fundraiser in user_fundraisers %}
-                {% if fundraiser.fundraiser_id == current_user.id %}
+                {% if fundraiser.user_id == current_user.id %}
                 <tr>
                     <td><a href="{{ url_for('fundraiser', id=fundraiser.id)}}">{{ fundraiser.title }}</a></td>
                     <td class="text-right">${{ fundraiser.fund_goal }}</td>
@@ -79,7 +79,7 @@
                         <div class="progress text-center" style="width: 100%; margin: 5px;">
                             <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0"
                                 aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                <span class=" progress-bar-label">{{ current_process }}%</span>
+                                <span class=" progress-bar-label">{{ fundraiser.current_process }}%</span>
                             </div>
 
                         </div>

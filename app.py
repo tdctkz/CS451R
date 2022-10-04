@@ -1,21 +1,29 @@
-from decimal import Rounded
-from multiprocessing import current_process
-from flask import Flask, render_template, flash, request, redirect, url_for, Response
+from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
 from webforms import UserForm, LoginForm, DonationForm, FundraiserForm
-import time
-
+from werkzeug.utils import secure_filename
+import os
 # create a Flask instance
 app = Flask(__name__)
 
 # Add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fundraisers.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donations.db'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password123@localhost/donate_users'
 # Secret key
 app.config['SECRET_KEY'] = "donation"
+
+UPLOAD_FOLDER = 'static/images/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# image requirements
+# limit upload size upto 8mb
+app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg','png','JPG','JPEG','PNG'}
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Initialize The database
 db = SQLAlchemy(app)
@@ -146,19 +154,25 @@ def create_fundraiser():
     form = FundraiserForm()
     
     if form.validate_on_submit():
-        funder = current_user.id
-        fundraiser = Fundraiser(fundraiser_id=funder, title=form.title.data, description=form.description.data,
-         fund_goal=form.fund_goal.data)
+        f = request.files['fundraiser_pic']
+        if allowed_file(f.filename):
+            file = secure_filename(f.filename)
+            funder = current_user.id
+            fundraiser = Fundraiser(user_id=funder, title=form.title.data, description=form.description.data,
+            fund_goal=form.fund_goal.data, fundraiser_pic=file)
+        else:
+            flash("Your file must be in type of 'jpg', 'jpeg','png'!!", 'warning')
+            return render_template("create_fundraiser.html", form=form)
 		# Clear The Form
         form.title.data = ''
         form.description.data = ''
         form.fund_goal.data = ''
-        # form.slug.data = ''
-
+        
+        
 		# Add post data to database
         db.session.add(fundraiser)
         db.session.commit()
-
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], file))
 		# Return a Message
         flash("A Fundraiser Created Successfully!", 'success')
         return redirect(url_for('user_page'))
@@ -168,16 +182,15 @@ def create_fundraiser():
 @app.route('/fundraiser/<int:id>')
 def fundraiser(id):
     current_fundraiser = Fundraiser.query.get_or_404(id)
-    current_process = round((current_fundraiser.raised_amount / current_fundraiser.fund_goal)*100)
-    return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser,
-     current_process=current_process)
+    current_fundraiser.current_process = round((current_fundraiser.raised_amount / current_fundraiser.fund_goal)*100)
+    return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser)
 
 @app.route('/fundraiser/delete/<int:id>')
 @login_required
 def delete_fundraiser(id):
 	fundraiser_to_delete = Fundraiser.query.get_or_404(id)
 	id = current_user.id
-	if id == fundraiser_to_delete.fundraiser_id:
+	if id == fundraiser_to_delete.user_id:
 		try:
 			db.session.delete(fundraiser_to_delete)
 			db.session.commit()
@@ -245,12 +258,22 @@ class Fundraiser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=True)
     description = db.Column(db.Text, nullable=True)
+    fundraiser_pic = db.Column(db.String(), nullable=True)
     fund_goal = db.Column(db.Integer)
     raised_amount = db.Column(db.Integer, default=0)
-    process = db.Column(db.Integer, default=0)
+    current_process = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)	
     # Foreign Key To Link Users (refer to primary key of the user)
-    fundraiser_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+# class Donors(db.Model): 
+#     id = db.Column(db.Integer, primary_key=True)   
+#     name = db.Column(db.String(200), nullable=False)    
+#     email = db.Column(db.String(100), nullable=False, unique=True)
+#     date_donated = db.Column(db.DateTime, default=datetime.utcnow)        
+    
+    # Donor Can Have Many donation 
+    #fundraiser = db.relationship('Fundraiser', backref='funder')
 
 # Create Users model
 class Users(db.Model, UserMixin): 

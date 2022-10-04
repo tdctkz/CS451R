@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Length
 from wtforms.widgets import TextArea
+from flask_wtf.file import FileField
 
 # Create a Log in form class
 class LoginForm(FlaskForm):
@@ -25,7 +26,7 @@ class UserForm(FlaskForm):
 class FundraiserForm(FlaskForm):    
 	title = StringField("Title", validators=[DataRequired()])
 	description = StringField("Description", validators=[DataRequired()], widget=TextArea())
-	#content = CKEditorField('Content', validators=[DataRequired()])	
+	fundraiser_pic = FileField("Fundraiser Pic", validators=[DataRequired()])
 	fund_goal = IntegerField("Your Goal", validators=[DataRequired()])	
 	submit = SubmitField("Submit")
 

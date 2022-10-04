@@ -26,9 +26,14 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
+<div class="container d-flex flex-column justify-content-center">
+    <div class="row d-flex flex-column justify-content-center myColor p-4">
+        <h1 class="text-center font-weight-bold text-white">Donation</h1>
+        <hr class="my-4 bg-light myHr" />
+        <p class="text-center font-weight-bolder text-light lead">Giving little can help a lot.</p>
+    </div>
 
-<div class="container my-auto myShadow bg-light mt-4 p-4">
-    <div class="container">
+    <div class="row d-flex flex-column justify-content-center bg-light p-4 ">
         <h2>Fundraiser List</h2>
         <table class="table table-striped">
             <thead>
@@ -52,5 +57,5 @@
         </table>
     </div>
 </div>
-
+</div>
 {% endblock %}
