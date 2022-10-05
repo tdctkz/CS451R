@@ -10,7 +10,7 @@ import os
 app = Flask(__name__)
 
 # Add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donations.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation_db.db'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password123@localhost/donate_users'
 # Secret key
 app.config['SECRET_KEY'] = "donation"
@@ -181,9 +181,10 @@ def create_fundraiser():
 
 @app.route('/fundraiser/<int:id>')
 def fundraiser(id):
-    current_fundraiser = Fundraiser.query.get_or_404(id)
+    current_fundraiser = Fundraiser.query.get_or_404(id)    
     current_fundraiser.current_process = round((current_fundraiser.raised_amount / current_fundraiser.fund_goal)*100)
-    return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser)
+    donors = Donors.query.order_by(Donors.date_donated.desc())
+    return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser, donors=donors)
 
 @app.route('/fundraiser/delete/<int:id>')
 @login_required
@@ -214,7 +215,23 @@ def home():
     all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())
     return render_template("home.html", all_fundraisers=all_fundraisers)
 
+@app.route('/donor/delete/<int:id>')
 
+def delete_donor(id):
+	donor_to_delete = Donors.query.get_or_404(id)	
+	try:
+		db.session.delete(donor_to_delete)
+		db.session.commit()
+
+			# Return a message
+		flash("Donor Was Deleted!", 'success')			
+		return render_template("fundraiser_page.html")
+
+	except:
+			# Return an error message
+		flash("Whoops! There was a problem deleting fundraiser, try again...", 'warning')
+		return render_template("fundraiser_page.html")
+		
 # @app.route('/reset_password', methods=['GET', 'POST'])
 # def reset_password():
 #     form = UserForm()
@@ -233,17 +250,21 @@ def home():
 @app.route('/donation/<int:id>', methods=['GET', 'POST'])
 def donation(id):
     form = DonationForm()
-    fund_to_update = Fundraiser.query.get_or_404(id)
-    
+    fund_to_update = Fundraiser.query.get_or_404(id) 
+    dor = fund_to_update.id
     if request.method == "POST":
-        fund_to_update.raised_amount += int(request.form['amount'])
+        fund_to_update.raised_amount += int(request.form['donate_amount'])       
+        donor = Donors(fundraiser_id=dor, name=form.name.data, email=form.email.data,
+         donate_amount=form.donate_amount.data)
         try:
+            db.session.add(donor)
             db.session.commit()
-            flash("User fund Updated Successfully!", 'success')
+            form.donate_amount.data = ''
+            flash("Fundraiser's fund Updated Successfully!", 'success')
             return redirect(url_for('home'))
         except:
             flash("Error!  Looks like there was a problem...try again!", 'warning')
-            return render_template("donation_form.html", form=form, fund_to_update = fund_to_update, id=id)
+            return render_template("donation_form.html", form=form, fund_to_update = fund_to_update)
     else:       
         return render_template("donation_form.html", form=form, fund_to_update = fund_to_update, id=id)        
 
@@ -252,6 +273,13 @@ def donation(id):
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
+
+#
+# class fundraiser_donor(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     donor_id = db.Column(db.Integer, db.ForeignKey('donors.id'))
+#     fundraiser_id = db.Column(db.Integer, db.ForeignKey('fundraiser.id'))
+    
 
 # Create a Fundraser  model
 class Fundraiser(db.Model):
@@ -263,17 +291,23 @@ class Fundraiser(db.Model):
     raised_amount = db.Column(db.Integer, default=0)
     current_process = db.Column(db.Integer, default=0)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)	
+
     # Foreign Key To Link Users (refer to primary key of the user)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-# class Donors(db.Model): 
-#     id = db.Column(db.Integer, primary_key=True)   
-#     name = db.Column(db.String(200), nullable=False)    
-#     email = db.Column(db.String(100), nullable=False, unique=True)
-#     date_donated = db.Column(db.DateTime, default=datetime.utcnow)        
+     # Fundraiser Can Have Many donors 
+    donor = db.relationship('Donors', backref='dor')
     
-    # Donor Can Have Many donation 
-    #fundraiser = db.relationship('Fundraiser', backref='funder')
+# Create Donors model
+class Donors(db.Model): 
+    id = db.Column(db.Integer, primary_key=True)   
+    name = db.Column(db.String(100), nullable=False)    
+    email = db.Column(db.String(200), nullable=True)
+    date_donated = db.Column(db.DateTime, default=datetime.utcnow)        
+    donate_amount = db.Column(db.Integer)
+
+    # Foreign Key To Link Fundraiser (refer to primary key of the fundraiser)
+    fundraiser_id = db.Column(db.Integer, db.ForeignKey('fundraiser.id'))    
 
 # Create Users model
 class Users(db.Model, UserMixin): 
@@ -283,8 +317,11 @@ class Users(db.Model, UserMixin):
     email = db.Column(db.String(100), nullable=False, unique=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)        
     password = db.Column(db.String(128))   
-    # User Can Have Many Posts 
+
+    # User Can Have Many Fundraisers 
     fundraiser = db.relationship('Fundraiser', backref='funder')
+
+    
     
     def __repr__(self):
         return '<Name %r>' % self.name

@@ -34,28 +34,29 @@
     </div>
 
     <div class="row d-flex flex-column justify-content-center bg-light p-4 ">
-        <h2>Fundraiser List</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th class="text-right">Goal amount</th>
-                    <th class="text-right">Raised amount</th>
-                    <th class="text-center">Created by</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for fundraiser in all_fundraisers %}
-                <tr>
-                    <td><a href="{{ url_for('fundraiser', id=fundraiser.id)}}">{{ fundraiser.title }}</a></td>
-                    <td class="text-right">${{ fundraiser.fund_goal }}</td>
-                    <td class="text-right">${{ fundraiser.raised_amount }}</td>
-                    <td class="text-center">{{ fundraiser.funder.name}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="input-group input-group-lg form-group">
+            <h2 class="text-left text-secondary">Fundraiser List</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th class="text-right">Goal amount</th>
+                        <th class="text-right">Raised amount</th>
+                        <th class="text-center">Created by</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fundraiser in all_fundraisers %}
+                    <tr>
+                        <td><a href="{{ url_for('fundraiser', id=fundraiser.id)}}">{{ fundraiser.title }}</a></td>
+                        <td class="text-right">${{ fundraiser.fund_goal }}</td>
+                        <td class="text-right">${{ fundraiser.raised_amount }}</td>
+                        <td class="text-center">{{ fundraiser.funder.name}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 </div>
 {% endblock %}

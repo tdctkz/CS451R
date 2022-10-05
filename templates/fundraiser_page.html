@@ -36,12 +36,8 @@
                 <div class="col-lg-5">
                     <div class="card shadow-sm">
                         <div class="card-header bg-transparent text-center">
-
-
                             <img src="{{ url_for('static', filename='images/' + current_fundraiser.fundraiser_pic)}}"
                                 alt="Fundraiser image" style="width: 100%;">
-
-
                         </div>
                         <div class="card-body">
                             <p class="h5 mb-0 text-secondary"><strong class="pr-1">Fundraiser Title:
@@ -98,10 +94,46 @@
                             </tbody>
                         </table>
                     </div>
+                    <br>
+                    <div class="col-lg-">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-transparent border-0">
+                                <h4 class="mb-0 text-secondary"><i class="far fa-clone pr-1"></i>Recent Donations
+                                </h4>
+                                <hr class="my-3" />
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Amount</th>
+                                            <th>Donor's name</th>
+                                            <th>Date donated</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for donor in donors %}
+                                        {% if donor.fundraiser_id == current_fundraiser.id %}
+                                        <tr>
+                                            <td>{{ donor.id }}</td>
+                                            <td class="text-center">${{ donor.donate_amount }}</td>
+                                            <td class="text-center">{{ donor.name }}</td>
+                                            <td>
+                                                {{ donor.date_donated }}
+                                            </td>
+                                            <!-- <td><a href="{{ url_for('delete_donor', id=donor.id)}}"
+                                                    class="btn btn-outline-danger btn-sm">Delete</a>
+                                            </td> -->
+                                        </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-{% endblock %}
+    {% endblock %}
