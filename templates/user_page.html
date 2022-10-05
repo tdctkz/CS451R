@@ -29,7 +29,7 @@
 
 <div class="container my-auto myShadow bg-light mt-4 p-4">
     <div class="row">
-        <div class="col-8">
+        <div class="col-sm-6">
             <h2>User profile</h2>
             <strong>Name:</strong>
             {{ current_user.name }}<br />
@@ -47,13 +47,14 @@
             {{ current_user.date_added }}<br />
             <br>
 
-            <a href="{{ url_for('update', id=current_user.id)}}" class="btn btn-secondary btn-sm">Update Profile</a>
+            <a href="{{ url_for('update_user', id=current_user.id)}}" class="btn btn-secondary btn-sm">Update
+                Profile</a>
 
             <a href="{{ url_for('delete', id=current_user.id)}}" class="btn btn-danger btn-sm">Delete</a>
         </div>
 
-
     </div>
+</div>
 </div>
 <br>
 <div class="container my-auto myShadow bg-light mt-4 p-4">
@@ -65,7 +66,7 @@
                     <th>Title</th>
                     <th class="text-right">Goal amount</th>
                     <th class="text-right">Raised amount</th>
-                    <th class="text-center">Process</th>
+                    <th class="text-center">Datetime created</th>
                 </tr>
             </thead>
             <tbody>
@@ -75,7 +76,7 @@
                     <td><a href="{{ url_for('fundraiser', id=fundraiser.id)}}">{{ fundraiser.title }}</a></td>
                     <td class="text-right">${{ fundraiser.fund_goal }}</td>
                     <td class="text-right">${{ fundraiser.raised_amount }}</td>
-                    <td>
+                    <!-- <td>
                         <div class="progress text-center" style="width: 100%; margin: 5px;">
                             <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0"
                                 aria-valuemin="0" aria-valuemax="100" style="width: 100%">
@@ -83,6 +84,13 @@
                             </div>
 
                         </div>
+                    </td> -->
+                    <td class="text-center">{{ fundraiser.date_created }}</td>
+                    <td class="text-right"><a href="{{ url_for('update_fundraiser', id=fundraiser.id)}}"
+                            class="btn btn-secondary btn-sm">Edit</a>
+                    </td>
+                    <td><a href="{{ url_for('delete_fundraiser', id=fundraiser.id)}}"
+                            class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
                 {% endif %}

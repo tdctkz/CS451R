@@ -82,10 +82,9 @@
 
                                         </div>
                                     </td>
-                                    <td><a href="{{ url_for('delete_fundraiser', id=current_fundraiser.id)}}"
+                                    <!-- <td><a href="{{ url_for('delete_fundraiser', id=current_fundraiser.id)}}"
                                             class="btn btn-outline-danger btn-sm">Delete</a>
-                                    </td>
-
+                                    </td> -->
                                     <td class="text-right"><a href="{{ url_for('donation', id=current_fundraiser.id)}}"
                                             class="btn btn-dark btn-sm">Donate
                                             now</a>
@@ -103,11 +102,11 @@
                                 <hr class="my-3" />
                                 <table class="table table-striped">
                                     <thead>
-                                        <tr>
+                                        <tr class="text-center">
                                             <th>ID</th>
-                                            <th>Amount</th>
                                             <th>Donor's name</th>
-                                            <th>Date donated</th>
+                                            <th>Amount</th>
+                                            <th>Datetime donated</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -115,11 +114,9 @@
                                         {% if donor.fundraiser_id == current_fundraiser.id %}
                                         <tr>
                                             <td>{{ donor.id }}</td>
-                                            <td class="text-center">${{ donor.donate_amount }}</td>
                                             <td class="text-center">{{ donor.name }}</td>
-                                            <td>
-                                                {{ donor.date_donated }}
-                                            </td>
+                                            <td class="text-center">${{ donor.donate_amount }}</td>
+                                            <td class="text-center">{{ donor.date_donated }}</td>
                                             <!-- <td><a href="{{ url_for('delete_donor', id=donor.id)}}"
                                                     class="btn btn-outline-danger btn-sm">Delete</a>
                                             </td> -->

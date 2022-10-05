@@ -74,9 +74,9 @@ def user_page():
     return render_template("user_page.html", user_fundraisers=user_fundraisers)
 
 # Create  update pages
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
+@app.route('/update_user/<int:id>', methods=['GET', 'POST'])
 @login_required
-def update(id):   
+def update_user(id):   
     form = UserForm()
     name_to_update = Users.query.get_or_404(id)
     
@@ -91,9 +91,30 @@ def update(id):
             return render_template("user_page.html", form=form, name_to_update = name_to_update, id=id)
         except:
             flash("Error!  Looks like there was a problem...try again!", 'warning')
-            return render_template("update.html", form=form, name_to_update = name_to_update, id=id)
+            return render_template("update_user.html", form=form, name_to_update = name_to_update, id=id)
     else:       
-        return render_template("update.html", form=form, name_to_update = name_to_update, id=id)        
+        return render_template("update_user.html", form=form, name_to_update = name_to_update, id=id) 
+
+ # Create  update fundraiser
+@app.route('/update_fundraiser/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update_fundraiser(id):   
+    form = FundraiserForm()
+    fundraiser_to_update = Fundraiser.query.get_or_404(id)
+    
+    if request.method == "POST":
+        fundraiser_to_update.title = request.form['title']
+        fundraiser_to_update.description = request.form['description']
+        fundraiser_to_update.fund_goal = request.form['fund_goal']        
+        try:
+            db.session.commit()
+            flash("Fundraiser Updated Successfully!", 'success')
+            return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)
+        except:
+            flash("Error!  Looks like there was a problem...try again!", 'warning')
+            return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)
+    else:       
+        return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)         
 
 
 @app.route('/delete/<int:id>')

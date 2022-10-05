@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Update{% endblock %}
+{% block title %}Update User Profile{% endblock %}
 {% block content %}
 
 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -31,19 +31,18 @@
 <br />
 <div class="container my-auto myShadow bg-light mt-4 p-4">
     <h2>Update User Profile</h2>
-    <form action="/update/{{ name_to_update.id }}" method="POST">
+    <form action="/update_user/{{ name_to_update.id }}" method="POST">
         {{ form.hidden_tag() }}
-
+        {{ form.name.label(class="form-label") }}
         {{ form.name(class="form-control", value=name_to_update.name, placeholder="Your new name") }}
         <br />
-
+        {{ form.username.label(class="form-label") }}
         {{ form.username(class="form-control", value=name_to_update.username, placeholder="Your new username") }}
         <br />
-
+        {{ form.email.label(class="form-label") }}
         {{ form.email(class="form-control", value=name_to_update.email, placeholder="Your new email") }}
-
         <br />
-
+        {{ form.password.label(class="form-label") }}
         {{ form.password(class="form-control rounded-0", placeholder="New Password",
         pattern="(?=.*[!@#$%&*_?])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}", title="Your password
         must be 8 characters minimum, must contain 1 upper case letter, 1 symbol
