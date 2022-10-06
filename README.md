@@ -101,9 +101,7 @@ o Name and billing address
 o Donation amount
 
 o The option to donate from a bank account or a credit/debit card
-User Profile and Settings
 
-
+### User Profile and Settings
 • User can view and edit their active fundraisers
-
 • User can update personal information and password
