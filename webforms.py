@@ -27,7 +27,7 @@ class FundraiserForm(FlaskForm):
 	title = StringField("Title", validators=[DataRequired()])
 	description = StringField("Description", validators=[DataRequired()], widget=TextArea())
 	fundraiser_pic = FileField("Fundraiser Pic", validators=[DataRequired()])
-	fund_goal = IntegerField("Your Goal", validators=[DataRequired()])	
+	fund_goal = IntegerField("Fund Goal", validators=[DataRequired()])	
 	submit = SubmitField("Submit")
 
 #Create a donation form

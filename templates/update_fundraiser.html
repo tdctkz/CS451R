@@ -29,30 +29,31 @@
 
 
 <br />
-<div class="container justify-content-center my-auto myShadow bg-light mt-4 p-4">
-    <div class="col-sm-6">
-        <h2>Update Fundraiser</h2>
-        <form action="/update_fundraiser/{{ fundraiser_to_update.id }}" method="POST">
-            {{ form.hidden_tag() }}
+<div class="container p-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 bg-white p-4 myShadow">
+            <h2>Update Fundraiser</h2>
+            <form action="/update_fundraiser/{{ fundraiser_to_update.id }}" method="POST">
+                {{ form.hidden_tag() }}
 
-            {{ form.title.label(class="form-label") }}
-            {{ form.title(class="form-control", value=fundraiser_to_update.title, placeholder="New title") }}
-            <br />
-            {{ form.description.label(class="form-label") }}
-            {{ form.description(class="form-control", value=fundraiser_to_update.description, placeholder="New
-            description")
-            }}
-            <br />
-            {{ form.fund_goal.label(class="form-label") }}
-            {{ form.fund_goal(class="form-control", value=fundraiser_to_update.fund_goal, placeholder="New goal") }}
+                {{ form.title.label(class="form-label") }}
+                {{ form.title(class="form-control", value=fundraiser_to_update.title, placeholder="New title") }}
+                <br />
+                {{ form.description.label(class="form-label") }}
+                {{ form.description(class="form-control", value=fundraiser_to_update.description, placeholder="New
+                description", rows=4)
+                }}
+                <br />
+                {{ form.fund_goal.label(class="form-label") }}
+                {{ form.fund_goal(class="form-control", value=fundraiser_to_update.fund_goal, placeholder="New goal") }}
 
-            <br />
+                <br />
 
-            {{ form.submit(class="btn btn-secondary btn-sm") }}
+                {{ form.submit(class="btn btn-secondary btn-sm") }}
 
-        </form>
-    </div>
-    <br /><br /><br />
+            </form>
+        </div>
+        <br /><br /><br />
 
 
-    {% endblock %}
+        {% endblock %}

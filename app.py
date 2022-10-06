@@ -119,32 +119,6 @@ def update_fundraiser(id):
     else:       
         return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)         
 
-
-@app.route('/delete/<int:id>')
-@login_required
-def delete(id):
-    if id == current_user.id:
-        user_to_delete = Users.query.get_or_404(id)
-        form = UserForm()
-
-        try:
-            db.session.delete(user_to_delete)
-            db.session.commit()
-            flash("User Deleted Successfully!!", 'success')
-
-            our_users = Users.query.order_by(Users.date_added)
-            return render_template("login.html", 
-                form=form,
-                our_users=our_users)
-
-        except:
-            flash("Whoops! There was a problem deleting user, try again...", 'warning')
-            return render_template("login.html", 
-                form=form, our_users=our_users)
-    else:
-        flash("Sorry, you can't delete that user! ", 'danger')
-        return redirect(url_for('user_page'))
-
 # Create Add user pages
 @app.route('/sign-up', methods=['GET', 'POST'])
 def add_user():
@@ -152,7 +126,6 @@ def add_user():
    
     if form.validate_on_submit():
         user = Users.query.filter_by(username=form.username.data).first()
-
         if user:
             flash('Username already exists.', 'warning')  
         elif form.confirm_password.data != form.password.data:
@@ -171,6 +144,7 @@ def add_user():
        
     return render_template("add_user.html", form=form)
 
+# Create a fundraiser form
 @app.route('/create_fundraiser', methods=['GET', 'POST'])
 def create_fundraiser():
     form = FundraiserForm()
@@ -188,8 +162,7 @@ def create_fundraiser():
 		# Clear The Form
         form.title.data = ''
         form.description.data = ''
-        form.fund_goal.data = ''
-        
+        form.fund_goal.data = ''       
         
 		# Add post data to database
         db.session.add(fundraiser)
@@ -201,6 +174,7 @@ def create_fundraiser():
 	# Redirect to the webpage
     return render_template("create_fundraiser.html", form=form)
 
+# Create a Fundraiser individual view pages
 @app.route('/fundraiser/<int:id>')
 def fundraiser(id):
     current_fundraiser = Fundraiser.query.get_or_404(id)    
@@ -208,6 +182,7 @@ def fundraiser(id):
     donors = Donors.query.order_by(Donors.date_donated.desc())
     return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser, donors=donors)
 
+# Create function to delete a fundraiser
 @app.route('/fundraiser/delete/<int:id>')
 @login_required
 def delete_fundraiser(id):
@@ -237,37 +212,37 @@ def home():
     all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())
     return render_template("home.html", all_fundraisers=all_fundraisers)
 
-@app.route('/donor/delete/<int:id>')
-@login_required
-def delete_donor(id):
-	donor_to_delete = Donors.query.get_or_404(id)	
-	try:
-		db.session.delete(donor_to_delete)
-		db.session.commit()
-
-			# Return a message
-		flash("Donor Was Deleted!", 'success')			
-		return render_template("fundraiser_page.html")
-
-	except:
-			# Return an error message
-		flash("Whoops! There was a problem deleting fundraiser, try again...", 'warning')
-		return render_template("fundraiser_page.html")
-		
-@app.route('/reset_password', methods=['GET', 'POST'])
-def reset_password():
+# Create forgot password function	
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
     form = UserForm()    
-    email = form.email.data
+   
     if request.method == "POST":
         user = Users.query.filter_by(email=form.email.data).first()
         if user: 
-            flash("Check your email!! We sent an email to reset your password.", 'success') 
+            flash("Check your email!! We sent an email that showing your password.", 'success') 
             return redirect(url_for('login'))
         else:
             flash("Email does not match in the system! Try again...", 'warning')
             
-    return render_template("reset_password.html", form=form)
+    return render_template("forgot_password.html", form=form)
 
+# Create forgot username function	
+@app.route('/forgot_username', methods=['GET', 'POST'])
+def forgot_username():
+    form = UserForm()    
+   
+    if request.method == "POST":
+        user = Users.query.filter_by(email=form.email.data).first()
+        if user: 
+            flash("Check your email!! We sent an email that showing your username.", 'success') 
+            return redirect(url_for('login'))
+        else:
+            flash("Email does not match in the system! Try again...", 'warning')
+            
+    return render_template("forgot_username.html", form=form)
+
+# Create donation form page
 @app.route('/donation/<int:id>', methods=['GET', 'POST'])
 def donation(id):
     form = DonationForm()
@@ -294,14 +269,8 @@ def donation(id):
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
-
-#
-# class fundraiser_donor(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     donor_id = db.Column(db.Integer, db.ForeignKey('donors.id'))
-#     fundraiser_id = db.Column(db.Integer, db.ForeignKey('fundraiser.id'))
-    
-
+   
+# Database creation
 # Create a Fundraser  model
 class Fundraiser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -345,6 +314,7 @@ class Users(db.Model, UserMixin):
     def __repr__(self):
         return '<Name %r>' % self.name
 
+# Create admin management
 admin.add_view(ModelView(Users, db.session))
 admin.add_view(ModelView(Fundraiser, db.session))
 admin.add_view(ModelView(Donors, db.session))

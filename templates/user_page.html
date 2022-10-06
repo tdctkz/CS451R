@@ -37,7 +37,7 @@
             <strong>Username:</strong>
             {{ current_user.username }}<br />
 
-            <strong>User Id:</strong>
+            <strong>UID:</strong>
             {{ current_user.id }}<br />
 
             <strong>Email:</strong>
@@ -49,10 +49,7 @@
 
             <a href="{{ url_for('update_user', id=current_user.id)}}" class="btn btn-secondary btn-sm">Update
                 Profile</a>
-
-            <a href="{{ url_for('delete', id=current_user.id)}}" class="btn btn-danger btn-sm">Delete</a>
         </div>
-
     </div>
 </div>
 </div>

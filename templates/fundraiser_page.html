@@ -40,8 +40,7 @@
                                 alt="Fundraiser image" style="width: 100%;">
                         </div>
                         <div class="card-body">
-                            <p class="h5 mb-0 text-secondary"><strong class="pr-1">Fundraiser Title:
-                                </strong class=>{{current_fundraiser.title}}</p>
+                            <p class="h5 mb-0 text-primary">{{current_fundraiser.title}}</p>
                         </div>
                     </div>
                 </div>
@@ -60,7 +59,7 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>FID</th>
                                     <th>Goal amount</th>
                                     <th>Raised amount</th>
                                     <th>Process</th>
@@ -82,9 +81,6 @@
 
                                         </div>
                                     </td>
-                                    <!-- <td><a href="{{ url_for('delete_fundraiser', id=current_fundraiser.id)}}"
-                                            class="btn btn-outline-danger btn-sm">Delete</a>
-                                    </td> -->
                                     <td class="text-right"><a href="{{ url_for('donation', id=current_fundraiser.id)}}"
                                             class="btn btn-danger btn-sm">Donate
                                             now</a>
@@ -103,7 +99,7 @@
                                 <table class="table table-striped">
                                     <thead>
                                         <tr class="text-center">
-                                            <th>ID</th>
+                                            <th>DID</th>
                                             <th>Donor's name</th>
                                             <th>Amount</th>
                                             <th>Datetime donated</th>
@@ -112,14 +108,11 @@
                                     <tbody>
                                         {% for donor in donors %}
                                         {% if donor.fundraiser_id == current_fundraiser.id %}
-                                        <tr>
+                                        <tr class="text-center">
                                             <td>{{ donor.id }}</td>
-                                            <td class="text-center">{{ donor.name }}</td>
-                                            <td class="text-center">${{ donor.donate_amount }}</td>
-                                            <td class="text-center">{{ donor.date_donated }}</td>
-                                            <!-- <td><a href="{{ url_for('delete_donor', id=donor.id)}}"
-                                                    class="btn btn-outline-danger btn-sm">Delete</a>
-                                            </td> -->
+                                            <td>{{ donor.name }}</td>
+                                            <td>${{ donor.donate_amount }}</td>
+                                            <td>{{ donor.date_donated }}</td>
                                         </tr>
                                         {% endif %}
                                         {% endfor %}
