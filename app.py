@@ -30,7 +30,6 @@ def allowed_file(filename):
 # Initialize The database
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-admin = Admin(app)
 
 # Flask_Login Stuff
 login_manager = LoginManager()
@@ -50,7 +49,7 @@ def login():
 		user = Users.query.filter_by(username=form.username.data).first()
       
 		if user:
-			# Check the hash
+			# Checking user password
 			if user.password == form.password.data:
 				login_user(user)
 				flash("Login Succesfull!!", 'success')
@@ -306,18 +305,27 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)        
-    password = db.Column(db.String(128))   
-
+    password = db.Column(db.String(128)) 
+    
     # User Can Have Many Fundraisers 
     fundraiser = db.relationship('Fundraiser', backref='funder')    
     
     def __repr__(self):
         return '<Name %r>' % self.name
 
-# Create admin management
-admin.add_view(ModelView(Users, db.session))
-admin.add_view(ModelView(Fundraiser, db.session))
-admin.add_view(ModelView(Donors, db.session))
+class AdminViews(ModelView):
+    def is_accessible(self):
+         return current_user.is_authenticated and current_user.username == "toanchu"
+
+    def inaccessible_callback(self, name, **kwargs):        
+        return redirect(url_for('login'))
+
+admin = Admin(app)
+# Create admin views management
+admin.add_view(AdminViews(Users, db.session))
+admin.add_view(AdminViews(Fundraiser, db.session))
+admin.add_view(AdminViews(Donors, db.session))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

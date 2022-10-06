@@ -29,29 +29,36 @@
 
 <div class="container my-auto myShadow bg-light mt-4 p-4">
     <div class="row">
-        <div class="col-sm-6">
-            <h2>User profile</h2>
-            <strong>Name:</strong>
-            {{ current_user.name }}<br />
+        <div class="col-lg-5">
+            <div>
+                <img src="{{ url_for('static', filename='images/Default-avatar.jpg')}}" alt="User image"
+                    style="width: 50%;">
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <h2 class="text-secondary">User profile</h2>
+            <div class="h5">
+                <strong>Name:</strong>
+                {{ current_user.name }}<br />
 
-            <strong>Username:</strong>
-            {{ current_user.username }}<br />
+                <strong>Username:</strong>
+                {{ current_user.username }}<br />
 
-            <strong>UID:</strong>
-            {{ current_user.id }}<br />
+                <strong>UID:</strong>
+                {{ current_user.id }}<br />
 
-            <strong>Email:</strong>
-            {{ current_user.email }}<br />
+                <strong>Email:</strong>
+                {{ current_user.email }}<br />
 
-            <strong>Date Joined:</strong>
-            {{ current_user.date_added }}<br />
-            <br>
+                <strong>Date Joined:</strong>
+                {{ current_user.date_added }}<br />
+                <br>
 
-            <a href="{{ url_for('update_user', id=current_user.id)}}" class="btn btn-secondary btn-sm">Update
-                Profile</a>
+                <a href="{{ url_for('update_user', id=current_user.id)}}" class="btn btn-secondary btn-sm">Update
+                    Profile</a>
+            </div>
         </div>
     </div>
-</div>
 </div>
 <br>
 <div class="container my-auto myShadow bg-light mt-4 p-4">
