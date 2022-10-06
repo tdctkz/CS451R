@@ -1,16 +1,20 @@
 # CS451R's project
 
-#Project Summary
+## Project Summary
+
 You will be creating a web application that allows users to login and setup their own
 fundraiser, track their donations, and view and donate to other user’s fundraisers. While
 you must be able to track and make donations through your site, you are not processing
 real transactions. Please use fake/dummy card numbers when appropriate to simulate the
 process.
 
-#Requirements
-##Technical Requirements
+## Requirements
+
+### Technical Requirements
+
 • Must be a web application (not a desktop application) built in a “modern” web
 development framework.
+
 o .Net (C#) or Java preferably – if you choose another framework, support from
 us will be limited
 o You cannot use a CMS, such as WordPress
