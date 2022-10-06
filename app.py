@@ -1,5 +1,7 @@
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
 from datetime import datetime
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
@@ -28,6 +30,7 @@ def allowed_file(filename):
 # Initialize The database
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+admin = Admin(app)
 
 # Flask_Login Stuff
 login_manager = LoginManager()
@@ -160,15 +163,13 @@ def add_user():
             db.session.add(user)
             db.session.commit()        
             flash("User Added Successfully!", 'success')           
+            form.name.data = ''
+            form.username.data = ''
+            form.email.data = ''
+            form.password.data = ''     
             return redirect(url_for('home'))
-        form.name.data = ''
-        form.username.data = ''
-        form.email.data = ''
-        form.password.data = ''      
-
-    our_users = Users.query.order_by(Users.date_added)    
-    return render_template("add_user.html", 
-		form=form, our_users=our_users)
+       
+    return render_template("add_user.html", form=form)
 
 @app.route('/create_fundraiser', methods=['GET', 'POST'])
 def create_fundraiser():
@@ -237,7 +238,7 @@ def home():
     return render_template("home.html", all_fundraisers=all_fundraisers)
 
 @app.route('/donor/delete/<int:id>')
-
+@login_required
 def delete_donor(id):
 	donor_to_delete = Donors.query.get_or_404(id)	
 	try:
@@ -253,20 +254,19 @@ def delete_donor(id):
 		flash("Whoops! There was a problem deleting fundraiser, try again...", 'warning')
 		return render_template("fundraiser_page.html")
 		
-# @app.route('/reset_password', methods=['GET', 'POST'])
-# def reset_password():
-#     form = UserForm()
-#     change_password = Users.query.get_or_404(id)
-    
-#     if request.method == "POST":
-#         user = Users.query.filter_by(email=form.email.data).first()
-#         if user:        
-#             flash('Check your email!! We sent an email to reset your password.') 
-#             return redirect(url_for('login'))
-#         else:
-#             flash('Email does not match in the system! Try again...')
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    form = UserForm()    
+    email = form.email.data
+    if request.method == "POST":
+        user = Users.query.filter_by(email=form.email.data).first()
+        if user: 
+            flash("Check your email!! We sent an email to reset your password.", 'success') 
+            return redirect(url_for('login'))
+        else:
+            flash("Email does not match in the system! Try again...", 'warning')
             
-#     return render_template("reset_password.html", form=form)
+    return render_template("reset_password.html", form=form)
 
 @app.route('/donation/<int:id>', methods=['GET', 'POST'])
 def donation(id):
@@ -340,12 +340,14 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.String(128))   
 
     # User Can Have Many Fundraisers 
-    fundraiser = db.relationship('Fundraiser', backref='funder')
-
-    
+    fundraiser = db.relationship('Fundraiser', backref='funder')    
     
     def __repr__(self):
         return '<Name %r>' % self.name
+
+admin.add_view(ModelView(Users, db.session))
+admin.add_view(ModelView(Fundraiser, db.session))
+admin.add_view(ModelView(Donors, db.session))
 
 if __name__ == '__main__':
     app.run(debug=True)

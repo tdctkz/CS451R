@@ -6,10 +6,14 @@
 <div class="container mt-2">
     <!-- Donation form start-->
     <div class="justify-content-center myShadow bg-light">
+        <div class="float-left mt-2 p-4">
+            <a href="{{ url_for('fundraiser', id=fund_to_update.id)}}">
+                <i class="btn fas fa-arrow-left fa-lg"></i></a>
+        </div>
         <br>
         <h1 class="text-center font-weight-bold text-secondary">Donation Form</h1>
-        <br>
-        <form method="POST" class="px-3">
+        <hr class="my-3" />
+        <form method="POST" class="p-4">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="input-group input-group-lg form-group">
@@ -45,6 +49,7 @@
 
                 </div>
                 <div class="col-sm-6">
+                    <label class="h5 font-weight-bold text-secondary">Credit Card information</label>
                     <div class="input-group input-group-lg form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text rounded-0"><i
@@ -70,7 +75,6 @@
                         {{ form.donate_amount(class="form-control rounded-0", placeholder="Enter amount") }}
                     </div>
                     <div class="form-group mt-4 float-right">
-                        <a href="{{url_for('home')}}" class="btn btn-secondary">Back</a>
                         <button type="submit" class="btn btn-secondary">Submit</button>
                     </div>
                 </div>

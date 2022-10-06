@@ -67,6 +67,15 @@ content %}
                                 </div>
                                 {{ form.password(class="form-control", placeholder="Password") }}
                             </div>
+                            <div>
+                                <div class="forgot font-weight-normal float-left">
+                                    <p>Forgot
+                                        <a href="#" id="forgotUsername-link">username</a>
+                                        or
+                                        <a href="{{url_for('reset_password')}}"> password?</a>
+                                    </p>
+                                </div>
+                            </div>
                             <div class="form-group clearfix">
                                 <div class="custom-control custom-checkbox float-right mb-3">
                                     <input type="checkbox" class="custom-control-input" id="showPassword"
