@@ -12,8 +12,8 @@ import os
 app = Flask(__name__)
 
 # Add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation_db.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password123@localhost/donate_users'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation.db'
+
 # Secret key
 app.config['SECRET_KEY'] = "donation"
 
@@ -315,7 +315,7 @@ class Users(db.Model, UserMixin):
 
 class AdminViews(ModelView):
     def is_accessible(self):
-         return current_user.is_authenticated and current_user.username == "toanchu"
+         return current_user.is_authenticated and current_user.username == "admin"
 
     def inaccessible_callback(self, name, **kwargs):        
         return redirect(url_for('login'))
