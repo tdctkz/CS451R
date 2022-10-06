@@ -54,8 +54,8 @@ Frontend Development Requirements
 o We recommend Bootstrap.
 
 • Front-end framework/libraries are up to you but must be included in project (aka no external resources).
-Required Pages
 
+## Required Pages
 ### Login Page
 • A login and password field
 
@@ -104,4 +104,5 @@ o The option to donate from a bank account or a credit/debit card
 
 ### User Profile and Settings
 • User can view and edit their active fundraisers
+
 • User can update personal information and password
