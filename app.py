@@ -57,7 +57,7 @@ def login():
 			else:
 				flash("Wrong Password - Try Again!", 'danger')
 		else:
-			flash("User Doesn't Exist!", 'warning')
+			flash("User Doesn't Exist! Please create an account.", 'warning')
 	return render_template('login.html', form=form)
 
 # Create Logout Page
@@ -139,7 +139,7 @@ def add_user():
             form.username.data = ''
             form.email.data = ''
             form.password.data = ''     
-            return redirect(url_for('home'))
+            return redirect(url_for('login'))
        
     return render_template("add_user.html", form=form)
 
@@ -176,8 +176,7 @@ def create_fundraiser():
 # Create a Fundraiser individual view pages
 @app.route('/fundraiser/<int:id>')
 def fundraiser(id):
-    current_fundraiser = Fundraiser.query.get_or_404(id)    
-    current_fundraiser.current_process = round((current_fundraiser.raised_amount / current_fundraiser.fund_goal)*100)
+    current_fundraiser = Fundraiser.query.get_or_404(id)  
     donors = Donors.query.order_by(Donors.date_donated.desc())
     return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser, donors=donors)
 
@@ -248,8 +247,10 @@ def donation(id):
     fund_to_update = Fundraiser.query.get_or_404(id) 
     dor = fund_to_update.id
     if request.method == "POST":
-        fund_to_update.raised_amount += int(request.form['donate_amount'])       
+        fund_to_update.raised_amount += int(request.form['donate_amount'])   
+        fund_to_update.current_process = round((fund_to_update.raised_amount / fund_to_update.fund_goal)*100)
         donor = Donors(fundraiser_id=dor, name=form.name.data, email=form.email.data,
+         address=form.address.data, city=form.city.data, state=form.state.data, zipcode=form.zipcode.data,
          donate_amount=form.donate_amount.data)
         try:
             db.session.add(donor)
@@ -291,10 +292,13 @@ class Fundraiser(db.Model):
 class Donors(db.Model): 
     id = db.Column(db.Integer, primary_key=True)   
     name = db.Column(db.String(100), nullable=False)    
-    email = db.Column(db.String(200), nullable=True)
+    email = db.Column(db.String(200), nullable=False)
     date_donated = db.Column(db.DateTime, default=datetime.utcnow)        
     donate_amount = db.Column(db.Integer)
-
+    address = db.Column(db.String(300), nullable=False)
+    city = db.Column(db.String(100), nullable=False)
+    state = db.Column(db.String(100), nullable=False)
+    zipcode = db.Column(db.Integer, nullable=False)
     # Foreign Key To Link Fundraiser (refer to primary key of the fundraiser)
     fundraiser_id = db.Column(db.Integer, db.ForeignKey('fundraiser.id'))    
 
@@ -304,6 +308,10 @@ class Users(db.Model, UserMixin):
     name = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(20), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
+    address = db.Column(db.String(300), nullable=True)
+    city = db.Column(db.String(100), nullable=True)
+    state = db.Column(db.String(100), nullable=True)
+    zipcode = db.Column(db.Integer, nullable=True)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)        
     password = db.Column(db.String(128)) 
     

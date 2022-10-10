@@ -1,8 +1,8 @@
-"""initial database
+"""create database
 
-Revision ID: 333c5e114bb4
+Revision ID: 0b0ab606e3a1
 Revises: 
-Create Date: 2022-10-06 15:05:44.964406
+Create Date: 2022-10-07 15:58:08.671857
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '333c5e114bb4'
+revision = '0b0ab606e3a1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,6 +23,10 @@ def upgrade():
     sa.Column('name', sa.String(length=200), nullable=False),
     sa.Column('username', sa.String(length=20), nullable=False),
     sa.Column('email', sa.String(length=100), nullable=False),
+    sa.Column('address', sa.String(length=300), nullable=True),
+    sa.Column('city', sa.String(length=100), nullable=True),
+    sa.Column('state', sa.String(length=100), nullable=True),
+    sa.Column('zipcode', sa.Integer(), nullable=True),
     sa.Column('date_added', sa.DateTime(), nullable=True),
     sa.Column('password', sa.String(length=128), nullable=True),
     sa.PrimaryKeyConstraint('id'),
@@ -45,9 +49,13 @@ def upgrade():
     op.create_table('donors',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
-    sa.Column('email', sa.String(length=200), nullable=True),
+    sa.Column('email', sa.String(length=200), nullable=False),
     sa.Column('date_donated', sa.DateTime(), nullable=True),
     sa.Column('donate_amount', sa.Integer(), nullable=True),
+    sa.Column('address', sa.String(length=300), nullable=False),
+    sa.Column('city', sa.String(length=100), nullable=False),
+    sa.Column('state', sa.String(length=100), nullable=False),
+    sa.Column('zipcode', sa.Integer(), nullable=False),
     sa.Column('fundraiser_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['fundraiser_id'], ['fundraiser.id'], ),
     sa.PrimaryKeyConstraint('id')

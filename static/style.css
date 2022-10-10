@@ -7,8 +7,16 @@
     font-family: "Maven Pro", sans-serif;
 }
 
+.mybg {
+    background-color: rgb(138, 168, 234);
+}
+
+.mybase {
+    background-color: hsl(171, 42%, 94%);
+}
+
 .myColor {
-    background-image: linear-gradient(#f66363 70%, #f6d379 110%);
+    background-image: linear-gradient(#f66363 70%, hsl(43, 87%, 72%) 110%);
 }
 
 .myShadow {

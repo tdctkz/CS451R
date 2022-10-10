@@ -34,4 +34,8 @@ class FundraiserForm(FlaskForm):
 class DonationForm(FlaskForm):
     name = StringField("Your name", validators=[DataRequired()])
     email = StringField("Your email", validators=[DataRequired()])
+    address = StringField("Address", validators=[DataRequired()])
+    city = StringField("City", validators=[DataRequired()])
+    state = StringField("State", validators=[DataRequired()])
+    zipcode = IntegerField("Zip code", validators=[DataRequired()])
     donate_amount = IntegerField("Amount", validators=[DataRequired()])

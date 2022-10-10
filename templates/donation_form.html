@@ -32,21 +32,16 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
                         </div>
-                        <input type="address" id="address" name="address" class="form-control rounded-0"
-                            placeholder="Billing Address" />
+                        {{ form.address(class="form-control rounded-0", placeholder="Billing Address") }}
                     </div>
                     <div class="input-group input-group-lg form-group">
+                        {{ form.city(class="form-control rounded-0", placeholder="City") }}
 
-                        <input type="string" id="city" name="city" class="form-control rounded-0" minlength="3"
-                            placeholder="City" />
-                        <input type="string" id="state" name="state" class="form-control rounded-0" minlength="3"
-                            placeholder="State" />
+                        {{ form.state(class="form-control rounded-0", placeholder="State") }}
                     </div>
                     <div class="input-group input-group-lg form-group">
-                        <input type="number" id="zipcode" name="zipcode" class="form-control rounded-0" minlength="3"
-                            placeholder="Zip code" />
+                        {{ form.zipcode(class="form-control rounded-0", placeholder="Zip code") }}
                     </div>
-
                 </div>
                 <div class="col-sm-6">
                     <label class="h5 font-weight-bold text-secondary">Credit Card information</label>
