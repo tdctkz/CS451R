@@ -1,34 +1,9 @@
 {% extends "base.html" %} {% block title %}Login{% endblock %} {% block
 content %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-{% if category == 'success' %}
-<div class="alert alert-success alert-dismissible">
-    {{ message }}
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-</div>
-{% endif %}
-{% if category == 'warning' %}
-<div class="alert alert-warning alert-dismissible">
-    {{ message }}
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-</div>
-{% endif %}
-{% if category == 'danger' %}
-<div class="alert alert-danger alert-dismissible">
-    {{ message }}
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-</div>
-{% endif %}
-{% endfor %}
-{% endif %}
-{% endwith %}
-
-<div class="container mt-4 p-4">
+<div class="container mt-5">
     <!-- Login Form Start -->
-    <div class="row justify-content-center" id="login-box">
+    <div class="row justify-content-center">
         <div class="my-auto myShadow">
             <div class="col-lg-12 bg-white">
                 <div class="row">
@@ -92,4 +67,5 @@ content %}
     </div>
 </div>
 <!-- Login Form End -->
+
 {% endblock %}
