@@ -3,8 +3,8 @@
 {% block content %}
 
 
-<div class="container justify-content-center mt-4">
-    <div class=" row d-flex flex-column justify-content-center myColor p-4">
+<div class="container justify-content-center">
+    <div class=" row d-flex flex-column justify-content-center makeColor p-4">
         <h1 class="text-center font-weight-bold text-white">Donation</h1>
         <hr class="my-2 bg-light myHr" />
         <p class="text-center font-weight-bolder text-light lead">Giving little can help a lot.</p>
@@ -14,7 +14,7 @@
         </p>
     </div>
 </div>
-<div class="container mybg">
+<div class="container" style="background-color: #a0d3f5;">
     <div class="row row-cols-3 p-4">
         {% for fundraiser in all_fundraisers %}
         <div class="card-deck px-2 mb-4">

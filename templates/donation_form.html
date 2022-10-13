@@ -3,16 +3,16 @@
 {% block content %}
 
 
-<div class="container mt-5">
+<div class="container">
     <!-- Donation form start-->
-    <div class="justify-content-center myShadow bg-light">
+    <div class="justify-content-center makeShadow bg-light">
         <div class="float-left mt-2 p-4">
             <a href="{{ url_for('fundraiser', id=fund_to_update.id)}}">
                 <i class="btn fas fa-arrow-left fa-lg"></i></a>
         </div>
         <br>
         <h1 class="text-center font-weight-bold text-secondary">Donation Form</h1>
-        <hr class="my-3" />
+        <br>
         <form method="POST" class="p-4">
             <div class="row">
                 <div class="col-lg-6">
