@@ -5,12 +5,21 @@ from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
 from datetime import datetime
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from webforms import UserForm, LoginForm, DonationForm, FundraiserForm
 from werkzeug.utils import secure_filename
+from flask_mail import Mail, Message
 import os
 # create a Flask instance
 app = Flask(__name__)
 
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'tdctkz142@gmail.com'
+app.config['MAIL_PASSWORD'] = 'ghkoejyzodjyghll'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+mail = Mail(app)
 # Add database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation.db'
 
@@ -50,7 +59,7 @@ def login():
       
 		if user:
 			# Checking user password
-			if user.password == form.password.data:
+			if check_password_hash(user.password, form.password.data):
 				login_user(user)
 				flash("Login Succesfull!!", 'success')
 				return redirect(url_for('user_page'))
@@ -86,7 +95,7 @@ def update_user(id):
         name_to_update.name = request.form['name']
         name_to_update.username = request.form['username']
         name_to_update.email = request.form['email']
-        name_to_update.password = request.form['password']
+        name_to_update.password = generate_password_hash(request.form['password'], method='sha256')
         try:
             db.session.commit()
             flash("User Updated Successfully!", 'success')
@@ -130,9 +139,9 @@ def add_user():
         elif form.confirm_password.data != form.password.data:
             flash('Passwords must match!!Try again...', 'warning')     
         else:                     
-            user = Users(username=form.username.data, name=form.name.data,
-            email=form.email.data, password=form.password.data)
-            db.session.add(user)
+            new_user = Users(username=form.username.data, name=form.name.data,
+            email=form.email.data, password=generate_password_hash(form.password.data, method='sha256'))
+            db.session.add(new_user)
             db.session.commit()        
             flash("User Added Successfully!", 'success')           
             form.name.data = ''
@@ -213,12 +222,17 @@ def home():
 # Create forgot password function	
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
-    form = UserForm()    
-   
+    form = UserForm()   
+    
     if request.method == "POST":
         user = Users.query.filter_by(email=form.email.data).first()
         if user: 
-            flash("Check your email!! We sent an email that showing your password.", 'success') 
+            flash("Check your email!! We sent an email that showing your password.", 'success')          
+            msg = Message('Password Reset Request',
+                  sender='tdctkz142@gmail.com',
+                  recipients=[user.email])
+            msg.body = f'''Here is your password:''' + user.password            
+            mail.send(msg)
             return redirect(url_for('login'))
         else:
             flash("Email does not match in the system! Try again...", 'warning')
@@ -234,6 +248,11 @@ def forgot_username():
         user = Users.query.filter_by(email=form.email.data).first()
         if user: 
             flash("Check your email!! We sent an email that showing your username.", 'success') 
+            msg = Message('Password Reset Request',
+                  sender='tdctkz142@gmail.com',
+                  recipients=[user.email])
+            msg.body = f'''Here is your username:''' + user.username            
+            mail.send(msg)
             return redirect(url_for('login'))
         else:
             flash("Email does not match in the system! Try again...", 'warning')
@@ -333,7 +352,6 @@ admin = Admin(app)
 admin.add_view(AdminViews(Users, db.session))
 admin.add_view(AdminViews(Fundraiser, db.session))
 admin.add_view(AdminViews(Donors, db.session))
-
 
 if __name__ == '__main__':
     app.run(debug=True)
