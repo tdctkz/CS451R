@@ -251,7 +251,7 @@ def forgot_username():
             msg = Message('Password Reset Request',
                   sender='tdctkz142@gmail.com',
                   recipients=[user.email])
-            msg.body = f'''Here is your username:''' + user.username            
+            msg.body = f'''Here is your username: ''' + user.username            
             mail.send(msg)
             return redirect(url_for('login'))
         else:
