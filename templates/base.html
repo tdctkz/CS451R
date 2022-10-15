@@ -14,13 +14,13 @@
 
 <body class="bg-info">
   <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    <button class="navbar-toggler mb-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <div class="navbar-nav mr-auto">
-        <button class="btn btn-outline-info btn-sm p-0"><a class="nav-item nav-link" href="{{url_for('home')}}"><i
+        <button class="btn btn-outline-info btn-sm p-0 ml-2"><a class="nav-item nav-link" href="{{url_for('home')}}"><i
               class="fa fa-fw fa-home pr-1"></i>Home</a></button>
       </div>
       <div class="navbar-nav">
@@ -31,13 +31,13 @@
           </button>
           <div class="dropdown-menu bg-secondary">
             <a class="nav-link btn btn-outline-info" href="{{url_for('user_page')}}">User profile</a>
-            <a class="nav-link btn btn-outline-info" href="{{url_for('create_fundraiser')}}">Create
+            <a class="nav-link btn btn-outline-success" href="{{url_for('create_fundraiser')}}">Create
               Fundraiser</a>
             <a class="nav-link btn btn-outline-warning" href="{{url_for('logout')}}">Logout</a>
             {% else %}
-            <button class="btn btn-outline-info btn-sm p-0"><a class="nav-item nav-link" href="{{url_for('login')}}"><i
-                  class="fa fa-fw fa-user pr-1"></i>Login</a></button>
-            <button class="btn btn-outline-info btn-sm p-0"><a class="nav-item nav-link"
+            <button class="btn btn-outline-info btn-sm p-0 ml-2"><a class="nav-item nav-link"
+                href="{{url_for('login')}}"><i class="fa fa-fw fa-user pr-1"></i>Login</a></button>
+            <button class="btn btn-outline-info btn-sm p-0 ml-2"><a class="nav-item nav-link"
                 href="{{url_for('add_user')}}"><i class="fa fa-fw fa-user-plus pr-1"></i> Sign
                 up</a></button>
           </div>

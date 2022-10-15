@@ -8,7 +8,7 @@
 }
 
 .makeColor {
-    background-image: linear-gradient(#f66363 70%, hsl(43, 87%, 72%) 110%);
+    background-image: linear-gradient(#67a5f5 70%, hsl(213, 56%, 88%) 110%);
 }
 
 .makeShadow {
@@ -25,7 +25,6 @@
 
 .makeHr {
     height: 1px;
-    border-radius: 50px;
 }
 
 .myLinkBtn {
