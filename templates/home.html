@@ -5,7 +5,8 @@
 
 <div class="container justify-content-center">
     <div class=" row d-flex flex-column justify-content-center makeColor p-4">
-        <h1 class="text-center font-weight-bold text-white">D<i class="fa fa-heartbeat text-danger"></i>nation</h1>
+        <h1 class="text-center font-weight-bold text-white">D<i class="fa fa-heartbeat text-danger"></i>nati<i
+                class="fa fa-globe h3 text-success"></i>n</h1>
         <p class="text-center font-weight-bolder text-light lead">Giving little can help a lot.</p>
         <p class="text-center text-black">Don't Have an Account?<a class="h6 text-light text-primary"
                 href="{{url_for('add_user')}}">
@@ -14,7 +15,7 @@
     </div>
 </div>
 <hr class="bg-light makeHr" />
-<div class="container" style="background-color: #a0d3f5;">
+<div class="container makeColor">
     <div class="row row-cols-3 p-4">
         {% for fundraiser in all_fundraisers %}
         <div class="card-deck px-2 mb-4">

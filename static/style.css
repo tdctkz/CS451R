@@ -24,11 +24,11 @@
 }
 
 .makeHr {
-    height: 1px;
+    height: 0.5px;
 }
 
 .myLinkBtn {
-    border-radius: 100px;
-    width: 50%;
-    border: 2px solid #fff;
+    border-radius: 10px;
+    width: 100%;
+    border: 1px solid #fff;
 }
