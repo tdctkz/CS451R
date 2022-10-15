@@ -80,9 +80,26 @@ def logout():
 # Create user Page
 @app.route('/user_page', methods=['GET', 'POST'])
 @login_required
-def user_page():   
+def user_page():  
+    form = UserForm() 
+    id = current_user.id
+    user_to_update = Users.query.get_or_404(id)
+   
+    if request.method == "POST":       
+        if check_password_hash(user_to_update.password, request.form['confirm_password']):
+            user_to_update.password = generate_password_hash(request.form['password'], method='sha256')
+            try:                    
+                db.session.commit()
+                flash("Your password has changed successfully!", 'success')
+                return redirect(url_for('user_page'))    
+            except:
+                flash("Error!  Looks like there was a problem...try again!", 'warning') 
+                return redirect(url_for('user_page'))        
+        else:
+            flash("Your current password was incorrected! Try again...", 'warning')   
+            return redirect(url_for('user_page'))          
     user_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())    
-    return render_template("user_page.html", user_fundraisers=user_fundraisers)
+    return render_template("user_page.html", user_fundraisers=user_fundraisers,user_to_update=user_to_update, form=form)
 
 # Create  update pages
 @app.route('/update_user/<int:id>', methods=['GET', 'POST'])
@@ -95,10 +112,14 @@ def update_user(id):
         name_to_update.name = request.form['name']
         name_to_update.username = request.form['username']
         name_to_update.email = request.form['email']
-        name_to_update.password = generate_password_hash(request.form['password'], method='sha256')
+        name_to_update.address = request.form['address']
+        name_to_update.city = request.form['city']
+        name_to_update.state = request.form['state']
+        name_to_update.zipcode = request.form['zipcode']
+        #name_to_update.password = generate_password_hash(request.form['password'], method='sha256')
         try:
             db.session.commit()
-            flash("User Updated Successfully!", 'success')
+            flash("Your Information Updated Successfully!", 'success')
             return render_template("user_page.html", form=form, name_to_update = name_to_update, id=id)
         except:
             flash("Error!  Looks like there was a problem...try again!", 'warning')

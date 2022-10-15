@@ -5,30 +5,70 @@
 {% if id == current_user.id %}
 <br />
 <div class="container myShadow bg-light p-4">
-    <h2>Update User Profile</h2>
+    <a href="{{ url_for('user_page', id=current_user.id)}}">
+        <i class="btn fas fa-arrow-left fa-lg"></i></a>
+    <br>
     <form action="/update_user/{{ name_to_update.id }}" method="POST">
-        {{ form.hidden_tag() }}
-        {{ form.name.label(class="form-label") }}
-        {{ form.name(class="form-control", value=name_to_update.name, placeholder="Your new name") }}
-        <br />
-        {{ form.username.label(class="form-label") }}
-        {{ form.username(class="form-control", value=name_to_update.username, placeholder="Your new username") }}
-        <br />
-        {{ form.email.label(class="form-label") }}
-        {{ form.email(class="form-control", value=name_to_update.email, placeholder="Your new email") }}
-        <br />
-        {{ form.password.label(class="form-label") }}
-        {{ form.password(class="form-control rounded-0", placeholder="New Password",
-        pattern="(?=.*[!@#$%&*_?])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}", title="Your password
-        must be 8 characters minimum, must contain 1 upper case letter, 1 symbol
-        and 1 number.") }}
-        <br>
-        {{ form.submit(class="btn btn-secondary btn-sm") }}
-        <a href="{{ url_for('user_page', id=current_user.id)}}" class="btn btn-dark btn-sm">Back</a>
+        <div class="row">
+            <div class="col">
+                <h2 class="text-center text-secondary mb-4">Update User Profile</h2>
+                {{ form.hidden_tag() }}
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="form-control", value=name_to_update.name, placeholder="Your new name") }}
+                <br />
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control", value=name_to_update.username, placeholder="Your new
+                username")
+                }}
+                <br />
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control", value=name_to_update.email, placeholder="Your new email") }}
+
+            </div>
+            <div class="col">
+                <label class="h6 font-weight-bold text-secondary">Credit Card information</label>
+                <div class="input-group input-group-lg form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text rounded-0"><i class="fas fa-credit-card fa-lg fa-fw"></i></span>
+                    </div>
+                    <input for="card-number" type="tel" id="credit-number" name="credit"
+                        class="form-control card-number rounded-0" placeholder="xxxx xxxx xxxx xxxx" pattern="[0-9]*"
+                        inputmode="numeric" maxlength="16" />
+                </div>
+                <div class="input-group input-group-lg form-group">
+                    <label class="h5 font-weight-normal mr-3 mt-2" for="card-number">Expiration
+                        Date</label>
+                    <input for="card-number" placeholder="MM/YY" pattern="[0-9]*" type="text"
+                        class="form-control card-expiration" id="card-expiration" />
+                    <input for="card-number" placeholder="CVV" pattern="[0-9]*" type="text"
+                        class="form-control card-cvv" id="cvv" />
+                </div>
+                <div class="input-group input-group-lg form-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
+                    </div>
+                    {{ form.address(class="form-control rounded-0", value=name_to_update.address, placeholder="Billing
+                    Address") }}
+                </div>
+                <div class="input-group input-group-lg form-group">
+                    {{ form.city(class="form-control rounded-0", value=name_to_update.city, placeholder="City") }}
+
+                    {{ form.state(class="form-control rounded-0", value=name_to_update.state, placeholder="State")}}
+                </div>
+                <div class="input-group input-group-lg form-group">
+                    {{ form.zipcode(class="form-control rounded-0", value=name_to_update.zipcode, placeholder="Zip
+                    code")}}
+                </div>
+                <div class="text-right">
+                    {{ form.submit(class="btn btn-secondary") }}
+                </div>
+            </div>
+        </div>
     </form>
 </div>
-<br /><br /><br />
 
+</div>
+</div>
 {% else %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
     Sorry! You Can't Edit This User...

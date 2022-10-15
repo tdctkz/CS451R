@@ -20,32 +20,35 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <div class="navbar-nav mr-auto">
-        <button class="btn btn-outline-success btn-sm p-0 ml-2 myLinkBtn"><a class="nav-item nav-link"
+        <button class="btn btn-outline-success btn-sm p-0 myLinkBtn"><a class="nav-item nav-link"
             href="{{url_for('home')}}"><i class="fa fa-fw fa-home pr-1"></i>Home</a></button>
       </div>
       <div class="navbar-nav">
         {% if current_user.is_authenticated %}
         <div class="dropdown mr-5">
-          <button class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown"><i
+          <button class="btn btn-outline-info dropdown-toggle myLinkBtn" data-toggle="dropdown"><i
               class="fa fa-fw fa-user pr-1"></i>{{current_user.name}}
           </button>
           <div class="dropdown-menu bg-secondary">
             <a class="nav-link btn btn-outline-info" href="{{url_for('user_page')}}">User profile</a>
             <a class="nav-link btn btn-outline-success" href="{{url_for('create_fundraiser')}}">Create
               Fundraiser</a>
-            <a class="nav-link btn btn-outline-warning" href="{{url_for('logout')}}">Logout</a>
-            {% else %}
-            <button class="btn btn-outline-warning btn-sm p-0 ml-2"><a class="nav-item nav-link"
-                href="{{url_for('login')}}"><i class="fa fa-fw fa-user pr-1"></i>Login</a></button>
-            <button class="btn btn-outline-danger btn-sm p-0 ml-2"><a class="nav-item nav-link"
-                href="{{url_for('add_user')}}"><i class="fa fa-fw fa-user-plus pr-1"></i> Sign
-                up</a></button>
+            <a class="nav-link btn btn-outline-danger" href="{{url_for('logout')}}">Logout</a>
           </div>
-          {% endif %}
         </div>
       </div>
+      {% else %}
+      <div class="navbar-nav">
+        <button class="btn btn-outline-warning btn-sm p-0 myLinkBtn mr-2"><a class="nav-item nav-link "
+            href="{{url_for('login')}}"><i class="fa fa-fw fa-user pr-1"></i>Login</a></button>
+      </div>
+      <div class="navbar-nav">
+        <button class="btn btn-outline-danger btn-sm p-0 myLinkBtn"><a class="nav-item nav-link "
+            href="{{url_for('add_user')}}"><i class="fa fa-fw fa-user-plus pr-1"></i> Sign
+            up</a></button>
+      </div>
     </div>
-    </div>
+    {% endif %}
   </nav>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
