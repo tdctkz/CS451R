@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from webforms import UserForm, LoginForm, DonationForm, FundraiserForm
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import os
 
 # create a Flask instance
@@ -16,8 +17,8 @@ app = Flask(__name__)
 
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'tdctkz142@gmail.com'
-app.config['MAIL_PASSWORD'] = 'ghkoejyzodjyghll'
+app.config['MAIL_USERNAME'] = 'toandchu88@gmail.com'
+app.config['MAIL_PASSWORD'] = 'comjburwkecykadp'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
@@ -257,17 +258,37 @@ def forgot_password():
     if request.method == "POST":
         user = Users.query.filter_by(email=form.email.data).first()
         if user: 
-            flash("Check your email!! We sent an email that showing your password.", 'success')          
+            flash("An email has been sent with instructions to reset your password.", 'success')          
+            token = user.get_reset_token()
             msg = Message('Password Reset Request',
                   sender='tdctkz142@gmail.com',
                   recipients=[user.email])
-            msg.body = f'''Here is your password: ''' + user.password            
+            msg.body = f'''To reset your password, visit the following link:
+            {url_for('reset_token', token=token, _external=True)}
+If you did not make this request then simply ignore this email and no changes will be made.
+             '''         
             mail.send(msg)
             return redirect(url_for('login'))
         else:
             flash("Email does not match in the system! Try again...", 'warning')
             
     return render_template("forgot_password.html", form=form)
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    user = Users.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('forgot_password'))
+    form = UserForm()
+    if request.method == "POST":
+        user.password = generate_password_hash(form.password.data, method='sha256')       
+        db.session.commit()
+        flash('Your password has been updated! You are now able to log in', 'success')
+        return redirect(url_for('login'))
+    return render_template('reset_token.html', title='Reset Password', form=form)
 
 # Create forgot username function	
 @app.route('/forgot_username', methods=['GET', 'POST'])
@@ -367,6 +388,18 @@ class Users(db.Model, UserMixin):
     # User Can Have Many Fundraisers 
     fundraiser = db.relationship('Fundraiser', backref='funder')    
     
+    def get_reset_token(self, expires_sec=60):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return Users.query.get(user_id)
+
     def __repr__(self):
         return '<Name %r>' % self.name
 
