@@ -9,7 +9,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from webforms import UserForm, LoginForm, DonationForm, FundraiserForm
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import os
 
 # create a Flask instance
@@ -109,26 +108,26 @@ def user_page():
 @login_required
 def update_user(id):   
     form = UserForm()
-    name_to_update = Users.query.get_or_404(id)
+    user_to_update = Users.query.get_or_404(id)
     
     if request.method == "POST":
-        name_to_update.name = request.form['name']
-        name_to_update.username = request.form['username']
-        name_to_update.email = request.form['email']
-        name_to_update.address = request.form['address']
-        name_to_update.city = request.form['city']
-        name_to_update.state = request.form['state']
-        name_to_update.zipcode = request.form['zipcode']
-        #name_to_update.password = generate_password_hash(request.form['password'], method='sha256')
+        user_to_update.name = request.form['name']
+        user_to_update.username = request.form['username']
+        user_to_update.email = request.form['email']
+        user_to_update.address = request.form['address']
+        user_to_update.city = request.form['city']
+        user_to_update.state = request.form['state']
+        user_to_update.zipcode = request.form['zipcode']
+        
         try:
             db.session.commit()
             flash("Your Information Updated Successfully!", 'success')
-            return render_template("user_page.html", form=form, name_to_update = name_to_update, id=id)
+            return render_template("user_page.html", form=form, user_to_update = user_to_update, id=id)
         except:
             flash("Error!  Looks like there was a problem...try again!", 'warning')
-            return render_template("update_user.html", form=form, name_to_update = name_to_update, id=id)
+            return render_template("update_user.html", form=form, user_to_update = user_to_update, id=id)
     else:       
-        return render_template("update_user.html", form=form, name_to_update = name_to_update, id=id) 
+        return render_template("update_user.html", form=form, user_to_update = user_to_update, id=id) 
 
  # Create  update fundraiser
 @app.route('/update_fundraiser/<int:id>', methods=['GET', 'POST'])
@@ -257,37 +256,18 @@ def forgot_password():
     
     if request.method == "POST":
         user = Users.query.filter_by(email=form.email.data).first()
-        if user:                      
-            token = user.get_reset_token()
+        if user: 
+            flash("Check your email!! We sent an email that showing your password.", 'success')          
             msg = Message('Password Reset Request',
                   sender='tdctkz142@gmail.com',
                   recipients=[user.email])
-            msg.body = f'''To reset your password, visit the following link:
-            {url_for('reset_token', token=token, _external=True)} 
-            If you did not make this request then simply ignore this email and no changes will be made.'''           
+            msg.body = f'''Here is your password: ''' + user.password            
             mail.send(msg)
-            flash("Check your email!! We sent a link to reset your password.", 'success')
             return redirect(url_for('login'))
         else:
             flash("Email does not match in the system! Try again...", 'warning')
             
     return render_template("forgot_password.html", form=form)
-
-@app.route("/reset_password/<token>", methods=['GET', 'POST'])
-def reset_token(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    user = Users.verify_reset_token(token)
-    if user is None:
-        flash('That is an invalid or expired token', 'warning')
-        return redirect(url_for('forgot_password'))
-    form = UserForm()
-    if request.method == "POST":   
-        user.password = generate_password_hash(form.password.data, method='sha256')        
-        db.session.commit()
-        flash('Your password has been updated! You are now able to log in', 'success')
-        return redirect(url_for('login'))
-    return render_template('reset_token.html', title='Reset Password', form=form)
 
 # Create forgot username function	
 @app.route('/forgot_username', methods=['GET', 'POST'])
@@ -385,20 +365,7 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.String(128)) 
     
     # User Can Have Many Fundraisers 
-    fundraiser = db.relationship('Fundraiser', backref='funder')
-
-    def get_reset_token(self, expires_sec=1800):
-        s = Serializer(app.config['SECRET_KEY'], expires_sec)
-        return s.dumps({'user_id': self.id}).decode('utf-8')
-
-    #staticmethod
-    def verify_reset_token(token):
-        s = Serializer(app.config['SECRET_KEY'])
-        try:
-            user_id = s.loads(token)['user_id']
-        except:
-            return None
-        return Users.query.get(user_id) 
+    fundraiser = db.relationship('Fundraiser', backref='funder')    
     
     def __repr__(self):
         return '<Name %r>' % self.name

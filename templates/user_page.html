@@ -13,7 +13,7 @@
         <div class="col-lg-2 dropdown float-right">
             <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog "></i></button>
             <div class="dropdown-menu bg-secondary">
-                <a class="text-white" href="{{ url_for('update_user', id=current_user.id)}}">Update info</a>
+                <a class="text-white" href="{{ url_for('update_user', id=current_user.id)}}">Update information</a>
                 <br>
                 <a class="text-light" href="#" data-toggle="modal" data-target="#exampleModal"
                     data-whatever="@mdo">Change password</a>
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-7">
             <h1 class="text-secondary">User profile</h1>
             <div class="h4">
                 <strong>Name:</strong>
@@ -63,7 +63,7 @@
                 <strong>Email:</strong>
                 {{ current_user.email }}<br />
 
-                <strong>Adress:</strong>
+                <strong>Address:</strong>
                 {{ current_user.address }}, {{ current_user.city }}, {{ current_user.state }} {{ current_user.zipcode }}
                 <br />
 
