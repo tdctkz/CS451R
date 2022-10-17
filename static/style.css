@@ -16,10 +16,9 @@
 }
 
 .makeBtn {
-    border-radius: 50px;
-    font-weight: bold;
-    font-size: 20px;
-    background-image: linear-gradient(to right, #0acffe 0%, #24cb86 100%);
+    border-radius: 10px;
+    font-size: 15px;
+    background-image: linear-gradient(to left, #5ba4ed 40%, #f95050 120%);
     border: none;
 }
 
