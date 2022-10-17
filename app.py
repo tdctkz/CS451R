@@ -17,8 +17,8 @@ app = Flask(__name__)
 
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'toandchu88@gmail.com'
-app.config['MAIL_PASSWORD'] = 'comjburwkecykadp'
+app.config['MAIL_USERNAME'] = 'admi.cs451r.proj@gmail.com'
+app.config['MAIL_PASSWORD'] = 'yyxfghlwukigugqf'
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
@@ -261,7 +261,7 @@ def forgot_password():
             flash("An email has been sent with instructions to reset your password.", 'success')          
             token = user.get_reset_token()
             msg = Message('Password Reset Request',
-                  sender='tdctkz142@gmail.com',
+                  sender='admi.cs451r.proj@gmail.com',
                   recipients=[user.email])
             msg.body = f'''To reset your password, visit the following link:
             {url_for('reset_token', token=token, _external=True)}
@@ -388,7 +388,7 @@ class Users(db.Model, UserMixin):
     # User Can Have Many Fundraisers 
     fundraiser = db.relationship('Fundraiser', backref='funder')    
     
-    def get_reset_token(self, expires_sec=60):
+    def get_reset_token(self, expires_sec=120):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
         return s.dumps({'user_id': self.id}).decode('utf-8')
 
