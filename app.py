@@ -99,7 +99,7 @@ def user_page():
             flash("Your current password was incorrected! Try again...", 'warning')   
             return redirect(url_for('user_page'))          
     user_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())    
-    return render_template("user_page.html", user_fundraisers=user_fundraisers,user_to_update=user_to_update, form=form)
+    return render_template("user_page.html", user_fundraisers=user_fundraisers, user_to_update=user_to_update, form=form)
 
 # Create  update pages
 @app.route('/update_user/<int:id>', methods=['GET', 'POST'])
@@ -153,18 +153,25 @@ def update_fundraiser(id):
 def add_user():
     form = UserForm()
    
-    if form.validate_on_submit():
-        user = Users.query.filter_by(username=form.username.data).first()
-        if user:
+    if request.method == "POST":        
+        email_exists = Users.query.filter_by(email=form.email.data).first()
+        username_exists = Users.query.filter_by(username=form.username.data).first()
+        if username_exists:
             flash('Username already exists.', 'warning')  
+            print("Username already exists!")
+        elif email_exists:
+            flash('Email already exists. Please use other email!', 'warning')  
         elif form.confirm_password.data != form.password.data:
-            flash('Passwords must match!!Try again...', 'warning')     
+            flash('Passwords must match!!Try again...', 'warning') 
+            print("Passwords must match!!Try again...")
+            return redirect(url_for('login'))    
         else:                     
             new_user = Users(username=form.username.data, name=form.name.data,
             email=form.email.data, password=generate_password_hash(form.password.data, method='sha256'))
             db.session.add(new_user)
             db.session.commit()        
-            flash("User Added Successfully!", 'success')           
+            flash("User Added Successfully!", 'success')  
+            print("Passwords must match!!Try again...")         
             form.name.data = ''
             form.username.data = ''
             form.email.data = ''

@@ -12,6 +12,11 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField("Login")
 
+class ChangePassForm(FlaskForm):
+    current_password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
+    confirm_password= PasswordField('Confirm Password', validators=[DataRequired()])
+    submit = SubmitField("Submit")
 
 # Create a  user form class
 class UserForm(FlaskForm):
