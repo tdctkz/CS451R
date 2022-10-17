@@ -252,7 +252,7 @@ def forgot_password():
             msg = Message('Password Reset Request',
                   sender='tdctkz142@gmail.com',
                   recipients=[user.email])
-            msg.body = f'''Here is your password:''' + user.password            
+            msg.body = f'''Here is your password: ''' + user.password            
             mail.send(msg)
             return redirect(url_for('login'))
         else:
@@ -269,10 +269,10 @@ def forgot_username():
         user = Users.query.filter_by(email=form.email.data).first()
         if user: 
             flash("Check your email!! We sent an email that showing your username.", 'success') 
-            msg = Message('Password Reset Request',
+            msg = Message('Username Forgot Request',
                   sender='tdctkz142@gmail.com',
                   recipients=[user.email])
-            msg.body = f'''Here is your username: ''' + user.username            
+            msg.body = f'''Your username is ''' + user.username            
             mail.send(msg)
             return redirect(url_for('login'))
         else:
