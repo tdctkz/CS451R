@@ -25,7 +25,7 @@ mail = Mail(app)
 
 # Add database
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://vnrljmochzcpxe:6f9e3d965af495cb6a817b35721bb2c57978bd3d4934bc6c18bfa25437dcbcdb@ec2-35-170-146-54.compute-1.amazonaws.com:5432/d2ia9c4mh997k1'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://dxvrhudnxkjivr:c4c1390435e81d36869782f4ae4b8ff84735b1a71407bccfd7a07cbaf6ce9f1b@ec2-54-204-56-171.compute-1.amazonaws.com:5432/d4kelvkv85q934'
 
 # Secret key
 app.config['SECRET_KEY'] = "donation"
