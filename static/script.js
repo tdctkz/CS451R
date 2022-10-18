@@ -56,3 +56,16 @@ function lsRememberMe() {
   }
 }
 
+var i = 0;
+var bar = document.querySelector(".progress-bar");
+function makeProgress() {
+  if (i < 100) {
+    i = i + 1;
+    bar.style.width = i + "%";
+    bar.innerText = i + "%";
+  }
+
+  // Wait for sometime before running this script again
+  setTimeout("makeProgress()", 100);
+}
+makeProgress();

@@ -24,7 +24,8 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 # Add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://vnrljmochzcpxe:6f9e3d965af495cb6a817b35721bb2c57978bd3d4934bc6c18bfa25437dcbcdb@ec2-35-170-146-54.compute-1.amazonaws.com:5432/d2ia9c4mh997k1'
 
 # Secret key
 app.config['SECRET_KEY'] = "donation"
@@ -345,7 +346,7 @@ def page_not_found(e):
 class Fundraiser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=True)
-    description = db.Column(db.Text, nullable=True)
+    description = db.Column(db.Text(), nullable=True)
     fundraiser_pic = db.Column(db.String(), nullable=True)
     fund_goal = db.Column(db.Integer)
     raised_amount = db.Column(db.Integer, default=0)

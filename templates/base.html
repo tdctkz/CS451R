@@ -77,6 +77,22 @@
   {% block content %}
 
   {% endblock %}
+  <script>
+    var i = 0;
+
+    var bar = document.querySelector(".progress-bar");
+    function makeProgress() {
+      if (i < 100) {
+        i = i + 1;
+        bar.style.width = i + "%";
+        bar.innerText = i + "%";
+      }
+
+      // Wait for sometime before running this script again
+      setTimeout("makeProgress()", 100);
+    }
+    makeProgress();
+  </script>
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
