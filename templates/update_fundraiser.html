@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Update Fundraiser{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 bg-white p-4 makeShadow">
+            <div class="float-left">
+                <a href="{{url_for('user_page')}}"><i class="btn fas fa-arrow-left fa-lg"></i></a>
+            </div>
+            <h2 class="text-center text-secondary p-2">Update Fundraiser</h2>
+            <form action="/update_fundraiser/{{ fundraiser_to_update.id }}" method="POST">
+                {{ form.hidden_tag() }}
+
+                {{ form.title.label(class="form-label font-weight-bold") }}
+                {{ form.title(class="form-control", value=fundraiser_to_update.title, placeholder="New title") }}
+                <br />
+                {{ form.description.label(class="form-label font-weight-bold") }}
+                {{ form.description(class="form-control", value=fundraiser_to_update.description,
+                placeholder="New description", rows=4)
+                }}
+                <br />
+                {{ form.fund_goal.label(class="form-label font-weight-bold") }}
+                {{ form.fund_goal(class="form-control", value=fundraiser_to_update.fund_goal, placeholder="New goal") }}
+
+                <br />
+
+                {{ form.submit(class="btn btn-secondary btn-sm") }}
+
+            </form>
+        </div>
+        <br /><br /><br />
+
+
+        {% endblock %}
