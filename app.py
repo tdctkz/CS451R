@@ -234,7 +234,7 @@ def delete_fundraiser(id):
 
 			# Return a message
 			flash("Fundraiser Was Deleted!", 'success')			
-			return render_template("user_page.html")
+			return redirect(url_for('user_page'))
 
 		except:
 			# Return an error message
