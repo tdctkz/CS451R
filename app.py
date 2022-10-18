@@ -24,8 +24,8 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 # Add database
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://dxvrhudnxkjivr:c4c1390435e81d36869782f4ae4b8ff84735b1a71407bccfd7a07cbaf6ce9f1b@ec2-54-204-56-171.compute-1.amazonaws.com:5432/d4kelvkv85q934'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://dxvrhudnxkjivr:c4c1390435e81d36869782f4ae4b8ff84735b1a71407bccfd7a07cbaf6ce9f1b@ec2-54-204-56-171.compute-1.amazonaws.com:5432/d4kelvkv85q934'
 
 # Secret key
 app.config['SECRET_KEY'] = "donation"
@@ -145,9 +145,9 @@ def update_fundraiser(id):
         try:
             db.session.commit()
             flash("Fundraiser Updated Successfully!", 'success')
-            return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)
+            return redirect(url_for('user_page'))
         except:
-            flash("Error!  Looks like there was a problem...try again!", 'warning')
+            flash("Error! Looks like there was a problem...try again!", 'warning')
             return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)
     else:       
         return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)         
