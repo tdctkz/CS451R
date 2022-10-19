@@ -1,3 +1,4 @@
+from time import timezone
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
@@ -354,7 +355,7 @@ class Fundraiser(db.Model):
     fund_goal = db.Column(db.Integer)
     raised_amount = db.Column(db.Integer, default=0)
     current_process = db.Column(db.Integer, default=0)
-    date_created = db.Column(db.DateTime, default=datetime.utcnow)	
+    date_created = db.Column(db.DateTime(timezone=True), default=func.now()) 
 
     # Foreign Key To Link Users (refer to primary key of the user)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -367,7 +368,7 @@ class Donors(db.Model):
     id = db.Column(db.Integer, primary_key=True)   
     name = db.Column(db.String(100), nullable=False)    
     email = db.Column(db.String(200), nullable=False)
-    date_donated = db.Column(db.DateTime, default=datetime.utcnow)        
+    date_donated = db.Column(db.DateTime(timezone=True), default=func.now())        
     donate_amount = db.Column(db.Integer)
     address = db.Column(db.String(300), nullable=False)
     city = db.Column(db.String(100), nullable=False)
@@ -386,7 +387,7 @@ class Users(db.Model, UserMixin):
     city = db.Column(db.String(100), nullable=True)
     state = db.Column(db.String(100), nullable=True)
     zipcode = db.Column(db.Integer, nullable=True)
-    date_added = db.Column(db.DateTime, default=datetime.utcnow)        
+    date_added = db.Column(db.DateTime(timezone=True), default=func.now())        
     password = db.Column(db.String(128)) 
     
     # User Can Have Many Fundraisers 

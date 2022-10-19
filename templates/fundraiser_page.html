@@ -41,7 +41,6 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>FID</th>
                             <th>Goal amount</th>
                             <th>Raised amount</th>
                             <th>Progress</th>
@@ -49,7 +48,6 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{ current_fundraiser.user_id }}</td>
                             <td class="text-center">${{ current_fundraiser.fund_goal }}</td>
                             <td class="text-center">${{ current_fundraiser.raised_amount }}</td>
                             <td class="text-center">
@@ -76,20 +74,18 @@
                     </h4>
                     <table class="table table-striped">
                         <thead>
-                            <tr class="text-center">
-                                <th>DID</th>
+                            <tr class="text-left">
                                 <th>Donor's name</th>
-                                <th>Amount</th>
+                                <th class="text-right">Amount</th>
                                 <th>Datetime donated</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for donor in donors %}
                             {% if donor.fundraiser_id == current_fundraiser.id %}
-                            <tr class="text-center">
-                                <td>{{ donor.id }}</td>
-                                <td>{{ donor.name }}</td>
-                                <td>${{ donor.donate_amount }}</td>
+                            <tr>
+                                <td class="text-left">{{ donor.name }}</td>
+                                <td class="text-right">${{ donor.donate_amount }}</td>
                                 <td>{{ donor.date_donated }}</td>
                             </tr>
                             {% endif %}
