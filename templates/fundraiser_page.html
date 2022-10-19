@@ -15,9 +15,9 @@
 </div>
 <hr class="bg-light makeHr" />
 <div class="container makeColor">
-    <div class="row p-4">
+    <div class="row p-2">
         <div class="col-lg-5">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm mt-4">
                 <div class="card-header bg-transparent text-center">
                     <img src="{{ url_for('static', filename='images/' + current_fundraiser.fundraiser_pic)}}"
                         alt="Fundraiser image" style="width: 100%;">
@@ -28,17 +28,15 @@
             </div>
         </div>
         <div class="col-lg-7">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm mt-4">
                 <div class="card-header bg-transparent border-0">
                     <h2 class="mb-0 text-secondary"><i class="far fa-clone pr-1"></i>Fundraiser Description
                     </h2>
-
                     <p class="h4 font-weight-normal text-primary ">{{current_fundraiser.description}}
                     </p>
                 </div>
             </div>
-            <div style="height: 20px"></div>
-            <div class="card shadow-sm">
+            <div class="card shadow-sm mt-4">
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -53,14 +51,17 @@
                             <td>{{ current_fundraiser.user_id }}</td>
                             <td class="text-center">${{ current_fundraiser.fund_goal }}</td>
                             <td class="text-center">${{ current_fundraiser.raised_amount }}</td>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%"
+                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+                            </div>
                             <td>
                                 <div class="progress" style="width: 100%; margin: 5px;">
-                                    <div class="progress-bar progress-bar-striped active" role="progressbar"
-                                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                        <span class=" progress-bar-label">
+                                    <div class="progress-bar progress-bar-striped">
+                                        <span class="progress-bar-label">
                                             {{ current_fundraiser.current_process }}%</span>
                                     </div>
-
                                 </div>
                             </td>
                             <td class="text-right"><a href="{{ url_for('donation', id=current_fundraiser.id)}}"

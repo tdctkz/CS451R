@@ -5,137 +5,140 @@
 
 <div class="container">
     <!-- Donation form start-->
-    <div class="justify-content-center makeShadow bg-light">
-        <div class="float-left mt-2 p-4">
-            <a href="{{ url_for('fundraiser', id=fund_to_update.id)}}">
-                <i class="btn fas fa-arrow-left fa-lg"></i></a>
-        </div>
-        <br>
-        <h1 class="text-center font-weight-bold text-secondary">Donation Form</h1>
-        <br>
-        <form method="POST" class="p-4">
-            <div class="row">
-                <div class="col-lg-6">
-                    {% if current_user.is_authenticated %}
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i class="far fa-user fa-lg fa-fw"></i></span>
-                        </div>
-                        {{ form.name(class="form-control rounded-0", value=current_user.name) }}
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i class="far fa-envelope fa-lg fa-fw"></i></span>
-                        </div>
-                        {{ form.email(class="form-control rounded-0", value=current_user.email) }}
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
-                        </div>
-                        {{ form.address(class="form-control rounded-0", value=current_user.address) }}
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        {{ form.city(class="form-control rounded-0", value=current_user.city) }}
-
-                        {{ form.state(class="form-control rounded-0", value=current_user.state) }}
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        {{ form.zipcode(class="form-control rounded-0", value=current_user.zipcode) }}
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <label class="h5 font-weight-bold text-secondary">Credit Card information</label>
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i
-                                    class="fas fa-credit-card fa-lg fa-fw"></i></span>
-                        </div>
-                        <input for="card-number" type="tel" id="credit-number" name="credit"
-                            class="form-control card-number rounded-0" placeholder="xxxx xxxx xxxx xxxx"
-                            pattern="[0-9]*" inputmode="numeric" maxlength="16" />
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        <label class="h5 font-weight-normal mr-3 mt-2" for="card-number">Expiration
-                            Date</label>
-                        <input for="card-number" placeholder="MM/YY" pattern="[0-9]*" type="text"
-                            class="form-control card-expiration" id="card-expiration" />
-                        <input for="card-number" placeholder="CVV" pattern="[0-9]*" type="text"
-                            class="form-control card-cvv" id="cvv" />
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i
-                                    class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
-                        </div>
-                        {{ form.donate_amount(class="form-control rounded-0", placeholder="Enter amount") }}
-                    </div>
-                    <div class="form-group float-right">
-                        <button type="submit" class="btn btn-secondary">Submit</button>
-                    </div>
-                    {% else %}
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i class="far fa-user fa-lg fa-fw"></i></span>
-                        </div>
-                        {{ form.name(class="form-control rounded-0", placeholder="Your name") }}
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i class="far fa-envelope fa-lg fa-fw"></i></span>
-                        </div>
-                        {{ form.email(class="form-control rounded-0", placeholder="Your Email") }}
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
-                        </div>
-                        {{ form.address(class="form-control rounded-0", placeholder="Billing Address") }}
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        {{ form.city(class="form-control rounded-0", placeholder="City") }}
-
-                        {{ form.state(class="form-control rounded-0", placeholder="State") }}
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        {{ form.zipcode(class="form-control rounded-0", placeholder="Zip code") }}
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <label class="h5 font-weight-bold text-secondary">Credit Card information</label>
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i
-                                    class="fas fa-credit-card fa-lg fa-fw"></i></span>
-                        </div>
-                        <input for="card-number" type="tel" id="credit-number" name="credit"
-                            class="form-control card-number rounded-0" placeholder="xxxx xxxx xxxx xxxx"
-                            pattern="[0-9]*" inputmode="numeric" maxlength="16" />
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        <label class="h5 font-weight-normal mr-3 mt-2" for="card-number">Expiration
-                            Date</label>
-                        <input for="card-number" placeholder="MM/YY" pattern="[0-9]*" type="text"
-                            class="form-control card-expiration" id="card-expiration" />
-                        <input for="card-number" placeholder="CVV" pattern="[0-9]*" type="text"
-                            class="form-control card-cvv" id="cvv" />
-                    </div>
-                    <div class="input-group input-group-lg form-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text rounded-0"><i
-                                    class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
-                        </div>
-                        {{ form.donate_amount(class="form-control rounded-0", placeholder="Enter amount") }}
-                    </div>
-                    <div class="form-group float-right">
-                        <button type="submit" class="btn btn-secondary">Submit</button>
-                    </div>
-                    {% endif %}
-                </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-10 makeShadow bg-light">
+            <div class="float-left mt-2 p-4">
+                <a href="{{ url_for('fundraiser', id=fund_to_update.id)}}">
+                    <i class="btn fas fa-arrow-left fa-lg"></i></a>
             </div>
-        </form>
-    </div>
-    <!-- Donation Form End -->
+            <br>
+            <h1 class="text-center font-weight-bold text-secondary">Donation Form</h1>
+            <br>
+            <form method="POST" class="p-4">
+                <div class="row">
+                    <div class="col-lg-6">
+                        {% if current_user.is_authenticated %}
+                        <div class="input-group input-group-lg form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-0"><i class="far fa-user fa-lg fa-fw"></i></span>
+                            </div>
+                            {{ form.name(class="form-control rounded-0", value=current_user.name) }}
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-0"><i
+                                        class="far fa-envelope fa-lg fa-fw"></i></span>
+                            </div>
+                            {{ form.email(class="form-control rounded-0", value=current_user.email) }}
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
+                            </div>
+                            {{ form.address(class="form-control rounded-0", value=current_user.address) }}
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            {{ form.city(class="form-control rounded-0", value=current_user.city) }}
+
+                            {{ form.state(class="form-control rounded-0", value=current_user.state) }}
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            {{ form.zipcode(class="form-control rounded-0", value=current_user.zipcode) }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="h5 font-weight-bold text-secondary">Credit Card information</label>
+                        <div class="input-group input-group-lg form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-0"><i
+                                        class="fas fa-credit-card fa-lg fa-fw"></i></span>
+                            </div>
+                            <input for="card-number" type="tel" id="credit-number" name="credit"
+                                class="form-control card-number rounded-0" placeholder="xxxx xxxx xxxx xxxx"
+                                pattern="[0-9]*" inputmode="numeric" maxlength="16" />
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            <label class="h5 font-weight-normal mr-3 mt-2" for="card-number">Expiration
+                                Date</label>
+                            <input for="card-number" placeholder="MM/YY" pattern="[0-9]*" type="text"
+                                class="form-control card-expiration" id="card-expiration" />
+                            <input for="card-number" placeholder="CVV" pattern="[0-9]*" type="text"
+                                class="form-control card-cvv" id="cvv" />
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-0"><i
+                                        class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
+                            </div>
+                            {{ form.donate_amount(class="form-control rounded-0", placeholder="Enter amount") }}
+                        </div>
+                        <div class="form-group float-right">
+                            <button type="submit" class="btn btn-secondary">Submit</button>
+                        </div>
+                        {% else %}
+                        <div class="input-group input-group-lg form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-0"><i class="far fa-user fa-lg fa-fw"></i></span>
+                            </div>
+                            {{ form.name(class="form-control rounded-0", placeholder="Your name") }}
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-0"><i
+                                        class="far fa-envelope fa-lg fa-fw"></i></span>
+                            </div>
+                            {{ form.email(class="form-control rounded-0", placeholder="Your Email") }}
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
+                            </div>
+                            {{ form.address(class="form-control rounded-0", placeholder="Billing Address") }}
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            {{ form.city(class="form-control rounded-0", placeholder="City") }}
+
+                            {{ form.state(class="form-control rounded-0", placeholder="State") }}
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            {{ form.zipcode(class="form-control rounded-0", placeholder="Zip code") }}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="h5 font-weight-bold text-secondary">Credit Card information</label>
+                        <div class="input-group input-group-lg form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-0"><i
+                                        class="fas fa-credit-card fa-lg fa-fw"></i></span>
+                            </div>
+                            <input for="card-number" type="tel" id="credit-number" name="credit"
+                                class="form-control card-number rounded-0" placeholder="xxxx xxxx xxxx xxxx"
+                                pattern="[0-9]*" inputmode="numeric" maxlength="16" />
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            <label class="h5 font-weight-normal mr-3 mt-2" for="card-number">Expiration
+                                Date</label>
+                            <input for="card-number" placeholder="MM/YY" pattern="[0-9]*" type="text"
+                                class="form-control card-expiration" id="card-expiration" />
+                            <input for="card-number" placeholder="CVV" pattern="[0-9]*" type="text"
+                                class="form-control card-cvv" id="cvv" />
+                        </div>
+                        <div class="input-group input-group-lg form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text rounded-0"><i
+                                        class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
+                            </div>
+                            {{ form.donate_amount(class="form-control rounded-0", placeholder="Enter amount") }}
+                        </div>
+                        <div class="form-group float-right">
+                            <button type="submit" class="btn btn-secondary">Submit</button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- Donation Form End -->
 
 
-    {% endblock %}
+        {% endblock %}
