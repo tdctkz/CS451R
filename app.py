@@ -1,19 +1,15 @@
-from time import timezone
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import *
-from sqlalchemy.engine import create_engine
-from sqlalchemy.schema import *
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
-from datetime import datetime
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from webforms import UserForm, LoginForm, DonationForm, FundraiserForm
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from sqlalchemy.sql import func
 import os
 
 # create a Flask instance
@@ -28,8 +24,8 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 # Add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation.db'
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://nbksoouohorvts:25f921cd7376ff95c80311ac979fa1203a847efc9af6e9892df6d7e45e6c62b1@ec2-3-229-11-55.compute-1.amazonaws.com:5432/d2ek09a9b31479'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://nbksoouohorvts:25f921cd7376ff95c80311ac979fa1203a847efc9af6e9892df6d7e45e6c62b1@ec2-3-229-11-55.compute-1.amazonaws.com:5432/d2ek09a9b31479'
 
 # Secret key
 app.config['SECRET_KEY'] = "donation"
