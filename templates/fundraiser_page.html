@@ -43,6 +43,7 @@
                             <th>FID</th>
                             <th>Goal amount</th>
                             <th>Raised amount</th>
+                            <th>Progress</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,6 +51,15 @@
                             <td>{{ current_fundraiser.user_id }}</td>
                             <td class="text-center">${{ current_fundraiser.fund_goal }}</td>
                             <td class="text-center">${{ current_fundraiser.raised_amount }}</td>
+                            <td class="text-center">
+                                <div class="progress mt-1">
+                                    <div class="progress-bar progress-bar-striped" style="width: 47%"
+                                        role=" progressbar" aria-valuemin="0" aria-valuemax="100">
+                                        <span class="progress-bar-label">
+                                            {{ current_fundraiser.current_process }}%</span>
+                                    </div>
+                                </div>
+                            </td>
                             <td class="text-right"><a href="{{ url_for('donation', id=current_fundraiser.id)}}"
                                     class="btn btn-danger btn-sm">Donate
                                     now</a>
@@ -57,12 +67,6 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="progress" style="width: 99%; margin: 2px;">
-                    <div class="progress-bar progress-bar-striped">
-                        <span class="progress-bar-label">
-                            {{ current_fundraiser.current_process }}%</span>
-                    </div>
-                </div>
             </div>
             <br>
             <div class="col-lg-">
@@ -98,5 +102,18 @@
         </div>
     </div>
 </div>
-
+<script>
+    var i = 0;
+    var bar = document.querySelector(".progress-bar");
+    function makeProgress() {
+        if (i < '{{ current_fundraiser.current_process  }}') {
+            i = i + 1;
+            bar.style.width = i + "%";
+            bar.innerText = i + "%";
+        }
+        // Wait for sometime before running this script again
+        setTimeout("makeProgress()", 60);
+    }
+    makeProgress();
+</script>
 {% endblock %}
