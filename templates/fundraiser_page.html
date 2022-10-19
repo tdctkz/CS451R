@@ -2,7 +2,7 @@
 {% block title %}Fundraiser{% endblock %}
 {% block content %}
 
-<div class="container">
+<div class="container makeShadow">
     <div class="row d-flex flex-column justify-content-center makeColor p-4">
         <h1 class="text-center font-weight-bold text-white">D<i class="fa fa-heartbeat text-danger"></i>nati<i
                 class="fa fa-globe h3 text-success"></i>n</h1>
@@ -14,9 +14,9 @@
     </div>
 </div>
 <hr class="bg-light makeHr" />
-<div class="container makeColor">
+<div class="container makeColor makeShadow">
     <div class="row p-2">
-        <div class="col-lg-5">
+        <div class="col-lg-5 align-items-stretch">
             <div class="card shadow-sm mt-4">
                 <div class="card-header bg-transparent text-center">
                     <img src="{{ url_for('static', filename='images/' + current_fundraiser.fundraiser_pic)}}"
@@ -26,9 +26,7 @@
                     <p class="h5 mb-0 text-primary">{{current_fundraiser.title}}</p>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-7">
-            <div class="card shadow-sm mt-4">
+            <div class="card d-flex align-items-stretch shadow-sm mt-4">
                 <div class="card-header bg-transparent border-0">
                     <h2 class="mb-0 text-secondary"><i class="far fa-clone pr-1"></i>Fundraiser Description
                     </h2>
@@ -36,8 +34,10 @@
                     </p>
                 </div>
             </div>
-            <div class="card shadow-sm mt-4">
-                <table class="table table-striped">
+        </div>
+        <div class="col-lg-7">
+            <div class="card d-flex align-items-stretch shadow-sm mt-4">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>FID</th>
@@ -53,8 +53,8 @@
                             <td class="text-center">${{ current_fundraiser.raised_amount }}</td>
                             <td class="text-center">
                                 <div class="progress mt-1">
-                                    <div class="progress-bar progress-bar-striped" style="width: 47%"
-                                        role=" progressbar" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar progress-bar-striped" style="width: 0%" role=" progressbar"
+                                        aria-valuemin="0" aria-valuemax="100">
                                         <span class="progress-bar-label">
                                             {{ current_fundraiser.current_process }}%</span>
                                     </div>
@@ -70,7 +70,7 @@
             </div>
             <br>
             <div class="col-lg-">
-                <div class="card shadow-sm">
+                <div class="card d-flex align-items-stretch shadow-sm">
                     <div class="card-header bg-transparent border-0">
                         <h4 class="mb-0 text-secondary"><i class="fas fa-list pr-1"></i>Recent Donations
                         </h4>
