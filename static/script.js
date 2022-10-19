@@ -54,4 +54,4 @@ function lsRememberMe() {
     localStorage.username = "";
     localStorage.checkbox = "";
   }
-}
+}   

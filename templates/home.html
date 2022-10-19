@@ -3,7 +3,7 @@
 {% block content %}
 
 
-<div class="container justify-content-center">
+<div class="container justify-content-center makeShadow">
     <div class=" row d-flex flex-column justify-content-center makeColor p-4">
         <h1 class="text-center font-weight-bold text-white">D<i class="fa fa-heartbeat text-danger"></i>nati<i
                 class="fa fa-globe h3 text-success"></i>n</h1>
@@ -16,24 +16,26 @@
 </div>
 <hr class="bg-light makeHr" />
 <div class="container makeColor">
-    <div class="row row-cols-3 p-4">
+    <div class="row p-4 makeShadow">
         {% for fundraiser in all_fundraisers %}
-        <div class="card-deck px-2 mb-4">
-            <div class="card img-thumbnail">
-                <a href="{{ url_for('fundraiser', id=fundraiser.id)}}"><img class="card-img-top"
-                        src="{{ url_for('static', filename='images/' + fundraiser.fundraiser_pic)}}"
-                        alt="Fundraiser image" style="width: 100%;"></a>
-                <div class="card-body">
-                    <h5 class="card-title">{{ fundraiser.title }}</h5>
-                    <p class="card-text">{{ fundraiser.description }}</p>
-                    <p class="card-text"><small class="text-muted"><a
-                                href="{{url_for('fundraiser', id=fundraiser.id)}}">More detail
-                                >></a></small></p>
+        <div class="col-lg-4 d-flex align-items-stretch mb-4">
+            <div class="card-deck">
+                <div class="card img-thumbnail">
+                    <a href="{{ url_for('fundraiser', id=fundraiser.id)}}"><img class="card-img-top"
+                            src="{{ url_for('static', filename='images/' + fundraiser.fundraiser_pic)}}"
+                            alt="Fundraiser image" style="width: 100%;"></a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ fundraiser.title }}</h5>
+                        <p class="card-text">{{ fundraiser.description }}</p>
+                        <p class="card-text"><small class="text-muted"><a
+                                    href="{{url_for('fundraiser', id=fundraiser.id)}}">More detail
+                                    >></a></small></p>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
-</div>
+
 {% endblock %}
