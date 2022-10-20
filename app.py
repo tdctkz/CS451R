@@ -170,20 +170,17 @@ def add_user():
         username_exists = Users.query.filter_by(username=form.username.data).first()
         if username_exists:
             flash('Username already exists.', 'warning')  
-            print("Username already exists!")
         elif email_exists:
             flash('Email already exists. Please use other email!', 'warning')  
         elif form.confirm_password.data != form.password.data:
             flash('Passwords must match!!Try again...', 'warning') 
-            print("Passwords must match!!Try again...")
             return redirect(url_for('login'))    
         else:                     
             new_user = Users(username=form.username.data, name=form.name.data, date_added=date, time_added=time,
             email=form.email.data, password=generate_password_hash(form.password.data, method='sha256'))
             db.session.add(new_user)
             db.session.commit()        
-            flash("User Added Successfully!", 'success')  
-            print("Passwords must match!!Try again...")         
+            flash("User Added Successfully!", 'success')       
             form.name.data = ''
             form.username.data = ''
             form.email.data = ''
@@ -298,10 +295,14 @@ def reset_token(token):
         return redirect(url_for('forgot_password'))
     form = UserForm()
     if request.method == "POST":
-        user.password = generate_password_hash(form.password.data, method='sha256')       
-        db.session.commit()
-        flash('Your password has been updated! You are now able to log in', 'success')
-        return redirect(url_for('login'))
+        if form.confirm_password.data != form.password.data:
+            flash('Passwords must match!!Try again...', 'warning')             
+            return redirect(request.referrer)
+        else:    
+            user.password = generate_password_hash(form.password.data, method='sha256')       
+            db.session.commit()
+            flash('Your password has been updated! You are now able to log in', 'success')
+            return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
 
 # Create forgot username function	
