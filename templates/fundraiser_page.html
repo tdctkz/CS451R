@@ -77,7 +77,7 @@
                             <tr class="text-left">
                                 <th>Donor's name</th>
                                 <th class="text-right">Amount</th>
-                                <th>Datetime donated</th>
+                                <th class="text-center">Datetime donated</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,7 +86,7 @@
                             <tr>
                                 <td class="text-left">{{ donor.name }}</td>
                                 <td class="text-right">${{ donor.donate_amount }}</td>
-                                <td>{{ donor.date_donated }}</td>
+                                <td class="text-center">{{ donor.time_donated }} {{ donor.date_donated }}</td>
                             </tr>
                             {% endif %}
                             {% endfor %}

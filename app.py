@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from sqlalchemy.sql import func
+from datetime import datetime
 import os
 
 # create a Flask instance
@@ -155,8 +156,15 @@ def update_fundraiser(id):
 # Create Add user pages
 @app.route('/sign-up', methods=['GET', 'POST'])
 def add_user():
-    form = UserForm()
-   
+    form = UserForm()  
+
+    #current datetime
+    current = datetime.now()   
+    # convert to date String
+    date = current.strftime("%m-%d-%Y")    
+    # convert to time String
+    time = current.strftime("%H:%M:%S")
+
     if request.method == "POST":        
         email_exists = Users.query.filter_by(email=form.email.data).first()
         username_exists = Users.query.filter_by(username=form.username.data).first()
@@ -170,7 +178,7 @@ def add_user():
             print("Passwords must match!!Try again...")
             return redirect(url_for('login'))    
         else:                     
-            new_user = Users(username=form.username.data, name=form.name.data,
+            new_user = Users(username=form.username.data, name=form.name.data, date_added=date, time_added=time,
             email=form.email.data, password=generate_password_hash(form.password.data, method='sha256'))
             db.session.add(new_user)
             db.session.commit()        
@@ -188,6 +196,13 @@ def add_user():
 @app.route('/create_fundraiser', methods=['GET', 'POST'])
 def create_fundraiser():
     form = FundraiserForm()
+
+    #current datetime
+    current = datetime.now()   
+    # convert to date String
+    date = current.strftime("%m-%d-%Y")    
+    # convert to time String
+    time = current.strftime("%H:%M:%S")
     
     if form.validate_on_submit():
         f = request.files['fundraiser_pic']
@@ -195,7 +210,7 @@ def create_fundraiser():
             file = secure_filename(f.filename)
             funder = current_user.id
             fundraiser = Fundraiser(user_id=funder, title=form.title.data, description=form.description.data,
-            fund_goal=form.fund_goal.data, fundraiser_pic=file)
+            fund_goal=form.fund_goal.data, date_created=date, time_created=time, fundraiser_pic=file)
         else:
             flash("Your file must be in type of 'jpg', 'jpeg','png'!!", 'warning')
             return render_template("create_fundraiser.html", form=form)
@@ -315,12 +330,20 @@ def forgot_username():
 @app.route('/donation/<int:id>', methods=['GET', 'POST'])
 def donation(id):
     form = DonationForm()
+
+    #current datetime
+    current = datetime.now()   
+    # convert to date String
+    date = current.strftime("%m-%d-%Y")    
+    # convert to time String
+    time = current.strftime("%H:%M:%S")
+
     fund_to_update = Fundraiser.query.get_or_404(id) 
     dor = fund_to_update.id
     if request.method == "POST":
         fund_to_update.raised_amount += int(request.form['donate_amount'])   
         fund_to_update.current_process = round((fund_to_update.raised_amount / fund_to_update.fund_goal)*100)
-        donor = Donors(fundraiser_id=dor, name=form.name.data, email=form.email.data,
+        donor = Donors(fundraiser_id=dor, name=form.name.data, email=form.email.data, date_donated=date, time_donated=time,
          address=form.address.data, city=form.city.data, state=form.state.data, zipcode=form.zipcode.data,
          donate_amount=form.donate_amount.data)
         try:
@@ -351,7 +374,8 @@ class Fundraiser(db.Model):
     fund_goal = db.Column(db.Integer)
     raised_amount = db.Column(db.Integer, default=0)
     current_process = db.Column(db.Integer, default=0)
-    date_created = db.Column(db.DateTime(timezone=True), default=func.now()) 
+    date_created = db.Column(db.String(128))
+    time_created = db.Column(db.String(128))  
 
     # Foreign Key To Link Users (refer to primary key of the user)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -364,7 +388,8 @@ class Donors(db.Model):
     id = db.Column(db.Integer, primary_key=True)   
     name = db.Column(db.String(100), nullable=False)    
     email = db.Column(db.String(200), nullable=False)
-    date_donated = db.Column(db.DateTime(timezone=True), default=func.now())        
+    date_donated = db.Column(db.String(128))   
+    time_donated = db.Column(db.String(128))      
     donate_amount = db.Column(db.Integer)
     address = db.Column(db.String(300), nullable=False)
     city = db.Column(db.String(100), nullable=False)
@@ -383,7 +408,8 @@ class Users(db.Model, UserMixin):
     city = db.Column(db.String(100), nullable=True)
     state = db.Column(db.String(100), nullable=True)
     zipcode = db.Column(db.Integer, nullable=True)
-    date_added = db.Column(db.DateTime(timezone=True), default=func.now())        
+    date_added = db.Column(db.String(128)) 
+    time_added = db.Column(db.String(128))        
     password = db.Column(db.String(128)) 
     
     # User Can Have Many Fundraisers 
