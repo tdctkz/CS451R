@@ -276,13 +276,11 @@ def forgot_password():
         if user: 
             flash("An email has been sent with instructions to reset your password.", 'success')          
             token = user.get_reset_token()
-            msg = Message('Password Reset Request',
-                  sender='admi.cs451r.proj@gmail.com',
-                  recipients=[user.email])
-            msg.body = f'''To reset your password, visit the following link:
-            {url_for('reset_token', token=token, _external=True)}
-If you did not make this request then simply ignore this email and no changes will be made.
-             '''         
+            msg = Message()
+            msg.subject = "Password Reset Request"
+            msg.sender = 'admi.cs451r.proj@gmail.com'
+            msg.recipients = [user.email]
+            msg.html = render_template("password_reset.html", user=user, token=token)     
             mail.send(msg)
             return redirect(url_for('login'))
         else:
