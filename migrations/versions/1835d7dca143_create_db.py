@@ -1,8 +1,8 @@
-"""create database
+"""create db
 
-Revision ID: 0b0ab606e3a1
+Revision ID: 1835d7dca143
 Revises: 
-Create Date: 2022-10-07 15:58:08.671857
+Create Date: 2022-10-19 18:47:25.283180
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0b0ab606e3a1'
+revision = '1835d7dca143'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,7 +27,7 @@ def upgrade():
     sa.Column('city', sa.String(length=100), nullable=True),
     sa.Column('state', sa.String(length=100), nullable=True),
     sa.Column('zipcode', sa.Integer(), nullable=True),
-    sa.Column('date_added', sa.DateTime(), nullable=True),
+    sa.Column('date_added', sa.DateTime(timezone=True), nullable=True),
     sa.Column('password', sa.String(length=128), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
@@ -41,7 +41,7 @@ def upgrade():
     sa.Column('fund_goal', sa.Integer(), nullable=True),
     sa.Column('raised_amount', sa.Integer(), nullable=True),
     sa.Column('current_process', sa.Integer(), nullable=True),
-    sa.Column('date_created', sa.DateTime(), nullable=True),
+    sa.Column('date_created', sa.DateTime(timezone=True), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -50,7 +50,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('email', sa.String(length=200), nullable=False),
-    sa.Column('date_donated', sa.DateTime(), nullable=True),
+    sa.Column('date_donated', sa.DateTime(timezone=True), nullable=True),
     sa.Column('donate_amount', sa.Integer(), nullable=True),
     sa.Column('address', sa.String(length=300), nullable=False),
     sa.Column('city', sa.String(length=100), nullable=False),
