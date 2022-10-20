@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-7">
+        <div class="col-sm-7">
             <h1 class="text-secondary">User profile</h1>
             <div class="h4">
                 <strong>Name:</strong>
@@ -78,42 +78,45 @@
 </div>
 <div class="container justify-content-center mt-4">
     <div class="row makeShadow bg-light p-4">
-        <h2 class="text-secondary">Fundraiser Created</h2>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th class="text-left">Title</th>
-                    <th class="text-right">Goal amount</th>
-                    <th class="text-right">Raised amount</th>
-                    <th class="text-center">Datetime Created</th>
-                    <th class="text-center"><i class=" fa fa-cog"></i></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for fundraiser in user_fundraisers %}
-                {% if fundraiser.user_id == current_user.id %}
-                <tr>
-                    <td class="text-left"><a href="{{ url_for('fundraiser', id=fundraiser.id)}}">{{ fundraiser.title
-                            }}</a></td>
-                    <td class="text-right">${{ fundraiser.fund_goal }}</td>
-                    <td class="text-right">${{ fundraiser.raised_amount }}</td>
-                    <td class="text-center">{{ fundraiser.time_created }} {{ fundraiser.date_created }}</td>
-                    <td>
-                        <div class="dropdown text-center">
-                            <button class="btn dropdown-toggle" data-toggle="dropdown"></button>
-                            <div class="dropdown-menu bg-light">
-                                <a href="{{ url_for('update_fundraiser', id=fundraiser.id)}}" class="">Edit</a>
-                                <br>
-                                <a href="{{ url_for('delete_fundraiser', id=fundraiser.id)}}"
-                                    class="text-danger">Delete</a>
+        <div class="col">
+            <h2 class="text-secondary">Fundraiser Created</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr class="row">
+                        <th class="col text-left">Title</th>
+                        <th class="col text-right">Goal amount</th>
+                        <th class="col text-right">Raised amount</th>
+                        <th class="col text-center">Datetime Created</th>
+                        <th class="col text-center"><i class=" fa fa-cog"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fundraiser in user_fundraisers %}
+                    {% if fundraiser.user_id == current_user.id %}
+                    <tr class="row">
+                        <td class="col text-left"><a href="{{ url_for('fundraiser', id=fundraiser.id)}}">{{
+                                fundraiser.title
+                                }}</a></td>
+                        <td class="col text-right">${{ fundraiser.fund_goal }}</td>
+                        <td class="col text-right">${{ fundraiser.raised_amount }}</td>
+                        <td class="col text-center">{{ fundraiser.time_created }} {{ fundraiser.date_created }}</td>
+                        <td class="col">
+                            <div class="dropdown text-center">
+                                <button class="btn dropdown-toggle" data-toggle="dropdown"></button>
+                                <div class="dropdown-menu bg-light">
+                                    <a href="{{ url_for('update_fundraiser', id=fundraiser.id)}}" class="">Edit</a>
+                                    <br>
+                                    <a href="{{ url_for('delete_fundraiser', id=fundraiser.id)}}"
+                                        class="text-danger">Delete</a>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
