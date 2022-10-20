@@ -79,7 +79,7 @@
 <div class="container justify-content-center mt-4">
     <div class="row makeShadow bg-light p-4">
         <div class="col">
-            <h2 class="text-secondary">Fundraiser Created</h2>
+            <p class="text-secondary h3"><i class="fas fa-list pr-1"></i>Fundraiser Created</p>
             <table class="table table-striped">
                 <thead>
                     <tr class="row">
@@ -87,7 +87,7 @@
                         <th class="col text-right">Goal amount</th>
                         <th class="col text-right">Raised amount</th>
                         <th class="col text-center">Datetime Created</th>
-                        <th class="col text-center"><i class=" fa fa-cog"></i></th>
+                        <th class="col-sm-1 text-center"><i class=" fa fa-cog"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -100,7 +100,7 @@
                         <td class="col text-right">${{ fundraiser.fund_goal }}</td>
                         <td class="col text-right">${{ fundraiser.raised_amount }}</td>
                         <td class="col text-center">{{ fundraiser.time_created }} {{ fundraiser.date_created }}</td>
-                        <td class="col">
+                        <td class="col-sm-1">
                             <div class="dropdown text-center">
                                 <button class="btn dropdown-toggle" data-toggle="dropdown"></button>
                                 <div class="dropdown-menu bg-light">
