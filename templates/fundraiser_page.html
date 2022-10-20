@@ -41,18 +41,18 @@
                 <div class="card-header bg-transparent border-0">
                     <table class="table table-sm">
                         <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Goal amount</th>
-                                <th scope="col">Raised amount</th>
-                                <th scope="col">Progress</th>
-                                <th scope="col"> </th>
+                            <tr class="row">
+                                <th class="col">Goal amount</th>
+                                <th class="col">Raised amount</th>
+                                <th class="col">Progress</th>
+                                <th class="col"> </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>${{ current_fundraiser.fund_goal }}</td>
-                                <td>${{ current_fundraiser.raised_amount }}</td>
-                                <td>
+                            <tr class="row">
+                                <td class="col">${{ current_fundraiser.fund_goal }}</td>
+                                <td class="col">${{ current_fundraiser.raised_amount }}</td>
+                                <td class="col">
                                     <div class="progress mt-1">
                                         <div class="progress-bar progress-bar-striped" style="width: 0%"
                                             role=" progressbar" aria-valuemin="0" aria-valuemax="100">
@@ -62,7 +62,7 @@
                                     </div>
                                     {{ current_fundraiser.current_process }}%
                                 </td>
-                                <td class="text-right"><a href="{{ url_for('donation', id=current_fundraiser.id)}}"
+                                <td class="col text-right"><a href="{{ url_for('donation', id=current_fundraiser.id)}}"
                                         class="btn btn-danger btn-sm">Donate
                                         now</a>
                                 </td>
@@ -78,19 +78,20 @@
                     </h4>
                     <table class="table table-striped">
                         <thead class="thead-dark">
-                            <tr class="text-left">
-                                <th scope="col">Donor's name</th>
-                                <th scope="col" class="text-right">Amount</th>
-                                <th scope="col" class="text-center">Datetime donated</th>
+                            <tr class="row">
+                                <th class="col" scope="col">Donor's name</th>
+                                <th scope="col" class="col text-right">Amount</th>
+                                <th scope="col" class="col text-center">Datetime donated</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for donor in donors %}
                             {% if donor.fundraiser_id == current_fundraiser.id %}
-                            <tr>
-                                <td class="text-left">{{ donor.name }}</td>
-                                <td class="text-right">${{ donor.donate_amount }}</td>
-                                <td class="text-center">{{ donor.time_donated }} {{ donor.date_donated }}</td>
+                            <tr class="row">
+                                <td scope="col" class="col text-left">{{ donor.name }}</td>
+                                <td scope="col" class="col text-right">${{ donor.donate_amount }}</td>
+                                <td scope="col" class="col text-center">{{ donor.time_donated }} {{ donor.date_donated
+                                    }}</td>
                             </tr>
                             {% endif %}
                             {% endfor %}
