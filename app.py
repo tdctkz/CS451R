@@ -1,4 +1,5 @@
 from email.policy import default
+from wsgiref.util import request_uri
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
@@ -58,7 +59,42 @@ login_manager.login_view = 'login'
 def load_user(user_id):
 	return Users.query.get(int(user_id))
 
-# create a route decorator
+# Create a user
+@app.route('/sign-up', methods=['GET', 'POST'])
+def add_user():
+    form = UserForm()  
+
+    #current datetime
+    current = datetime.now()   
+    # convert to date String
+    date = current.strftime("%m-%d-%Y")    
+    # convert to time String
+    time = current.strftime("%H:%M:%S")
+
+    if request.method == "POST":        
+        email_exists = Users.query.filter_by(email=form.email.data).first()
+        username_exists = Users.query.filter_by(username=form.username.data).first()
+        if username_exists:
+            flash('Username already exists.', 'warning')  
+        elif email_exists:
+            flash('Email already exists. Please use other email!', 'warning')  
+        elif form.confirm_password.data != form.password.data:
+            flash('Passwords must match!!Try again...', 'warning') 
+            return redirect(url_for('add_user'))    
+        else:                     
+            new_user = Users(username=form.username.data, name=form.name.data, date_added=date, time_added=time,
+            email=form.email.data, password=generate_password_hash(form.password.data, method='sha256'))
+            db.session.add(new_user)
+            db.session.commit()        
+            flash("User Added Successfully!", 'success')       
+            form.name.data = ''
+            form.username.data = ''
+            form.email.data = ''
+            form.password.data = ''     
+            return redirect(url_for('login'))
+       
+    return render_template("add_user.html", form=form)
+
 # Create Login pages
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -167,42 +203,6 @@ def update_fundraiser(id):
             return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)
     else:       
         return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)         
-
-# Create Add user pages
-@app.route('/sign-up', methods=['GET', 'POST'])
-def add_user():
-    form = UserForm()  
-
-    #current datetime
-    current = datetime.now()   
-    # convert to date String
-    date = current.strftime("%m-%d-%Y")    
-    # convert to time String
-    time = current.strftime("%H:%M:%S")
-
-    if request.method == "POST":        
-        email_exists = Users.query.filter_by(email=form.email.data).first()
-        username_exists = Users.query.filter_by(username=form.username.data).first()
-        if username_exists:
-            flash('Username already exists.', 'warning')  
-        elif email_exists:
-            flash('Email already exists. Please use other email!', 'warning')  
-        elif form.confirm_password.data != form.password.data:
-            flash('Passwords must match!!Try again...', 'warning') 
-            return redirect(url_for('login'))    
-        else:                     
-            new_user = Users(username=form.username.data, name=form.name.data, date_added=date, time_added=time,
-            email=form.email.data, password=generate_password_hash(form.password.data, method='sha256'))
-            db.session.add(new_user)
-            db.session.commit()        
-            flash("User Added Successfully!", 'success')       
-            form.name.data = ''
-            form.username.data = ''
-            form.email.data = ''
-            form.password.data = ''     
-            return redirect(url_for('login'))
-       
-    return render_template("add_user.html", form=form)
 
 # Create a fundraiser form
 @app.route('/create_fundraiser', methods=['GET', 'POST'])
