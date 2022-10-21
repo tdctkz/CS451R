@@ -1,3 +1,4 @@
+from email.policy import default
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
@@ -32,8 +33,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation-451r.db'
 app.config['SECRET_KEY'] = "cs451r-donation"
 
 # image requirements
-UPLOAD_FOLDER = 'static/images/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+USER_UPLOAD_FOLDER = 'static/images/users'
+app.config['USER_UPLOAD_FOLDER'] = USER_UPLOAD_FOLDER
+
+FUNDRAISER_UPLOAD_FOLDER = 'static/images/fundraisers'
+app.config['FUNDRAISER_UPLOAD_FOLDER'] = FUNDRAISER_UPLOAD_FOLDER
 
 # limit upload size upto 8mb
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
@@ -90,8 +94,19 @@ def user_page():
     id = current_user.id
     user_to_update = Users.query.get_or_404(id)
    
-    if request.method == "POST":       
-        if check_password_hash(user_to_update.password, request.form['confirm_password']):
+    if request.method == "POST":    
+        f = request.files['user_pic']
+        if allowed_file(f.filename):
+            user_to_update.user_pic = secure_filename(f.filename)               
+            try:             
+                f.save(os.path.join(app.config['USER_UPLOAD_FOLDER'], user_to_update.user_pic))       
+                db.session.commit()
+                flash("Your avatar has changed successfully!", 'success')
+                return redirect(url_for('user_page'))  
+            except:
+                flash("Error!  Looks like there was a problem...try again!", 'warning') 
+                return redirect(url_for('user_page'))   
+        elif check_password_hash(user_to_update.password, request.form['confirm_password']):
             user_to_update.password = generate_password_hash(request.form['password'], method='sha256')
             try:                    
                 db.session.commit()
@@ -201,7 +216,7 @@ def create_fundraiser():
     # convert to time String
     time = current.strftime("%H:%M:%S")
     
-    if form.validate_on_submit():
+    if request.method == "POST":  
         f = request.files['fundraiser_pic']
         if allowed_file(f.filename):
             file = secure_filename(f.filename)
@@ -219,7 +234,7 @@ def create_fundraiser():
 		# Add post data to database
         db.session.add(fundraiser)
         db.session.commit()
-        f.save(os.path.join(app.config['UPLOAD_FOLDER'], file))
+        f.save(os.path.join(app.config['FUNDRAISER_UPLOAD_FOLDER'], file))
 		# Return a Message
         flash("A Fundraiser Created Successfully!", 'success')
         return redirect(url_for('user_page'))
@@ -403,6 +418,7 @@ class Users(db.Model, UserMixin):
     name = db.Column(db.String(200), nullable=False)
     username = db.Column(db.String(20), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
+    user_pic = db.Column(db.String(), default='Default-avatar.jpg')
     address = db.Column(db.String(300), nullable=True)
     city = db.Column(db.String(100), nullable=True)
     state = db.Column(db.String(100), nullable=True)

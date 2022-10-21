@@ -4,21 +4,51 @@
 
 <div class="container makeShadow bg-light p-4">
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <div>
-                <img src="{{ url_for('static', filename='images/Default-avatar.jpg')}}" alt="User image"
+                <img src="{{ url_for('static', filename='images/users/' + current_user.user_pic)}}" alt="User Avatar"
                     style="width: 100%;">
             </div>
         </div>
         <div class="col-lg-2 dropdown">
             <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog "></i></button>
             <div class="dropdown-menu bg-secondary">
+                <a class="text-light" href="#" data-toggle="modal" data-target="#changeAvatar"
+                    data-whatever="@mdo">Change avatar</a>
+                <br>
                 <a class="text-white" href="{{ url_for('update_user', id=current_user.id)}}">Update information</a>
                 <br>
-                <a class="text-light" href="#" data-toggle="modal" data-target="#exampleModal"
+                <a class="text-light" href="#" data-toggle="modal" data-target="#changePassword"
                     data-whatever="@mdo">Change password</a>
             </div>
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <div class="modal fade" id="changeAvatar" tabindex="-1" aria-labelledby="changeAvatarLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="changeAvatarLabel">Change Avatar</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/user_page" method="POST" enctype="multipart/form-data">
+                                {{ form.user_pic.label(class="form-label") }}
+                                <div class="input-group input-group-lg form-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text rounded-0"><i
+                                                class="far fa-image fa-lg fa-fw"></i>
+                                        </span>
+                                    </div>
+                                    {{ form.user_pic(class="form-control", placeholder="Avatar") }}
+                                </div>
+                                {{ form.submit(class="btn btn-secondary float-right") }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="changePassword" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -39,7 +69,8 @@
                                     <label class="col-form-label">New password:</label>
                                     {{ form.password(class="form-control rounded-0", placeholder="Password",
                                     pattern="(?=.*[!@#$%&*_?])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
-                                    title="Your password must be 8 characters minimum, must contain 1 upper case letter,
+                                    title="Your password must be 8 characters minimum, must contain 1 upper case
+                                    letter,
                                     1 symbol and 1 number.") }}
                                 </div>
                                 <div class="text-right">
@@ -51,7 +82,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-6">
             <h1 class="text-secondary">User profile</h1>
             <div class="h4">
                 <strong>Name:</strong>
