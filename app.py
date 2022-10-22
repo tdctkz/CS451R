@@ -276,7 +276,8 @@ def delete_fundraiser(id):
 @app.route('/')
 def home():
     all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())
-    return render_template("home.html", all_fundraisers=all_fundraisers)
+    all_donors = Donors.query.order_by(Donors.date_donated.desc())
+    return render_template("home.html", all_fundraisers=all_fundraisers, all_donors=all_donors)
 
 # Create forgot password function	
 @app.route('/forgot_password', methods=['GET', 'POST'])

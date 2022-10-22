@@ -2,7 +2,6 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-
 <div class="container justify-content-center makeShadow">
     <div class=" row d-flex flex-column justify-content-center makeColor p-4">
         <h1 class="text-center font-weight-bold text-white">D<i class="fa fa-heartbeat text-danger"></i>nati<i
@@ -16,20 +15,47 @@
 </div>
 <hr class="bg-light makeHr" />
 <div class="container makeColor">
-    <div class="row p-4 makeShadow">
+    <div class="row">
         {% for fundraiser in all_fundraisers %}
-        <div class="col-lg-4 d-flex align-items-stretch mb-4">
+        <div class="col-lg-4 d-flex align-items-stretch p-2">
             <div class="card-deck">
-                <div class="card img-thumbnail">
-                    <a href="{{ url_for('fundraiser', id=fundraiser.id)}}"><img class="card-img-top"
-                            src="{{ url_for('static', filename='images/' + fundraiser.fundraiser_pic)}}"
-                            alt="Fundraiser image" style="width: 100%;"></a>
+                <div class="card makeShadow">
+                    <div class="card-header">
+                        <h5 class="card-title"><i class="fas fa-star-of-life pr-1"></i>{{ fundraiser.title }}</h5>
+                    </div>
+                    <a href="{{ url_for('fundraiser', id=fundraiser.id)}}"><img class="flex"
+                            src="{{ url_for('static', filename='images/fundraisers/' + fundraiser.fundraiser_pic)}}"
+                            alt="Fundraiser image" width="100%" height="auto"></a>
                     <div class="card-body">
-                        <h5 class="card-title">{{ fundraiser.title }}</h5>
                         <p class="card-text">{{ fundraiser.description }}</p>
-                        <p class="card-text"><small class="text-muted"><a
-                                    href="{{url_for('fundraiser', id=fundraiser.id)}}">More detail
-                                    >></a></small></p>
+                        <div class="progress mt-4">
+                            <div class="progress-bar bg-info progress-bar-striped" style="width: 100%"
+                                role=" progressbar" aria-valuemin="0" aria-valuemax="100">
+                                <span class="progress-bar-label">
+                                    {{ fundraiser.current_process }}%</span>
+                            </div>
+                        </div>
+                        <p><span class="nums">{{ fundraiser.raised_amount }}</span> of <span class="nums">{{
+                                fundraiser.fund_goal }}</span><span> goal</span>
+                        </p>
+                        <p><img src="{{ url_for('static', filename='images/users/' + fundraiser.funder.user_pic)}}"
+                                alt="User Avatar" width="40" height="40" class="rounded-circle">
+                            {{ fundraiser.funder.name }}
+                        </p>
+                        <div class="row">
+                            <div class="col">
+                                <p class="h5">Raised</p>
+                                <p class="nums">{{ fundraiser.raised_amount}}</p>
+                            </div>
+                            <div class="col">
+                                <p class="h5">Donors</p>
+                                <p></p>
+                            </div>
+                            <div class="col">
+                                <a class="btn btn-outline-danger btn-sm"
+                                    href="{{ url_for('donation', id=fundraiser.id)}}">Donate</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -37,5 +63,7 @@
         {% endfor %}
     </div>
 </div>
+
+
 
 {% endblock %}

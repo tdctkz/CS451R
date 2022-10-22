@@ -2,7 +2,7 @@
 {% block title %}Fundraiser{% endblock %}
 {% block content %}
 
-<div class="container">
+<div class="container makeShadow">
     <div class="row d-flex flex-column justify-content-center makeColor p-4">
         <h1 class="text-center font-weight-bold text-white">D<i class="fa fa-heartbeat text-danger"></i>nati<i
                 class="fa fa-globe h3 text-success"></i>n</h1>
@@ -14,30 +14,29 @@
     </div>
 </div>
 <hr class="bg-light makeHr" />
-<div class="container makeColor">
+<div class="container makeColor makeShadow">
     <div class="row">
-        <div class="col-lg-5 p-4">
-            <div class="card row shadow-sm">
-                <div class="card-header bg-transparent text-center">
-                    <img src="{{ url_for('static', filename='images/fundraisers/' + current_fundraiser.fundraiser_pic)}}"
-                        alt="Fundraiser image" style="width: 100%;">
+        <div class="col-lg-5 mt-4 mb-2">
+            <div class="card img-thumbnail">
+                <div class="card-header bg-transparent border-0">
+                    <p class="h5 text-secondary"><i class="fas fa-star-of-life pr-1"></i>{{current_fundraiser.title}}
+                    </p>
                 </div>
+                <img src="{{ url_for('static', filename='images/fundraisers/' + current_fundraiser.fundraiser_pic)}}"
+                    alt="Fundraiser image" style="width: 100%;">
+
                 <div class="card-body">
-                    <p class="h5 mb-0 text-primary">{{current_fundraiser.title}}</p>
+                    <h4 class="text-secondary"></i>Fundraiser Description
+                    </h4>
+                    <p class="h4 font-weight-normal text-dark">{{current_fundraiser.description}}
+                    </p>
+                    <a href="{{ url_for('donation', id=current_fundraiser.id)}}"
+                        class="btn btn-danger btn-sm">Donate</a>
                 </div>
             </div>
         </div>
-        <div class="col-lg-7 p-4">
-            <div class="card row shadow-sm">
-                <div class="card-header bg-transparent border-0">
-                    <h2 class="mb-0 text-secondary"><i class="far fa-clone pr-1"></i>Fundraiser Description
-                    </h2>
-                    <p class="h4 font-weight-normal text-primary ">{{current_fundraiser.description}}
-                    </p>
-                </div>
-            </div>
-
-            <div class="card row shadow-sm mt-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm mt-4">
                 <div class="card-header bg-transparent border-0">
                     <table class="table table-sm">
                         <thead class="thead-dark">
@@ -50,11 +49,11 @@
                         </thead>
                         <tbody>
                             <tr class="row">
-                                <td class="col">${{ current_fundraiser.fund_goal }}</td>
-                                <td class="col">${{ current_fundraiser.raised_amount }}</td>
+                                <td class="col nums">{{ current_fundraiser.fund_goal }}</td>
+                                <td class="col nums">{{ current_fundraiser.raised_amount }}</td>
                                 <td class="col text-center">
                                     <div class="progress mt-1">
-                                        <div class="progress-bar progress-bar-striped" style="width: 0%"
+                                        <div class="progress-bar bg-info progress-bar-striped" style="width: 0%"
                                             role=" progressbar" aria-valuemin="0" aria-valuemax="100">
                                             <span class="progress-bar-label">
                                                 {{ current_fundraiser.current_process }}%</span>
@@ -71,27 +70,25 @@
                     </table>
                 </div>
             </div>
-
-            <div class="card row shadow-sm mt-4">
-                <div class="card-header bg-transparent border-0">
-                    <h4 class="mb-0 text-secondary"><i class="fas fa-list pr-1"></i>Recent Donations
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h4 class="text-secondary"><i class="fas fa-list pr-1"></i>Recent Donations
                     </h4>
                     <table class="table table-striped">
                         <thead class="thead-dark">
                             <tr class="row">
-                                <th class="col" scope="col">Donor's name</th>
-                                <th scope="col" class="col text-right">Amount</th>
-                                <th scope="col" class="col text-center">Datetime donated</th>
+                                <th class="col">Donor's name</th>
+                                <th class="col text-right">Amount</th>
+                                <th class="col text-center">Datetime donated</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for donor in donors %}
                             {% if donor.fundraiser_id == current_fundraiser.id %}
                             <tr class="row">
-                                <td scope="col" class="col text-left">{{ donor.name }}</td>
-                                <td scope="col" class="col text-right">${{ donor.donate_amount }}</td>
-                                <td scope="col" class="col text-center">{{ donor.time_donated }} {{ donor.date_donated
-                                    }}</td>
+                                <td class="col text-left">{{ donor.name }}</td>
+                                <td class="col text-right nums">{{ donor.donate_amount }}</td>
+                                <td class="col text-center">{{ donor.time_donated }} {{ donor.date_donated }}</td>
                             </tr>
                             {% endif %}
                             {% endfor %}
@@ -102,8 +99,8 @@
         </div>
     </div>
 </div>
-
 <script>
+    // Make progress-bar processing
     var i = 0;
     var bar = document.querySelector(".progress-bar");
     function makeProgress() {

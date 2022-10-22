@@ -7,6 +7,10 @@
     font-family: "Maven Pro", sans-serif;
 }
 
+.currSign:before {
+    content: '$';
+}
+
 .column {
     width: 100%;
 }
