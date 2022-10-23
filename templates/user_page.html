@@ -9,8 +9,7 @@
                 <img src="{{ url_for('static', filename='images/users/' + current_user.user_pic)}}" alt="User Avatar"
                     width="300" height="300" class="rounded-circle">
             </div>
-
-            <div class="col-lg-1 dropdown ml-4">
+            <div class="dropleft float-right">
                 <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog "></i></button>
                 <div class="dropdown-menu bg-secondary">
                     <a class="text-light" href="#" data-toggle="modal" data-target="#changeAvatar"
@@ -130,8 +129,8 @@
                         <td class="col text-left"><a href="{{ url_for('fundraiser', id=fundraiser.id)}}">{{
                                 fundraiser.title
                                 }}</a></td>
-                        <td class="col text-right">${{ fundraiser.fund_goal }}</td>
-                        <td class="col text-right">${{ fundraiser.raised_amount }}</td>
+                        <td class="col nums text-right">{{ fundraiser.fund_goal }}</td>
+                        <td class="col nums text-right">{{ fundraiser.raised_amount }}</td>
                         <td class="col text-center">{{ fundraiser.time_created }} {{ fundraiser.date_created }}</td>
                         <td class="col-sm-1">
                             <div class="dropdown text-center">
