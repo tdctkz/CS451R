@@ -27,11 +27,16 @@
             class="fa fa-fw fa-user pr-1"></i>{{current_user.name}}
         </button>
         <div class="dropdown-menu" style="background-color: #cbe2e8;" aria-labelledby="dropdownMenuButton">
+          {% if current_user.username == "admin" %}
+          <a class="dropdown-item" href="{{url_for('admin.index')}}">Admin Management</a>
+          <a class="dropdown-item" href="{{url_for('logout')}}">Logout</a>
+          {% else %}
           <a class="dropdown-item" href="{{url_for('user_page')}}">User profile</a>
           <a class="dropdown-item" href="{{url_for('create_fundraiser')}}">Create
             Fundraiser</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="{{url_for('logout')}}">Logout</a>
+          {% endif %}
         </div>
       </div>
     </div>

@@ -1,5 +1,3 @@
-from email.policy import default
-from wsgiref.util import request_uri
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
@@ -11,7 +9,6 @@ from webforms import UserForm, LoginForm, DonationForm, FundraiserForm
 from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from sqlalchemy.sql import func
 from datetime import datetime
 import os
 
@@ -101,7 +98,7 @@ def login():
 	form = LoginForm()
 	if form.validate_on_submit():
 		user = Users.query.filter_by(username=form.username.data).first()
-      
+        
 		if user:
 			# Checking user password
 			if check_password_hash(user.password, form.password.data):

@@ -136,10 +136,11 @@
                             <div class="dropdown text-center">
                                 <button class="btn dropdown-toggle" data-toggle="dropdown"></button>
                                 <div class="dropdown-menu bg-light">
-                                    <a href="{{ url_for('update_fundraiser', id=fundraiser.id)}}" class="">Edit</a>
+                                    <a href="{{ url_for('update_fundraiser', id=fundraiser.id)}}" class=""><i
+                                            class="fa fa-pen pr-1"></i>Edit</a>
                                     <br>
-                                    <a href="{{ url_for('delete_fundraiser', id=fundraiser.id)}}"
-                                        class="text-danger">Delete</a>
+                                    <a href="{{ url_for('delete_fundraiser', id=fundraiser.id)}}" class="text-danger"><i
+                                            class="fa fa-trash pr-1"></i>Delete</a>
                                 </div>
                             </div>
                         </td>
