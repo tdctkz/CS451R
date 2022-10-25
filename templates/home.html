@@ -29,15 +29,14 @@
                     <div class="card-body">
                         <p class="card-text">{{ fundraiser.description }}</p>
                         <div class="progress mt-4">
-                            <div class="progress-bar bg-info" style="width: 100%" role=" progressbar" aria-valuemin="0"
+                            <div class="progress-bar bg-info" style="width: 0%" role="progressbar" aria-valuemin="0"
                                 aria-valuemax="100">
-                                <span class="progress-bar-label">
+                                <span class="progress-bar-label text-left ml-1">
                                     {{ fundraiser.current_process }}%</span>
                             </div>
                         </div>
                         <p class="text-right"><span class="nums">{{ fundraiser.raised_amount }}</span> of <span
-                                class="nums">{{
-                                fundraiser.fund_goal }}</span><span> goal</span>
+                                class="nums">{{fundraiser.fund_goal }}</span><span> goal</span>
                         </p>
                         <p><img src="{{ url_for('static', filename='images/users/' + fundraiser.funder.user_pic)}}"
                                 alt="User Avatar" width="40" height="40" class="rounded-circle">
@@ -48,13 +47,15 @@
                                 <p class="h5 text-primary">Raised</p>
                                 <p class="nums">{{ fundraiser.raised_amount}}</p>
                             </div>
+
                             <div class="col">
                                 <p class="h5 text-primary">Donors</p>
-                                <p></p>
+                                {{fundraiser.num_of_donors}}
                             </div>
+
                             <div class="col">
                                 <a class="btn btn-outline-danger btn-sm"
-                                    href="{{ url_for('donation', id=fundraiser.id)}}">Donate</a>
+                                    href="{{ url_for('donation', id=fundraiser.id)}}">Donate now</a>
                             </div>
                         </div>
                     </div>
@@ -64,7 +65,17 @@
         {% endfor %}
     </div>
 </div>
-
-
-
+<script>
+    // Make progress-bar processing
+    '{% set n = 1 %}'
+    var bar = document.querySelectorAll(".progress-bar");
+    var i = '{{ all_fundraisers.count() }}'
+    while (i > 0) {
+        '{% for n in range(1, all_fundraisers.count() + 1)%}'
+        bar[i - 1].style.width = '{{ all_fundraisers[all_fundraisers.count() - n].current_process  }}' + "%";
+        bar[i - 1].innerText = '{{ all_fundraisers[all_fundraisers.count() - n].current_process  }}' + "%";
+        i--;
+        '{% endfor %}'
+    }
+</script>
 {% endblock %}

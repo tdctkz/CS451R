@@ -27,7 +27,7 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 # Add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donation-451r.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cs451-donation.db'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://beelxwgcloygrs:dda0a02bcdd30f444e5fa3b68077dee96e2d7a11d67b59d1616847ca67b54cc7@ec2-44-206-137-96.compute-1.amazonaws.com:5432/dbhqro2eijvu6i'
 
 # Secret key
@@ -154,7 +154,7 @@ def user_page():
         else:
             flash("Your current password was incorrected! Try again...", 'warning')   
             return redirect(url_for('user_page'))          
-    user_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())    
+    user_fundraisers = Fundraiser.query.order_by(Fundraiser.time_created.desc())    
     return render_template("user_page.html", user_fundraisers=user_fundraisers, user_to_update=user_to_update, form=form)
 
 # Create  update pages
@@ -208,7 +208,6 @@ def update_fundraiser(id):
 @app.route('/create_fundraiser', methods=['GET', 'POST'])
 def create_fundraiser():
     form = FundraiserForm()
-
     #current datetime
     current = datetime.now()   
     # convert to date String
@@ -235,6 +234,7 @@ def create_fundraiser():
         db.session.add(fundraiser)
         db.session.commit()
         f.save(os.path.join(app.config['FUNDRAISER_UPLOAD_FOLDER'], file))
+        
 		# Return a Message
         flash("A Fundraiser Created Successfully!", 'success')
         return redirect(url_for('user_page'))
@@ -245,7 +245,7 @@ def create_fundraiser():
 @app.route('/fundraiser/<int:id>')
 def fundraiser(id):
     current_fundraiser = Fundraiser.query.get_or_404(id)  
-    donors = Donors.query.order_by(Donors.date_donated.desc())
+    donors = Donors.query.order_by(Donors.time_donated.desc())
     return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser, donors=donors)
 
 # Create function to delete a fundraiser
@@ -254,7 +254,7 @@ def fundraiser(id):
 def delete_fundraiser(id):
 	fundraiser_to_delete = Fundraiser.query.get_or_404(id)
 	id = current_user.id
-	if id == fundraiser_to_delete.user_id:
+	if id == fundraiser_to_delete.user_id:        
 		try:
 			db.session.delete(fundraiser_to_delete)
 			db.session.commit()
@@ -262,7 +262,6 @@ def delete_fundraiser(id):
 			# Return a message
 			flash("Fundraiser Was Deleted!", 'success')			
 			return redirect(url_for('user_page'))
-
 		except:
 			# Return an error message
 			flash("Whoops! There was a problem deleting fundraiser, try again...", 'warning')
@@ -275,8 +274,8 @@ def delete_fundraiser(id):
 # Create home page
 @app.route('/')
 def home():
-    all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())
-    all_donors = Donors.query.order_by(Donors.date_donated.desc())
+    all_fundraisers = Fundraiser.query.order_by(Fundraiser.time_created.desc())    
+    all_donors = Donors.query.order_by(Donors.time_donated.desc())
     return render_template("home.html", all_fundraisers=all_fundraisers, all_donors=all_donors)
 
 # Create forgot password function	
@@ -300,6 +299,7 @@ def forgot_password():
             flash("Email does not match in the system! Try again...", 'warning')
             
     return render_template("forgot_password.html", form=form)
+
 
 @app.route("/reset_password/<token>", methods=['GET', 'POST'])
 def reset_token(token):
@@ -345,7 +345,7 @@ def forgot_username():
 @app.route('/donation/<int:id>', methods=['GET', 'POST'])
 def donation(id):
     form = DonationForm()
-
+   
     #current datetime
     current = datetime.now()   
     # convert to date String
@@ -358,6 +358,7 @@ def donation(id):
     if request.method == "POST":
         fund_to_update.raised_amount += int(request.form['donate_amount'])   
         fund_to_update.current_process = round((fund_to_update.raised_amount / fund_to_update.fund_goal)*100)
+        fund_to_update.num_of_donors += 1
         donor = Donors(fundraiser_id=dor, name=form.name.data, email=form.email.data, date_donated=date, time_donated=time,
          address=form.address.data, city=form.city.data, state=form.state.data, zipcode=form.zipcode.data,
          donate_amount=form.donate_amount.data)
@@ -387,6 +388,7 @@ class Fundraiser(db.Model):
     description = db.Column(db.Text(), nullable=True)
     fundraiser_pic = db.Column(db.String(), nullable=True)
     fund_goal = db.Column(db.Integer)
+    num_of_donors = db.Column(db.Integer, default=0)
     raised_amount = db.Column(db.Integer, default=0)
     current_process = db.Column(db.Integer, default=0)
     date_created = db.Column(db.String(128))
