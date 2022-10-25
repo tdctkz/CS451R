@@ -40,6 +40,7 @@ app.config['FUNDRAISER_UPLOAD_FOLDER'] = FUNDRAISER_UPLOAD_FOLDER
 # limit upload size upto 8mb
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg','png','JPG','JPEG','PNG'}
+# Image file requirement
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -92,7 +93,7 @@ def add_user():
        
     return render_template("add_user.html", form=form)
 
-# Create Login pages
+# Create Login 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
@@ -111,7 +112,7 @@ def login():
 			flash("User Doesn't Exist! Please create an account.", 'warning')
 	return render_template('login.html', form=form)
 
-# Create Logout Page
+# Create Logout 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
@@ -119,7 +120,7 @@ def logout():
 	flash("You Have Been Logged Out!", 'success')
 	return redirect(url_for('login'))
 
-# Create user Page
+# Create user profile Page
 @app.route('/user_page', methods=['GET', 'POST'])
 @login_required
 def user_page():  
@@ -154,7 +155,7 @@ def user_page():
     user_fundraisers = Fundraiser.query.order_by(Fundraiser.time_created.desc())    
     return render_template("user_page.html", user_fundraisers=user_fundraisers, user_to_update=user_to_update, form=form)
 
-# Create  update pages
+# Create update user profile 
 @app.route('/update_user/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update_user(id):   
@@ -224,7 +225,7 @@ def fundraiser(id):
     donors = Donors.query.order_by(Donors.time_donated.desc())
     return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser, donors=donors)
 
- # Create  update fundraiser
+ #update fundraiser
 @app.route('/update_fundraiser/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update_fundraiser(id):   
@@ -409,6 +410,7 @@ class Donors(db.Model):
     city = db.Column(db.String(100), nullable=False)
     state = db.Column(db.String(100), nullable=False)
     zipcode = db.Column(db.Integer, nullable=False)
+
     # Foreign Key To Link Fundraiser (refer to primary key of the fundraiser)
     fundraiser_id = db.Column(db.Integer, db.ForeignKey('fundraiser.id'))    
 
