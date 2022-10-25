@@ -180,29 +180,9 @@ def update_user(id):
     else:       
         return render_template("update_user.html", form=form, user_to_update = user_to_update, id=id) 
 
- # Create  update fundraiser
-@app.route('/update_fundraiser/<int:id>', methods=['GET', 'POST'])
-@login_required
-def update_fundraiser(id):   
-    form = FundraiserForm()
-    fundraiser_to_update = Fundraiser.query.get_or_404(id)
-    
-    if request.method == "POST":
-        fundraiser_to_update.title = request.form['title']
-        fundraiser_to_update.description = request.form['description']
-        fundraiser_to_update.fund_goal = request.form['fund_goal']        
-        try:
-            db.session.commit()
-            flash("Fundraiser Updated Successfully!", 'success')
-            return redirect(url_for('user_page'))
-        except:
-            flash("Error! Looks like there was a problem...try again!", 'warning')
-            return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)
-    else:       
-        return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)         
-
-# Create a fundraiser form
+# Create a fundraiser
 @app.route('/create_fundraiser', methods=['GET', 'POST'])
+@login_required
 def create_fundraiser():
     form = FundraiserForm()
     #current datetime
@@ -230,8 +210,7 @@ def create_fundraiser():
 		# Add post data to database
         db.session.add(fundraiser)
         db.session.commit()
-        f.save(os.path.join(app.config['FUNDRAISER_UPLOAD_FOLDER'], file))
-        
+        f.save(os.path.join(app.config['FUNDRAISER_UPLOAD_FOLDER'], file))        
 		# Return a Message
         flash("A Fundraiser Created Successfully!", 'success')
         return redirect(url_for('user_page'))
@@ -244,6 +223,27 @@ def fundraiser(id):
     current_fundraiser = Fundraiser.query.get_or_404(id)  
     donors = Donors.query.order_by(Donors.time_donated.desc())
     return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser, donors=donors)
+
+ # Create  update fundraiser
+@app.route('/update_fundraiser/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update_fundraiser(id):   
+    form = FundraiserForm()
+    fundraiser_to_update = Fundraiser.query.get_or_404(id)
+    
+    if request.method == "POST":
+        fundraiser_to_update.title = request.form['title']
+        fundraiser_to_update.description = request.form['description']
+        fundraiser_to_update.fund_goal = request.form['fund_goal']        
+        try:
+            db.session.commit()
+            flash("Fundraiser Updated Successfully!", 'success')
+            return redirect(url_for('user_page'))
+        except:
+            flash("Error! Looks like there was a problem...try again!", 'warning')
+            return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)
+    else:       
+        return render_template("update_fundraiser.html", form=form, fundraiser_to_update = fundraiser_to_update, id=id)         
 
 # Create function to delete a fundraiser
 @app.route('/fundraiser/delete/<int:id>')
