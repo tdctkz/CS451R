@@ -45,26 +45,6 @@
                         <div class="input-group input-group-lg form-group">
                             {{ form.zipcode(class="form-control rounded-0", value=current_user.zipcode) }}
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <label class="h5 font-weight-bold text-secondary">Credit Card information</label>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i
-                                        class="fas fa-credit-card fa-lg fa-fw"></i></span>
-                            </div>
-                            <input for="card-number" type="tel" id="credit-number" name="credit"
-                                class="form-control card-number rounded-0" placeholder="xxxx xxxx xxxx xxxx"
-                                pattern="[0-9]*" inputmode="numeric" maxlength="16" />
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            <label class="h5 font-weight-normal mr-3 mt-2" for="card-number">Expiration
-                                Date</label>
-                            <input for="card-number" placeholder="MM/YY" pattern="[0-9]*" type="text"
-                                class="form-control card-expiration" id="card-expiration" />
-                            <input for="card-number" placeholder="CVV" pattern="[0-9]*" type="text"
-                                class="form-control card-cvv" id="cvv" />
-                        </div>
                         <div class="input-group input-group-lg form-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text rounded-0"><i
@@ -72,73 +52,263 @@
                             </div>
                             {{ form.donate_amount(class="form-control rounded-0", placeholder="Enter amount") }}
                         </div>
-                        <div class="form-group float-right">
-                            <button type="submit" class="btn btn-secondary">Submit</button>
-                        </div>
-                        {% else %}
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i class="far fa-user fa-lg fa-fw"></i></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+                            <!-- Credit card form tabs -->
+                            <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
+                                <li class="nav-item"> <a data-toggle="pill" href="#credit-card"
+                                        class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit Card
+                                    </a> </li>
+                                <li class="nav-item"> <a data-toggle="pill" href="#online-banking" class="nav-link "> <i
+                                            class="fas fa-mobile-alt mr-2"></i> Online Banking </a> </li>
+                            </ul>
+                        </div> <!-- End -->
+                        <!-- Credit card form content -->
+                        <div class="tab-content">
+                            <!-- credit card info-->
+                            <div id="credit-card" class="tab-pane fade show active pt-3">
+                                <form role="form">
+                                    <div class="form-group"> <label for="username">
+                                            <h6>Card Owner</h6>
+                                        </label> <input type="text" name="username" placeholder="Card Owner Name"
+                                            required class="form-control "> </div>
+                                    <div class="form-group"> <label for="cardNumber">
+                                            <h6>Card number</h6>
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="text" name="cardNumber" placeholder="xxxx xxxx xxxx xxxx"
+                                                pattern="[0-9]*" maxlength="16" class="form-control" required>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text text-muted">
+                                                    <i class="fab fa-cc-visa mx-1"></i>
+                                                    <i class="fab fa-cc-mastercard mx-1"></i>
+                                                    <i class="fab fa-cc-amex mx-1"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="form-group">
+                                                <label>
+                                                    <span class="hidden-xs">
+                                                        <h6>Expiration Date</h6>
+                                                    </span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <input type="number" placeholder="MM" maxlength="2"
+                                                        class="form-control" required>
+                                                    <input type="number" placeholder="YYYY" maxlength="4"
+                                                        class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group mb-4">
+                                                <label data-toggle="tooltip"
+                                                    title="Three digit CV code on the back of your card">
+                                                    <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
+                                                </label>
+                                                <input type="number" placeholder="cvv" maxlength="3" required
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            {{ form.name(class="form-control rounded-0", placeholder="Your name") }}
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i
-                                        class="far fa-envelope fa-lg fa-fw"></i></span>
+                            <!-- End -->
+                            <!-- bank transfer info -->
+                            <div id="online-banking" class="tab-pane fade pt-3">
+                                <div class="form-group "> <label for="Select Your Bank">
+                                        <h6>Select your Bank</h6>
+                                    </label> <select class="form-control" id="ccmonth">
+                                        <option value="" selected disabled>--Please select your Bank--</option>
+                                        <option>Bank 1</option>
+                                        <option>Bank 2</option>
+                                        <option>Bank 3</option>
+                                        <option>Bank 4</option>
+                                        <option>Bank 5</option>
+                                        <option>Bank 6</option>
+                                        <option>Bank 7</option>
+                                        <option>Bank 8</option>
+                                        <option>Bank 9</option>
+                                        <option>Bank 10</option>
+                                    </select> </div>
+                                <div class="form-group">
+                                    <label>
+                                        <h6>Bank's Account Number</h6>
+                                    </label>
+                                    <input type="number" placeholder="Account Number" class="form-control " required>
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <h6>Bank's Rounting Number</h6>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number" placeholder="Rounting Number" class="form-control"
+                                            required>
+                                    </div>
+                                </div>
+                            </div> <!-- End -->
+                            <!-- End -->
+                            <div class="form-group float-right">
+                                <button type="submit" class="btn btn-secondary">Submit</button>
                             </div>
-                            {{ form.email(class="form-control rounded-0", placeholder="Your Email") }}
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
+                            {% else %}
+                            <div class="input-group input-group-lg form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-0"><i
+                                            class="far fa-user fa-lg fa-fw"></i></span>
+                                </div>
+                                {{ form.name(class="form-control rounded-0", placeholder="Your name") }}
                             </div>
-                            {{ form.address(class="form-control rounded-0", placeholder="Billing Address") }}
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            {{ form.city(class="form-control rounded-0", placeholder="City") }}
+                            <div class="input-group input-group-lg form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-0"><i
+                                            class="far fa-envelope fa-lg fa-fw"></i></span>
+                                </div>
+                                {{ form.email(class="form-control rounded-0", placeholder="Your Email") }}
+                            </div>
+                            <div class="input-group input-group-lg form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-0"><i
+                                            class="fas fa-home fa-lg fa-fw"></i></span>
+                                </div>
+                                {{ form.address(class="form-control rounded-0", placeholder="Billing Address") }}
+                            </div>
+                            <div class="input-group input-group-lg form-group">
+                                {{ form.city(class="form-control rounded-0", placeholder="City") }}
 
-                            {{ form.state(class="form-control rounded-0", placeholder="State") }}
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            {{ form.zipcode(class="form-control rounded-0", placeholder="Zip code") }}
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <label class="h5 font-weight-bold text-secondary">Credit Card information</label>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i
-                                        class="fas fa-credit-card fa-lg fa-fw"></i></span>
+                                {{ form.state(class="form-control rounded-0", placeholder="State") }}
                             </div>
-                            <input for="card-number" type="tel" id="credit-number" name="credit"
-                                class="form-control card-number rounded-0" placeholder="xxxx xxxx xxxx xxxx"
-                                pattern="[0-9]*" inputmode="numeric" maxlength="16" />
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            <label class="h5 font-weight-normal mr-3 mt-2" for="card-number">Expiration
-                                Date</label>
-                            <input for="card-number" placeholder="MM/YY" pattern="[0-9]*" type="text"
-                                class="form-control card-expiration" id="card-expiration" />
-                            <input for="card-number" placeholder="CVV" pattern="[0-9]*" type="text"
-                                class="form-control card-cvv" id="cvv" />
-                        </div>
-                        <div class="input-group input-group-lg form-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text rounded-0"><i
-                                        class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
+                            <div class="input-group input-group-lg form-group">
+                                {{ form.zipcode(class="form-control rounded-0", placeholder="Zip code") }}
                             </div>
-                            {{ form.donate_amount(class="form-control rounded-0", placeholder="Enter amount") }}
+                            <div class="input-group input-group-lg form-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-0"><i
+                                            class="fas fa-dollar-sign fa-lg fa-fw"></i></span>
+                                </div>
+                                {{ form.donate_amount(class="form-control rounded-0", placeholder="Enter amount") }}
+                            </div>
                         </div>
-                        <div class="form-group float-right">
-                            <button type="submit" class="btn btn-secondary">Submit</button>
+                        <div class="col-sm-6">
+                            <div class="bg-white shadow-sm pt-4 pl-2 pr-2 pb-2">
+                                <!-- Credit card form tabs -->
+                                <ul role="tablist" class="nav bg-light nav-pills rounded nav-fill mb-3">
+                                    <li class="nav-item"> <a data-toggle="pill" href="#credit-card"
+                                            class="nav-link active "> <i class="fas fa-credit-card mr-2"></i> Credit
+                                            Card
+                                        </a> </li>
+                                    <li class="nav-item"> <a data-toggle="pill" href="#online-banking"
+                                            class="nav-link ">
+                                            <i class="fas fa-mobile-alt mr-2"></i> Online Banking </a> </li>
+                                </ul>
+                            </div> <!-- End -->
+                            <!-- Credit card form content -->
+                            <div class="tab-content">
+                                <!-- credit card info-->
+                                <div id="credit-card" class="tab-pane fade show active pt-3">
+                                    <form role="form">
+                                        <div class="form-group"> <label for="username">
+                                                <h6>Card Owner</h6>
+                                            </label> <input type="text" name="username" placeholder="Card Owner Name"
+                                                required class="form-control "> </div>
+                                        <div class="form-group"> <label for="cardNumber">
+                                                <h6>Card number</h6>
+                                            </label>
+                                            <div class="input-group">
+                                                <input type="text" placeholder="xxxx xxxx xxxx xxxx" pattern="[0-9]*"
+                                                    maxlength="16" class="form-control" required>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text text-muted">
+                                                        <i class="fab fa-cc-visa mx-1"></i>
+                                                        <i class="fab fa-cc-mastercard mx-1"></i>
+                                                        <i class="fab fa-cc-amex mx-1"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="form-group">
+                                                    <label>
+                                                        <span class="hidden-xs">
+                                                            <h6>Expiration Date</h6>
+                                                        </span>
+                                                    </label>
+                                                    <div class="input-group">
+                                                        <input type="number" maxlength="2" placeholder="MM"
+                                                            class="form-control" required>
+                                                        <input type="number" maxlength="4" placeholder="YYYY"
+                                                            class="form-control" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group mb-4">
+                                                    <label data-toggle="tooltip"
+                                                        title="Three digit CV code on the back of your card">
+                                                        <h6>CVV <i class="fa fa-question-circle d-inline"></i></h6>
+                                                    </label>
+                                                    <input type="number" placeholder="cvv" maxlength="3" required
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- End -->
+                                <!-- bank transfer info -->
+                                <div id="online-banking" class="tab-pane fade pt-3">
+                                    <div class="form-group ">
+                                        <label for="Select Your Bank">
+                                            <h6>Select your Bank</h6>
+                                        </label>
+                                        <select class="form-control">
+                                            <option value="" selected disabled>--Please select your Bank--</option>
+                                            <option>Bank 1</option>
+                                            <option>Bank 2</option>
+                                            <option>Bank 3</option>
+                                            <option>Bank 4</option>
+                                            <option>Bank 5</option>
+                                            <option>Bank 6</option>
+                                            <option>Bank 7</option>
+                                            <option>Bank 8</option>
+                                            <option>Bank 9</option>
+                                            <option>Bank 10</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            <h6>Bank's Account Number</h6>
+                                        </label>
+                                        <input type="number" placeholder="Account Number" class="form-control "
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            <h6>Bank's Rounting Number</h6>
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="number" placeholder="Rounting Number" class="form-control"
+                                                required>
+                                        </div>
+                                    </div>
+                                </div> <!-- End -->
+                                <!-- End -->
+                                <div class="form-group float-right">
+                                    <button type="submit" class="btn btn-secondary">Submit</button>
+                                </div>
+                                {% endif %}
+                            </div>
                         </div>
-                        {% endif %}
                     </div>
                 </div>
             </form>
         </div>
-        <!-- Donation Form End -->
-
-
-        {% endblock %}
+    </div>
+</div>
+<!-- Donation Form End -->
+{% endblock %}

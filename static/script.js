@@ -41,3 +41,6 @@ function lsRememberMe() {
   }
 }
 
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
