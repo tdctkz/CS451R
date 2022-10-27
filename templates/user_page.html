@@ -86,13 +86,13 @@
             <h1 class="text-secondary">User profile</h1>
             <div class="h4">
                 <strong>Name:</strong>
-                {{ current_user.name }}<br />
+                {{ current_user.name|title }}<br />
 
                 <strong>Username:</strong>
                 {{ current_user.username }}<br />
 
                 <strong>Email:</strong>
-                {{ current_user.email }}<br />
+                {{ current_user.email|lower }}<br />
 
                 <strong>Address:</strong>
                 {{ current_user.address }}, {{ current_user.city }}, {{ current_user.state }} {{

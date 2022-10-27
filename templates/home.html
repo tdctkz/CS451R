@@ -21,13 +21,13 @@
             <div class="card-deck">
                 <div class="card makeShadow">
                     <div class="card-header">
-                        <h5 class="card-title"><i class="fas fa-star-of-life pr-1"></i>{{ fundraiser.title }}</h5>
+                        <h5 class="card-title"><i class="fas fa-star-of-life pr-1"></i>{{ fundraiser.title|title }}</h5>
                     </div>
                     <a href="{{ url_for('fundraiser', id=fundraiser.id)}}"><img class="img-fluid"
                             src="{{ url_for('static', filename='images/fundraisers/' + fundraiser.fundraiser_pic)}}"
                             alt="Fundraiser image"></a>
                     <div class="card-body">
-                        <p class="card-text">{{ fundraiser.description }}</p>
+                        <p class="card-text">{{ fundraiser.description|capitalize }}</p>
                         <div class="progress mt-4">
                             <div class="progress-bar bg-info" style="width: 0%" role="progressbar" aria-valuemin="0"
                                 aria-valuemax="100">
@@ -40,7 +40,7 @@
                         </p>
                         <p><img src="{{ url_for('static', filename='images/users/' + fundraiser.funder.user_pic)}}"
                                 alt="User Avatar" width="40" height="40" class="rounded-circle">
-                            <span class="h6 text-dark ml-2">{{ fundraiser.funder.name }}</span>
+                            <span class="h6 text-dark ml-2">{{ fundraiser.funder.name|title }}</span>
                         </p>
                         <div class="row text-center">
                             <div class="col">
