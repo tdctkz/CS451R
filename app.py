@@ -24,7 +24,7 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 # Add database
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cs451-donation.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cs451r-donation.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://beelxwgcloygrs:dda0a02bcdd30f444e5fa3b68077dee96e2d7a11d67b59d1616847ca67b54cc7@ec2-44-206-137-96.compute-1.amazonaws.com:5432/dbhqro2eijvu6i'
 
 # Secret key
