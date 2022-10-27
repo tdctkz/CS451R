@@ -27,7 +27,7 @@
                 <div class="card-body">
                     <h4 class="text-info"></i>Fundraiser Description
                     </h4>
-                    <p class="card-text">{{current_fundraiser.description}}
+                    <p class="text-muted">{{current_fundraiser.description}}
                     </p>
                     <a href="{{ url_for('donation', id=current_fundraiser.id)}}"
                         class="btn btn-danger btn-sm float-right">Donate now</a>
@@ -59,7 +59,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="col text-right"><a href="{{ url_for('donation', id=current_fundraiser.id)}}"
+                                <td class="col text-center"><a href="{{ url_for('donation', id=current_fundraiser.id)}}"
                                         class="btn btn-danger btn-sm">Donate</a>
                                 </td>
                             </tr>
