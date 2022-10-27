@@ -6,7 +6,7 @@
             {% if current_user.is_authenticated %}
             <h3>Welcome to Admin Management page!</h3>
             <p>You now have access to the Administrator view.</p>
-            <a class="btn btn-primary" href="{{url_for('home')}}">Go back to Admin profile</a>
+            <a class="btn btn-primary" href="{{url_for('user_page')}}">Go back to Admin profile</a>
             {% else %}
             <h3>Please Login to access to the Administrator page! </h3>
             <a class="btn btn-primary" href="{{url_for('login')}}">Go back to Login</a>
