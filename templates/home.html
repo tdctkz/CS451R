@@ -33,8 +33,8 @@
                             <a class="float-right" href="{{ url_for('fundraiser', id=fundraiser.id)}}">continued</a>
                         </div>
                         <div class="progress mt-5">
-                            <div class="progress-bar bg-info" style="width: 0%" role="progressbar" aria-valuemin="0"
-                                aria-valuemax="100">
+                            <div class="progress-bar bg-info progress-bar-striped" style="width: 0%" role="progressbar"
+                                aria-valuemin="0" aria-valuemax="100">
                                 <span class="progress-bar-label text-left ml-1">
                                     {{ fundraiser.current_process }}%</span>
                             </div>
@@ -77,12 +77,15 @@
     '{% set n = 1 %}'
     var bar = document.querySelectorAll(".progress-bar");
     var i = '{{ all_fundraisers.count() }}'
-    while (i > 0) {
-        '{% for n in range(1, all_fundraisers.count() + 1)%}'
-        bar[i - 1].style.width = '{{ all_fundraisers[all_fundraisers.count() - n].current_process  }}' + "%";
-        bar[i - 1].innerText = '{{ all_fundraisers[all_fundraisers.count() - n].current_process  }}' + "%";
-        i--;
-        '{% endfor %}'
+    function makeProgress() {
+        while (i > 0) {
+            '{% for n in range(1, all_fundraisers.count() + 1)%}'
+            bar[i - 1].style.width = '{{ all_fundraisers[all_fundraisers.count() - n].current_process  }}' + "%";
+            bar[i - 1].innerText = '{{ all_fundraisers[all_fundraisers.count() - n].current_process  }}' + "%";
+            i--;
+            '{% endfor %}'
+        }
     }
+    makeProgress()
 </script>
 {% endblock %}
