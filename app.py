@@ -1,3 +1,4 @@
+from email.policy import default
 from flask import Flask, render_template, flash, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
@@ -10,6 +11,7 @@ from werkzeug.utils import secure_filename
 from flask_mail import Mail, Message
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from datetime import datetime
+import uuid as uuid
 import os
 
 # create a Flask instance
@@ -25,7 +27,7 @@ mail = Mail(app)
 
 # Add database
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cs451r-donation.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://beelxwgcloygrs:dda0a02bcdd30f444e5fa3b68077dee96e2d7a11d67b59d1616847ca67b54cc7@ec2-44-206-137-96.compute-1.amazonaws.com:5432/dbhqro2eijvu6i'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jhwcuvjblhkhpj:dfc4cd5081ba0744112b8a31a980680b5d554a914045a30a48b7e10efb00324b@ec2-23-23-151-191.compute-1.amazonaws.com:5432/d8i6ur7te2fd52'
 
 # Secret key
 app.config['SECRET_KEY'] = "cs451r-donation"
@@ -131,7 +133,7 @@ def user_page():
     if request.method == "POST":    
         f = request.files['user_pic']
         if allowed_file(f.filename):
-            user_to_update.user_pic = secure_filename(f.filename)               
+            user_to_update.user_pic = str(uuid.uuid1()) + "_" + secure_filename(f.filename)               
             try:             
                 f.save(os.path.join(app.config['USER_UPLOAD_FOLDER'], user_to_update.user_pic))       
                 db.session.commit()
@@ -196,7 +198,7 @@ def create_fundraiser():
     if request.method == "POST":  
         f = request.files['fundraiser_pic']
         if allowed_file(f.filename):
-            file = secure_filename(f.filename)
+            file = str(uuid.uuid1()) + "_" + secure_filename(f.filename)
             funder = current_user.id
             fundraiser = Fundraiser(user_id=funder, title=form.title.data, description=form.description.data,
             fund_goal=form.fund_goal.data, date_created=date, time_created=time, fundraiser_pic=file)
@@ -421,10 +423,10 @@ class Users(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     email = db.Column(db.String(100), nullable=False, unique=True)
     user_pic = db.Column(db.String(), default='Default-avatar.jpg')
-    address = db.Column(db.String(300), nullable=True)
-    city = db.Column(db.String(100), nullable=True)
-    state = db.Column(db.String(100), nullable=True)
-    zipcode = db.Column(db.Integer, nullable=True)
+    address = db.Column(db.String(300), nullable=True, default="")
+    city = db.Column(db.String(100), nullable=True, default="")
+    state = db.Column(db.String(100), nullable=True, default="")
+    zipcode = db.Column(db.String(100), nullable=True, default="")
     date_added = db.Column(db.String(128)) 
     time_added = db.Column(db.String(128))        
     password = db.Column(db.String(128)) 

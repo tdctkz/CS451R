@@ -8,7 +8,7 @@
             <div class="float-left">
                 <a href="{{url_for('user_page')}}"><i class="btn fas fa-arrow-left fa-lg"></i></a>
             </div>
-            <h2 class="text-center text-secondary p-2">Update Fundraiser</h2>
+            <h2 class="text-center text-info p-2">Update Fundraiser</h2>
             <form action="/update_fundraiser/{{ fundraiser_to_update.id }}" method="POST">
                 {{ form.hidden_tag() }}
 
@@ -25,11 +25,12 @@
 
                 <br />
 
-                {{ form.submit(class="btn btn-secondary btn-sm") }}
+                {{ form.submit(class="btn btn-secondary btn-sm float-right") }}
 
             </form>
         </div>
         <br /><br /><br />
+    </div>
+</div>
 
-
-        {% endblock %}
+{% endblock %}

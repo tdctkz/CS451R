@@ -25,7 +25,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="changeAvatarLabel">Change Avatar</h5>
+                                <h5 class="modal-title text-info" id="changeAvatarLabel">Change Avatar</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -52,7 +52,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Change password</h5>
+                                <h5 class="modal-title text-info" id="exampleModalLabel">Change password</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -82,9 +82,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-7 p-4">
-            <h1 class="text-secondary">User profile</h1>
-            <div class="h4">
+        <div class="col-sm-8 p-0">
+            <h1 class="text-info">User profile</h1>
+            <div class="h3 text-dark">
                 <strong>Name:</strong>
                 {{ current_user.name|title }}<br />
 
@@ -111,7 +111,7 @@
 <div class="container justify-content-center mt-4">
     <div class="row makeShadow bg-light p-4">
         <div class="col">
-            <p class="text-secondary h3"><i class="fas fa-list pr-1"></i>Fundraiser Created</p>
+            <p class="text-info h3"><i class="fas fa-list pr-1"></i>Fundraiser Created</p>
             <table class="table table-striped">
                 <thead>
                     <tr class="row">
@@ -119,7 +119,7 @@
                         <th class="col text-right">Goal amount</th>
                         <th class="col text-right">Raised amount</th>
                         <th class="col text-center">Datetime Created</th>
-                        <th class="col-sm-1 text-center"><i class=" fa fa-cog"></i></th>
+                        <th class="col-sm-1"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,17 +132,12 @@
                         <td class="col nums text-right">{{ fundraiser.fund_goal }}</td>
                         <td class="col nums text-right">{{ fundraiser.raised_amount }}</td>
                         <td class="col text-center"> {{ fundraiser.date_created }} {{ fundraiser.time_created }}</td>
-                        <td class="col-sm-1">
-                            <div class="dropdown text-center">
-                                <button class="btn dropdown-toggle" data-toggle="dropdown"></button>
-                                <div class="dropdown-menu bg-light">
-                                    <a href="{{ url_for('update_fundraiser', id=fundraiser.id)}}" class=""><i
-                                            class="fa fa-pen pr-1"></i>Edit</a>
-                                    <br>
-                                    <a href="{{ url_for('delete_fundraiser', id=fundraiser.id)}}" class="text-danger"><i
-                                            class="fa fa-trash pr-1"></i>Delete</a>
-                                </div>
-                            </div>
+                        <td class="col-sm-1 text-right">
+                            <a href="{{ url_for('update_fundraiser', id=fundraiser.id)}}" class=""><i
+                                    class="fa fa-pen pr-1"></i></a>
+
+                            <a href="{{ url_for('delete_fundraiser', id=fundraiser.id)}}" class="text-danger"><i
+                                    class="fa fa-trash pr-1"></i></a>
                         </td>
                     </tr>
                     {% endif %}

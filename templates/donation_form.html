@@ -6,15 +6,13 @@
 <div class="container">
     <!-- Donation form start-->
     <div class="row justify-content-center">
-        <div class="col-lg-10 makeShadow bg-light">
-            <div class="float-left mt-2 p-4">
+        <div class="col-lg-10 makeShadow bg-light p-4">
+            <div class="float-left">
                 <a href="{{ url_for('fundraiser', id=fund_to_update.id)}}">
                     <i class="btn fas fa-arrow-left fa-lg"></i></a>
             </div>
-            <br>
-            <h1 class="text-center font-weight-bold text-secondary">Donation Form</h1>
-            <br>
-            <form method="POST" class="p-4">
+            <h1 class="text-center font-weight-bold text-info">Donation Form</h1>
+            <form method="POST">
                 <div class="row">
                     <div class="col-lg-6">
                         {% if current_user.is_authenticated %}
@@ -35,15 +33,18 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text rounded-0"><i class="fas fa-home fa-lg fa-fw"></i></span>
                             </div>
-                            {{ form.address(class="form-control rounded-0", value=current_user.address) }}
+                            {{ form.address(class="form-control rounded-0", placeholder="Billing Address",
+                            value=current_user.address) }}
                         </div>
                         <div class="input-group input-group-lg form-group">
-                            {{ form.city(class="form-control rounded-0", value=current_user.city) }}
+                            {{ form.city(class="form-control rounded-0", placeholder="City", value=current_user.city) }}
 
-                            {{ form.state(class="form-control rounded-0", value=current_user.state) }}
+                            {{ form.state(class="form-control rounded-0", placeholder="State", value=current_user.state)
+                            }}
                         </div>
                         <div class="input-group input-group-lg form-group">
-                            {{ form.zipcode(class="form-control rounded-0", value=current_user.zipcode) }}
+                            {{ form.zipcode(class="form-control rounded-0", placeholder="zip code",
+                            value=current_user.zipcode) }}
                         </div>
                         <div class="input-group input-group-lg form-group">
                             <div class="input-group-prepend">
