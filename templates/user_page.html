@@ -84,25 +84,26 @@
         </div>
         <div class="col-sm-8 p-0">
             <h1 class="text-info">User profile</h1>
-            <div class="h3 text-dark">
-                <strong>Name:</strong>
-                {{ current_user.name|title }}<br />
+            <div class="h4 text-dark">
+                <p><strong>Name:</strong>
+                    {{ current_user.name|title }}</p>
 
-                <strong>Username:</strong>
-                {{ current_user.username }}<br />
+                <p><strong>Username:</strong>
+                    {{ current_user.username }}</p>
 
-                <strong>Email:</strong>
-                {{ current_user.email|lower }}<br />
+                <p><strong>Email:</strong>
+                    {{ current_user.email|lower }}</p>
 
-                <strong>Address:</strong>
-                {{ current_user.address }} {{ current_user.city }} {{ current_user.state }} {{
-                current_user.zipcode }}
-                <br />
+                <p><strong>Address:</strong>
+                    {{ current_user.address }} {{current_user.city }} {{ current_user.state }} {{
+                    current_user.zipcode }}
+                </p>
 
-                <strong>Date Joined:</strong>
-                {{ current_user.date_added }}<br />
-                <strong>Time Joined:</strong>
-                {{ current_user.time_added }}<br />
+                <p><strong>Date Joined:</strong>
+                    {{ current_user.date_added }}</p>
+
+                <p><strong>Time Joined:</strong>
+                    {{ current_user.time_added }}</p>
                 <br>
             </div>
         </div>

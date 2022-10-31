@@ -19,6 +19,10 @@ strong {
     color: #67a5f5;
 }
 
+.tab {
+    tab-size: 8;
+}
+
 .makeColor {
     background-image: linear-gradient(#67a5f5 70%, hsl(213, 56%, 88%) 110%);
 }

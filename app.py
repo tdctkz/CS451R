@@ -289,7 +289,7 @@ def forgot_password():
             token = user.get_reset_token()
             msg = Message()
             msg.subject = "Password Reset Request"
-            msg.sender = 'admi.cs451r.proj@gmail.com'
+            msg.sender = 'Admin'
             msg.recipients = [user.email]
             msg.html = render_template("password_reset.html", user=user, token=token)     
             mail.send(msg)
@@ -328,11 +328,11 @@ def forgot_username():
     if request.method == "POST":
         user = Users.query.filter_by(email=form.email.data).first()
         if user: 
-            flash("Check your email!! We sent an email that showing your username.", 'success') 
+            flash("Check your email!! We sent an email with your username.", 'success') 
             msg = Message('Username Forgot Request',
-                  sender='tdctkz142@gmail.com',
+                  sender='Admin',
                   recipients=[user.email])
-            msg.body = f'''Your username is ''' + user.username            
+            msg.body = f'''Your username is: ''' + user.username            
             mail.send(msg)
             return redirect(url_for('login'))
         else:
@@ -368,7 +368,7 @@ def donation(id):
             flash("Fundraiser's fund Updated Successfully!", 'success')
             return redirect(url_for('home'))
         except:
-            flash("Error!  Looks like there was a problem...try again!", 'warning')
+            flash("Error! Looks like there was a problem...try again!", 'warning')
             return render_template("donation_form.html", form=form, fund_to_update = fund_to_update)
     else:       
         return render_template("donation_form.html", form=form, fund_to_update = fund_to_update, id=id)        
