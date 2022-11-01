@@ -23,25 +23,25 @@
                     </p>
                 </div>
                 <img src="{{ url_for('static', filename='images/fundraisers/' + current_fundraiser.fundraiser_pic)}}"
-                    alt="Fundraiser image" style="width: 100%;">
+                    alt="Fundraiser image" class="makeShadow" style="width: 100%;">
                 <div class="card-body">
                     <h4 class="text-info"></i>Fundraiser Description
                     </h4>
                     <p class="text-muted">{{current_fundraiser.description}}
                     </p>
                     <a href="{{ url_for('donation', id=current_fundraiser.id)}}"
-                        class="btn btn-danger btn-sm float-right">Donate now</a>
+                        class="btn btn-danger btn-sm float-right makeShadow">Donate now</a>
                 </div>
             </div>
         </div>
         <div class="col-lg-7">
             <div class="card p-0 makeShadow" style="height: 130px;">
                 <div class="card-body">
-                    <table class="table table-sm">
+                    <table class="table">
                         <thead class="thead-dark">
                             <tr class="row">
-                                <th class="col">Goal amount</th>
-                                <th class="col">Raised amount</th>
+                                <th class="col">Goal</th>
+                                <th class="col">Raised</th>
                                 <th class="col text-center">Progress</th>
                                 <th class="col"> </th>
                             </tr>
@@ -60,7 +60,7 @@
                                     </div>
                                 </td>
                                 <td class="col text-center"><a href="{{ url_for('donation', id=current_fundraiser.id)}}"
-                                        class="btn btn-danger btn-sm">Donate</a>
+                                        class="btn btn-danger btn-sm makeShadow">Donate</a>
                                 </td>
                             </tr>
                         </tbody>

@@ -28,14 +28,14 @@ strong {
 }
 
 .makeShadow {
-    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .makeBtn {
-    border-radius: 10px;
-    font-size: 15px;
-    background-image: linear-gradient(to left, #5ba4ed 40%, #f95050 120%);
-    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 25px;
+    background-image: linear-gradient(to right, #2d94ee 0%, #6cefb8 150%);
 }
 
 .makeHr {

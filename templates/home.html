@@ -16,7 +16,9 @@
 <hr class="bg-light makeHr" />
 <div class="container makeColor">
     <div class="row">
-        <div class="col"></div>
+        <div class="col">
+            <button class="btn btn-info makeBtn mt-2 makeShadow">START FUNDRAISING</button>
+        </div>
         <div class="col"></div>
         <div class="col-lg-4 mt-2">
             <div class="input-group input-group-lg form-group">
@@ -37,13 +39,11 @@
                         <h5 class="card-title"><i class="fas fa-star-of-life pr-1"></i>{{ fundraiser.title|title }}
                         </h5>
                     </div>
-                    <a href="{{ url_for('fundraiser', id=fundraiser.id)}}"><img
-                            class="img-fluid img-thumbnail text-center p-0 makeShadow"
+                    <a href="{{ url_for('fundraiser', id=fundraiser.id)}}"><img class="img-thumbnail p-0"
                             src="{{ url_for('static', filename='images/fundraisers/' + fundraiser.fundraiser_pic)}}"
                             alt="Fundraiser image" style="height: 250px; width: 100%;"></a>
+                    <p class="text-success mt-2 ml-2"><small>Updated {{ fundraiser.date_created }}</small></p>
                     <div class="card-body">
-
-                        <p class="text-success"><small>Updated on {{ fundraiser.date_created }}</small></p>
                         <div>
                             <p class="truncate-line-clamp text-muted h6">{{ fundraiser.description|capitalize }}</p>
                             <a class="float-right" href="{{ url_for('fundraiser', id=fundraiser.id)}}">continued</a>
