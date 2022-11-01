@@ -37,23 +37,25 @@
                         <h5 class="card-title"><i class="fas fa-star-of-life pr-1"></i>{{ fundraiser.title|title }}
                         </h5>
                     </div>
-                    <a href="{{ url_for('fundraiser', id=fundraiser.id)}}"><img class="img-fluid"
+                    <a href="{{ url_for('fundraiser', id=fundraiser.id)}}"><img
+                            class="img-fluid img-thumbnail text-center p-0 makeShadow"
                             src="{{ url_for('static', filename='images/fundraisers/' + fundraiser.fundraiser_pic)}}"
-                            alt="Fundraiser image"></a>
-                    <div class="card-body p-3">
+                            alt="Fundraiser image" style="height: 250px; width: 100%;"></a>
+                    <div class="card-body">
+
                         <p class="text-success"><small>Updated on {{ fundraiser.date_created }}</small></p>
                         <div>
                             <p class="truncate-line-clamp text-muted h6">{{ fundraiser.description|capitalize }}</p>
                             <a class="float-right" href="{{ url_for('fundraiser', id=fundraiser.id)}}">continued</a>
                         </div>
                         <div class="progress mt-5">
-                            <div class="progress-bar bg-info" style="width: 0%" role="progressbar" aria-valuemin="0"
-                                aria-valuemax="100">
+                            <div class="progress-bar makeShadow bg-info " style="width: 0%" role="progressbar"
+                                aria-valuemin="0" aria-valuemax="100">
                                 <span class="progress-bar-label text-left ml-1">
                                     {{ fundraiser.current_process }}%</span>
                             </div>
                         </div>
-                        <p class="text-right"><span>{{ fundraiser.current_process }}%</span> of <span
+                        <p class="text-right mt-0"><span>{{ fundraiser.current_process }}%</span> of <span
                                 class="nums">{{fundraiser.fund_goal }}</span><span> goal</span>
                         </p>
 
@@ -69,7 +71,7 @@
                             </div>
 
                             <div class="col">
-                                <a class="btn btn-outline-danger btn-sm rounded-circle"
+                                <a class="btn btn-outline-danger btn-sm rounded-circle makeShadow"
                                     href="{{ url_for('donation', id=fundraiser.id)}}">Donate now</a>
                             </div>
 
@@ -89,7 +91,6 @@
 </div>
 <script>
     // Make progress-bar processing
-    '{% set n = 1 %}'
     var bar = document.querySelectorAll(".progress-bar");
     var i = '{{ all_fundraisers.count() }}'
     function makeProgress() {

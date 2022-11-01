@@ -28,7 +28,7 @@ strong {
 }
 
 .makeShadow {
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
 .makeBtn {

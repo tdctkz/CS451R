@@ -153,7 +153,7 @@ def user_page():
         else:
             flash("Your current password was incorrected! Try again...", 'warning')   
             return redirect(url_for('user_page'))          
-    user_fundraisers = Fundraiser.query.order_by(Fundraiser.time_created.desc())    
+    user_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())    
     return render_template("user_page.html", user_fundraisers=user_fundraisers, user_to_update=user_to_update, form=form)
 
 # Create update user profile 
@@ -273,8 +273,8 @@ def delete_fundraiser(id):
 # Create home page
 @app.route('/')
 def home():
-    all_fundraisers = Fundraiser.query.order_by(Fundraiser.time_created.desc())    
-    all_donors = Donors.query.order_by(Donors.time_donated.desc())
+    all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())    
+    all_donors = Donors.query.order_by(Donors.date_donated.desc())
     return render_template("home.html", all_fundraisers=all_fundraisers, all_donors=all_donors)
 
 # Create forgot password function	
@@ -358,6 +358,7 @@ def donation(id):
         fund_to_update.raised_amount += int(request.form['donate_amount'])   
         fund_to_update.current_process = round((fund_to_update.raised_amount / fund_to_update.fund_goal)*100)
         fund_to_update.num_of_donors += 1
+        #fund_to_update.date_updated = date
         donor = Donors(fundraiser_id=dor, name=form.name.data, email=form.email.data, date_donated=date, time_donated=time,
          address=form.address.data, city=form.city.data, state=form.state.data, zipcode=form.zipcode.data,
          donate_amount=form.donate_amount.data)
@@ -392,6 +393,7 @@ class Fundraiser(db.Model):
     current_process = db.Column(db.Integer, default=0)
     date_created = db.Column(db.String(128))
     time_created = db.Column(db.String(128))  
+    #date_updated = db.Column(db.String(128))
 
     # Foreign Key To Link Users (refer to primary key of the user)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
