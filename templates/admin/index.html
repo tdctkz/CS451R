@@ -4,11 +4,17 @@
     <div>
         <div>
             {% if current_user.is_authenticated %}
-            <h3>Welcome to Admin Management page!</h3>
+            {% if current_user.username == "admin" %}
+            <h3 class="text-info">Welcome to Admin Management page!</h3>
             <p>You now have access to the Administrator view.</p>
             <a class="btn btn-primary" href="{{url_for('user_page')}}">Go back to Admin profile</a>
             {% else %}
-            <h3>Please Login to access to the Administrator page! </h3>
+            <h3 class="text-info">You do not have access to Admin Management page!</h3>
+            <p>Please log in with admin user.</p>
+            <a class="btn btn-primary" href="{{url_for('login')}}">Go back to Login</a>
+            {% endif %}
+            {% else %}
+            <h3 class="text-info">Please Login to access to the Administrator page! </h3>
             <a class="btn btn-primary" href="{{url_for('login')}}">Go back to Login</a>
             {% endif %}
 
