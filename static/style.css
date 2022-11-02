@@ -11,16 +11,8 @@
     content: '$';
 }
 
-.column {
-    width: 100%;
-}
-
 strong {
     color: #67a5f5;
-}
-
-.tab {
-    tab-size: 8;
 }
 
 .makeColor {
