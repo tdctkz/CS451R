@@ -16,8 +16,9 @@
 <hr class="bg-light makeHr" />
 <div class="container makeColor">
     <div class="row">
-        <div class="col">
-            <button class="btn btn-info makeBtn mt-2 makeShadow">START FUNDRAISING</button>
+        <div class="col-lg-4 text-center">
+            <a href="{{url_for('create_fundraiser')}}" class="btn btn-primary makeBtn mt-2 makeShadow">START
+                FUNDRAISING</a>
         </div>
         <div class="col"></div>
         <div class="col-lg-4 mt-2">
@@ -78,7 +79,7 @@
                         </div>
                         <p><span class="text-secondary"><small>Created by</small> </span></p>
                         <p><img src="{{ url_for('static', filename='images/users/' + fundraiser.funder.user_pic)}}"
-                                alt="User Avatar" width="30" height="30" class="rounded-circle ml-3">
+                                alt="User Avatar" width="40" height="40" class="rounded-circle ml-2">
                             <span class="h6 text-info ml-2">{{ fundraiser.funder.name|title }}</span>
                         </p>
                     </div>

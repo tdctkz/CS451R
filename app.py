@@ -184,7 +184,7 @@ def update_user(id):
 
 # Create a fundraiser
 @app.route('/create_fundraiser', methods=['GET', 'POST'])
-@login_required
+
 def create_fundraiser():
     form = FundraiserForm()
     #current datetime
@@ -193,30 +193,34 @@ def create_fundraiser():
     date = current.strftime("%m-%d-%Y")    
     # convert to time String
     time = current.strftime("%H:%M:%S")
-    
-    if request.method == "POST":  
-        f = request.files['fundraiser_pic']
-        if allowed_file(f.filename):
-            file = str(uuid.uuid1()) + "_" + secure_filename(f.filename)
-            funder = current_user.id
-            fundraiser = Fundraiser(user_id=funder, title=form.title.data, description=form.description.data,
-            fund_goal=form.fund_goal.data, date_created=date, time_created=time, fundraiser_pic=file)
-        else:
-            flash("Your file must be in type of 'jpg', 'jpeg','png'!!", 'warning')
-            return render_template("create_fundraiser.html", form=form)
-		# Clear The Form
-        form.title.data = ''
-        form.description.data = ''
-        form.fund_goal.data = ''       
-        
-		# Add post data to database
-        db.session.add(fundraiser)
-        db.session.commit()
-        f.save(os.path.join(app.config['FUNDRAISER_UPLOAD_FOLDER'], file))        
-		# Return a Message
-        flash("A Fundraiser Created Successfully!", 'success')
-        return redirect(url_for('user_page'))
-	# Redirect to the webpage
+    if not current_user.is_authenticated:
+        flash("Please login to create a funraiser!", 'warning')
+        return redirect(url_for('login'))
+    else:
+        if request.method == "POST":        
+            # Redirect to the webpage           
+            f = request.files['fundraiser_pic']
+            if allowed_file(f.filename):
+                file = str(uuid.uuid1()) + "_" + secure_filename(f.filename)
+                funder = current_user.id
+                fundraiser = Fundraiser(user_id=funder, title=form.title.data, description=form.description.data,
+                fund_goal=form.fund_goal.data, date_created=date, time_created=time, fundraiser_pic=file)
+            else:
+                flash("Your file must be in type of 'jpg', 'jpeg','png'!!", 'warning')
+                return render_template("create_fundraiser.html", form=form)
+            # Clear The Form
+            form.title.data = ''
+            form.description.data = ''
+            form.fund_goal.data = ''       
+            
+            # Add post data to database
+            db.session.add(fundraiser)
+            db.session.commit()
+            f.save(os.path.join(app.config['FUNDRAISER_UPLOAD_FOLDER'], file))        
+            # Return a Message
+            flash("A Fundraiser Created Successfully!", 'success')
+            return redirect(url_for('user_page'))         
+	
     return render_template("create_fundraiser.html", form=form)
 
 # Create a Fundraiser individual view pages
