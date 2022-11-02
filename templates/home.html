@@ -16,11 +16,6 @@
 <hr class="bg-light makeHr" />
 <div class="container makeColor">
     <div class="row">
-        <div class="col-lg-4 text-center">
-            <a href="{{url_for('create_fundraiser')}}" class="btn btn-primary makeBtn mt-2 makeShadow">START
-                FUNDRAISING</a>
-        </div>
-        <div class="col"></div>
         <div class="col-lg-4 mt-2">
             <div class="input-group input-group-lg form-group">
                 <input class="form-control" id="myInput" onkeyup="myFunction()" type="text"
@@ -29,6 +24,13 @@
                     <span class="input-group-text"><i class="fa fa-search"></i></span>
                 </div>
             </div>
+        </div>
+        <div class="col-lg-4 text-center">
+            <a href="{{url_for('create_fundraiser')}}" class="btn btn-primary makeBtn mt-2 makeShadow">START
+                FUNDRAISING</a>
+        </div>
+        <div class="col-lg-4 text-center mt-3">
+            <p><a class="text-light" href="#"><span class="h5"> Top Fundraisers</span></a></p>
         </div>
     </div>
     <div class="row">
@@ -43,7 +45,8 @@
                     <a href="{{ url_for('fundraiser', id=fundraiser.id)}}"><img class="img-thumbnail p-0"
                             src="{{ url_for('static', filename='images/fundraisers/' + fundraiser.fundraiser_pic)}}"
                             alt="Fundraiser image" style="height: 250px; width: 100%;"></a>
-                    <p class="text-success mt-2 ml-2"><small>Updated {{ fundraiser.date_created }}</small></p>
+                    <p class="text-success mt-2 ml-3"><small><i class="far fa-clock pr-1"></i>Updated {{
+                            fundraiser.date_created }}</small></p>
                     <div class="card-body">
                         <div>
                             <p class="truncate-line-clamp text-muted h6">{{ fundraiser.description|capitalize }}</p>
