@@ -52,9 +52,9 @@
                             <p class="truncate-line-clamp text-muted h6">{{ fundraiser.description|capitalize }}</p>
                             <a class="float-right" href="{{ url_for('fundraiser', id=fundraiser.id)}}">continued</a>
                         </div>
-                        <div class="progress mt-5">
-                            <div class="progress-bar makeShadow bg-info " style="width: 0%" role="progressbar"
-                                aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress makeShadow mt-5">
+                            <div class="progress-bar bg-info " style="width: 0%" role="progressbar" aria-valuemin="0"
+                                aria-valuemax="100">
                                 <span class="progress-bar-label text-left ml-1">
                                     {{ fundraiser.current_process }}%</span>
                             </div>
@@ -65,12 +65,12 @@
 
                         <div class="row text-center">
                             <div class="col">
-                                <p class="h5 text-primary">Raised</p>
+                                <p class="h5 text-primary">RAISED</p>
                                 <p class="nums">{{ fundraiser.raised_amount}}</p>
                             </div>
 
                             <div class="col">
-                                <p class="h5 text-primary">Donors</p>
+                                <p class="h5 text-primary">DONORS</p>
                                 {{fundraiser.num_of_donors}}
                             </div>
 
