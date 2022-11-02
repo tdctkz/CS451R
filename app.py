@@ -184,7 +184,6 @@ def update_user(id):
 
 # Create a fundraiser
 @app.route('/create_fundraiser', methods=['GET', 'POST'])
-
 def create_fundraiser():
     form = FundraiserForm()
     #current datetime
@@ -203,7 +202,7 @@ def create_fundraiser():
             if allowed_file(f.filename):
                 file = str(uuid.uuid1()) + "_" + secure_filename(f.filename)
                 funder = current_user.id
-                fundraiser = Fundraiser(user_id=funder, title=form.title.data, description=form.description.data,
+                new_fundraiser = Fundraiser(user_id=funder, title=form.title.data, description=form.description.data,
                 fund_goal=form.fund_goal.data, date_created=date, time_created=time, fundraiser_pic=file)
             else:
                 flash("Your file must be in type of 'jpg', 'jpeg','png'!!", 'warning')
@@ -214,7 +213,7 @@ def create_fundraiser():
             form.fund_goal.data = ''       
             
             # Add post data to database
-            db.session.add(fundraiser)
+            db.session.add(new_fundraiser)
             db.session.commit()
             f.save(os.path.join(app.config['FUNDRAISER_UPLOAD_FOLDER'], file))        
             # Return a Message
@@ -370,7 +369,7 @@ def donation(id):
             db.session.add(donor)
             db.session.commit()
             form.donate_amount.data = ''
-            flash("Fundraiser's fund Updated Successfully!", 'success')
+            flash("You have donated successfully!", 'success')
             return redirect(url_for('home'))
         except:
             flash("Error! Looks like there was a problem...try again!", 'warning')
