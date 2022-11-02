@@ -139,7 +139,7 @@ def user_page():
                 flash("Your avatar has changed successfully!", 'success')
                 return redirect(url_for('user_page'))  
             except:
-                flash("Error!  Looks like there was a problem...try again!", 'warning') 
+                flash("Error! Looks like there was a problem...try again!", 'warning') 
                 return redirect(url_for('user_page'))   
         elif check_password_hash(user_to_update.password, request.form['confirm_password']):
             user_to_update.password = generate_password_hash(request.form['password'], method='sha256')
