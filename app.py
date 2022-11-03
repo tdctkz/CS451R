@@ -193,7 +193,7 @@ def create_fundraiser():
     # convert to time String
     time = current.strftime("%H:%M:%S")
     if not current_user.is_authenticated:
-        flash("Please login to create a funraiser!", 'warning')
+        flash("Please login to create a fundraiser!", 'warning')
         return redirect(url_for('login'))
     else:
         if request.method == "POST":        
