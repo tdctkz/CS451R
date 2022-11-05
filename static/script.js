@@ -45,22 +45,6 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
-function myFunction() {
-  var input, filter, ul, li, a, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  ul = document.getElementById("myUL");
-  card = ul.getElementsByTagName("card");
-  for (i = 0; i < card.length; i++) {
-    a = card[i].getElementsByTagName("a")[0];
-    txtValue = a.textContent || a.innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      card[i].style.display = "";
-    } else {
-      card[i].style.display = "none";
-    }
-  }
-}
 
 function search_bar() {
   let input = document.getElementById('searchbar').value
