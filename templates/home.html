@@ -18,8 +18,8 @@
     <div class="row">
         <div class="col-lg-4 mt-2">
             <div class="input-group input-group-lg form-group">
-                <input class="form-control" id="myInput" onkeyup="myFunction()" type="text"
-                    placeholder="Search for names..." aria-label="Search" title="Type in a name">
+                <input class="form-control" id="searchbar" onkeyup="search_bar()" type="text" placeholder="Search..."
+                    aria-label="Search" title="Type to search">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa fa-search"></i></span>
                 </div>
@@ -30,12 +30,12 @@
                 FUNDRAISING</a>
         </div>
         <div class="col-lg-4 text-center mt-3">
-            <p><a class="text-light" href="#"><span class="h5"> Top Fundraisers</span></a></p>
+            <p><a class="text-light" href="#"><span class="h4">Top Fundraisers</span></a></p>
         </div>
     </div>
     <div class="row">
         {% for fundraiser in all_fundraisers %}
-        <div class="col-lg-4 d-flex align-items-stretch p-2">
+        <div class="col-lg-4 d-flex align-items-stretch p-1 px-2">
             <div class="card-deck">
                 <div class="card makeShadow">
                     <div class="card-header">
@@ -65,12 +65,12 @@
 
                         <div class="row text-center">
                             <div class="col">
-                                <p class="h5 text-primary">RAISED</p>
+                                <p class="h6 text-primary">RAISED</p>
                                 <p class="nums">{{ fundraiser.raised_amount}}</p>
                             </div>
 
                             <div class="col">
-                                <p class="h5 text-primary">DONORS</p>
+                                <p class="h6 text-primary">DONORS</p>
                                 {{fundraiser.num_of_donors}}
                             </div>
 

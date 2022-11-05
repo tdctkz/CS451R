@@ -50,15 +50,29 @@ function myFunction() {
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
   ul = document.getElementById("myUL");
-  li = ul.getElementsByTagName("li");
-  for (i = 0; i < li.length; i++) {
-    a = li[i].getElementsByTagName("a")[0];
+  card = ul.getElementsByTagName("card");
+  for (i = 0; i < card.length; i++) {
+    a = card[i].getElementsByTagName("a")[0];
     txtValue = a.textContent || a.innerText;
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      li[i].style.display = "";
+      card[i].style.display = "";
     } else {
-      li[i].style.display = "none";
+      card[i].style.display = "none";
     }
   }
 }
 
+function search_bar() {
+  let input = document.getElementById('searchbar').value
+  input = input.toLowerCase();
+  let x = document.getElementsByClassName('card');
+
+  for (i = 0; i < x.length; i++) {
+    if (!x[i].innerHTML.toLowerCase().includes(input)) {
+      x[i].style.display = "none";
+    }
+    else {
+      x[i].style.display = "";
+    }
+  }
+}
