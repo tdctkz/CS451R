@@ -58,3 +58,35 @@ strong {
     width: auto;
     overflow: hidden;
 }
+
+/* The message box is shown when the user clicks on the password field */
+#message {
+    display: none;
+}
+
+#message p {
+    padding: 0px 35px;
+    font-size: 15px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+    color: rgb(16, 172, 16);
+}
+
+.valid:before {
+    position: relative;
+    left: -35px;
+    content: "✔";
+}
+
+/* Add a red text color and an "x" when the requirements are wrong */
+.invalid {
+    color: red;
+}
+
+.invalid:before {
+    position: relative;
+    left: -35px;
+    content: "✖";
+}

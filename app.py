@@ -25,8 +25,8 @@ app.config['MAIL_USE_SSL'] = False
 mail = Mail(app)
 
 # Add database
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cs451r-donation.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jhwcuvjblhkhpj:dfc4cd5081ba0744112b8a31a980680b5d554a914045a30a48b7e10efb00324b@ec2-23-23-151-191.compute-1.amazonaws.com:5432/d8i6ur7te2fd52'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cs451r-donation.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://jhwcuvjblhkhpj:dfc4cd5081ba0744112b8a31a980680b5d554a914045a30a48b7e10efb00324b@ec2-23-23-151-191.compute-1.amazonaws.com:5432/d8i6ur7te2fd52'
 
 # Secret key
 app.config['SECRET_KEY'] = "cs451r-donation"
@@ -153,7 +153,7 @@ def user_page():
         else:
             flash("Your current password was incorrected! Try again...", 'warning')   
             return redirect(url_for('user_page'))          
-    user_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())    
+    user_fundraisers = Fundraisers.query.order_by(Fundraisers.date_created.desc())    
     return render_template("user_page.html", user_fundraisers=user_fundraisers, user_to_update=user_to_update, form=form)
 
 # Create update user profile 
@@ -202,8 +202,8 @@ def create_fundraiser():
             if allowed_file(f.filename):
                 file = str(uuid.uuid1()) + "_" + secure_filename(f.filename)
                 funder = current_user.id
-                new_fundraiser = Fundraiser(user_id=funder, title=form.title.data, description=form.description.data,
-                fund_goal=form.fund_goal.data, date_created=date, time_created=time, fundraiser_pic=file)
+                new_fundraiser = Fundraisers(user_id=funder, title=form.title.data, description=form.description.data,
+                fund_goal=form.fund_goal.data, date_created=date, time_created=time, date_updated=date, fundraiser_pic=file)
             else:
                 flash("Your file must be in type of 'jpg', 'jpeg','png'!!", 'warning')
                 return render_template("create_fundraiser.html", form=form)
@@ -225,7 +225,7 @@ def create_fundraiser():
 # Create a Fundraiser individual view pages
 @app.route('/fundraiser/<int:id>')
 def fundraiser(id):
-    current_fundraiser = Fundraiser.query.get_or_404(id)  
+    current_fundraiser = Fundraisers.query.get_or_404(id)  
     donors = Donors.query.order_by(Donors.time_donated.desc())
     return render_template("fundraiser_page.html", current_fundraiser=current_fundraiser, donors=donors)
 
@@ -234,7 +234,7 @@ def fundraiser(id):
 @login_required
 def update_fundraiser(id):   
     form = FundraiserForm()
-    fundraiser_to_update = Fundraiser.query.get_or_404(id)
+    fundraiser_to_update = Fundraisers.query.get_or_404(id)
     
     if request.method == "POST":
         fundraiser_to_update.title = request.form['title']
@@ -254,7 +254,7 @@ def update_fundraiser(id):
 @app.route('/fundraiser/delete/<int:id>')
 @login_required
 def delete_fundraiser(id):
-	fundraiser_to_delete = Fundraiser.query.get_or_404(id)
+	fundraiser_to_delete = Fundraisers.query.get_or_404(id)
 	id = current_user.id
 	if id == fundraiser_to_delete.user_id:        
 		try:
@@ -276,7 +276,7 @@ def delete_fundraiser(id):
 # Create home page
 @app.route('/')
 def home():
-    all_fundraisers = Fundraiser.query.order_by(Fundraiser.date_created.desc())    
+    all_fundraisers = Fundraisers.query.order_by(Fundraisers.date_updated.desc())    
     all_donors = Donors.query.order_by(Donors.date_donated.desc())
     return render_template("home.html", all_fundraisers=all_fundraisers, all_donors=all_donors)
 
@@ -355,13 +355,13 @@ def donation(id):
     # convert to time String
     time = current.strftime("%H:%M:%S")
 
-    fund_to_update = Fundraiser.query.get_or_404(id) 
+    fund_to_update = Fundraisers.query.get_or_404(id) 
     dor = fund_to_update.id
     if request.method == "POST":
         fund_to_update.raised_amount += int(request.form['donate_amount'])   
         fund_to_update.current_process = round((fund_to_update.raised_amount / fund_to_update.fund_goal)*100)
         fund_to_update.num_of_donors += 1
-        #fund_to_update.date_updated = date
+        fund_to_update.date_updated = date 
         donor = Donors(fundraiser_id=dor, name=form.name.data, email=form.email.data, date_donated=date, time_donated=time,
          address=form.address.data, city=form.city.data, state=form.state.data, zipcode=form.zipcode.data,
          donate_amount=form.donate_amount.data)
@@ -385,7 +385,7 @@ def page_not_found(e):
    
 # Database creation
 # Create a Fundraser  model
-class Fundraiser(db.Model):
+class Fundraisers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=True)
     description = db.Column(db.Text(), nullable=True)
@@ -396,7 +396,7 @@ class Fundraiser(db.Model):
     current_process = db.Column(db.Integer, default=0)
     date_created = db.Column(db.String(128))
     time_created = db.Column(db.String(128))  
-    #date_updated = db.Column(db.String(128))
+    date_updated = db.Column(db.String(128))
 
     # Foreign Key To Link Users (refer to primary key of the user)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -418,7 +418,7 @@ class Donors(db.Model):
     zipcode = db.Column(db.Integer, nullable=False)
 
     # Foreign Key To Link Fundraiser (refer to primary key of the fundraiser)
-    fundraiser_id = db.Column(db.Integer, db.ForeignKey('fundraiser.id'))    
+    fundraiser_id = db.Column(db.Integer, db.ForeignKey('fundraisers.id'))    
 
 # Create Users model
 class Users(db.Model, UserMixin): 
@@ -436,7 +436,7 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.String(128)) 
     
     # User Can Have Many Fundraisers 
-    fundraiser = db.relationship('Fundraiser', backref='funder')    
+    fundraiser = db.relationship('Fundraisers', backref='funder')    
     
     def get_reset_token(self, expires_sec=120):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -463,7 +463,7 @@ class AdminViews(ModelView):
 admin = Admin(app)
 # Create admin views management
 admin.add_view(AdminViews(Users, db.session))
-admin.add_view(AdminViews(Fundraiser, db.session))
+admin.add_view(AdminViews(Fundraisers, db.session))
 admin.add_view(AdminViews(Donors, db.session))
 
 if __name__ == '__main__':

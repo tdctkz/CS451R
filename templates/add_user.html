@@ -14,7 +14,7 @@
                     href="{{url_for('login')}}">
                     Sign In</a></p>
         </div>
-        <div class="col-lg-6 bg-white p-4 myShadow">
+        <div class="col-lg-6 bg-light p-4 myShadow">
             <h1 class="text-center font-weight-bold text-info">Create Account</h1>
             <br>
             <form class="mb-5 border-top" method="POST">
@@ -41,9 +41,18 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text rounded-0"><i class="fas fa-key fa-lg fa-fw"></i></span>
                     </div>
-                    {{ form.password(class="form-control rounded-0", placeholder="Password",
-                    pattern="(?=.*[!@#$%&*_?])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}", title="Your password must
-                    be 8 characters minimum, must contain 1 upper case letter, 1 symbol and 1 number.") }}
+                    {{ form.password(class="form-control rounded-0", placeholder="Password", id="pwd",
+                    pattern="(?=.*[!@#$%&*_?])(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}", title="
+                    Your password must be 8 characters minimum, contain 1 upper case letter, 1 symbol and 1 number.") }}
+
+                </div>
+                <div id="message" class="p-2">
+                    <h6 class="text-primary">Password must contain the following:</h6>
+                    <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+                    <p id="capital" class="invalid">1 <b>uppercase</b> letter</p>
+                    <p id="symbol" class="invalid">1 <b>symbol</b></p>
+                    <p id="number" class="invalid">1 <b>number</b></p>
+
                 </div>
                 <div class="input-group input-group-lg form-group">
                     <div class="input-group-prepend">
@@ -52,7 +61,6 @@
                     {{ form.confirm_password(class="form-control rounded-0", placeholder="Confirm Password")
                     }}
                 </div>
-
                 {{ form.submit(class="btn btn-danger makeShadow float-right") }}
             </form>
         </div>
@@ -61,5 +69,63 @@
 </div>
 <!-- Registration Form End -->
 </div>
+<script>
+    var myInput = document.getElementById("pwd");
+    var special_letter = document.getElementById("symbol");
+    var capital = document.getElementById("capital");
+    var number = document.getElementById("number");
+    var length = document.getElementById("length");
 
+    // When the user clicks on the password field, show the message box
+    myInput.onfocus = function () {
+        document.getElementById("message").style.display = "block";
+    }
+
+    // When the user clicks outside of the password field, hide the message box
+    myInput.onblur = function () {
+        document.getElementById("message").style.display = "none";
+    }
+
+    // When the user starts to type something inside the password field
+    myInput.onkeyup = function () {
+        // Validate lowercase letters
+        var symbol = /[!@#$%&*_?]/g;
+        if (myInput.value.match(symbol)) {
+            special_letter.classList.remove("invalid");
+            special_letter.classList.add("valid");
+        } else {
+            special_letter.classList.remove("valid");
+            special_letter.classList.add("invalid");
+        }
+
+        // Validate capital letters
+        var upperCaseLetters = /[A-Z]/g;
+        if (myInput.value.match(upperCaseLetters)) {
+            capital.classList.remove("invalid");
+            capital.classList.add("valid");
+        } else {
+            capital.classList.remove("valid");
+            capital.classList.add("invalid");
+        }
+
+        // Validate numbers
+        var numbers = /[0-9]/g;
+        if (myInput.value.match(numbers)) {
+            number.classList.remove("invalid");
+            number.classList.add("valid");
+        } else {
+            number.classList.remove("valid");
+            number.classList.add("invalid");
+        }
+
+        // Validate length
+        if (myInput.value.length >= 8) {
+            length.classList.remove("invalid");
+            length.classList.add("valid");
+        } else {
+            length.classList.remove("valid");
+            length.classList.add("invalid");
+        }
+    }
+</script>
 {% endblock %}
