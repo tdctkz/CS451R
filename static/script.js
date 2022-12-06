@@ -31,6 +31,7 @@ if (localStorage.checkbox && localStorage.checkbox !== "") {
   username_input.value = "";
 }
 
+//Remember username
 function lsRememberMe() {
   if (rmCheck.checked && username_input.value !== "") {
     localStorage.username = username_input.value;
@@ -45,7 +46,7 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
 
-
+//Search for infomation
 function search_bar() {
   let input = document.getElementById('searchbar').value
   input = input.toLowerCase();
